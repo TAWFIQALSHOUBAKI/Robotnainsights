@@ -3,7 +3,8 @@
     "allow": [
       "Bash(python -c ' *)",
       "Bash(node -e \"const fs=require\\('fs'\\);eval\\(fs.readFileSync\\('data.js','utf8'\\)\\);const sets=[...new Set\\(RAW_DATA.map\\(r=>r.adset\\)\\)];console.log\\('Unique adsets:',sets.length\\);sets.forEach\\(s=>console.log\\(' -',s\\)\\)\")",
-      "Bash(node -e \"const fs=require\\('fs'\\);const src=fs.readFileSync\\('data.js','utf8'\\).replace\\(/^const /gm,'var '\\);eval\\(src\\);const sets=[...new Set\\(RAW_DATA.map\\(r=>r.adset\\)\\)];console.log\\('Unique adsets:',sets.length\\);sets.forEach\\(s=>console.log\\(' -',s\\)\\)\")"
+      "Bash(node -e \"const fs=require\\('fs'\\);const src=fs.readFileSync\\('data.js','utf8'\\).replace\\(/^const /gm,'var '\\);eval\\(src\\);const sets=[...new Set\\(RAW_DATA.map\\(r=>r.adset\\)\\)];console.log\\('Unique adsets:',sets.length\\);sets.forEach\\(s=>console.log\\(' -',s\\)\\)\")",
+      "Bash(node -e ' *)"
     ]
   }
 }

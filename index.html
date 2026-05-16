@@ -699,6 +699,13 @@ const f$4= v => v==null?'—':'$'+v.toFixed(4);
 const fn = v => v==null?'—':v.toLocaleString();
 const fnK= v => v==null?'—':v>=1000?(v/1000).toFixed(1)+'K':String(v);
 const fpct=v => v==null?'—':v.toFixed(2)+'%';
+// Short ad-set label for disambiguation when same creative runs in multiple ad sets
+function shortAdsetTag(adset) {
+  if (!adset) return '';
+  if (adset.includes(' - Custom')) return 'Custom';
+  const parts = adset.split('_');
+  return parts[1] || parts[0]; // e.g. "Broad" from DM_Broad_AMM_ZAR_IRB
+}
 
 function prettyDate(iso) {
   if(!iso) return '';
@@ -775,12 +782,20 @@ function computeData(since, until) {
   const adsets = Object.keys(byAdset).map(name => ({ name, ...agg(byAdset[name]) }))
     .sort((a,b)=>b.spend-a.spend);
 
-  // Ads
-  const byAd = groupBy(rows, 'ad');
-  const ads = Object.keys(byAd).map(name => {
-    const aRows = byAd[name];
-    return { name, adset: aRows[0].adset, ...agg(aRows) };
-  }).sort((a,b)=>b.spend-a.spend);
+  // Ads — keyed by ad+adset composite so the same creative in different ad sets
+  // stays separate (Meta tracks them as distinct delivery units with different CPR)
+  const SEP = '|||';
+  const byAdKey = {};
+  rows.forEach(r => {
+    const k = r.ad + SEP + r.adset;
+    (byAdKey[k] = byAdKey[k] || []).push(r);
+  });
+  const ads = Object.keys(byAdKey).map(k => {
+    const sep = k.indexOf(SEP);
+    const name  = k.slice(0, sep);
+    const adset = k.slice(sep + SEP.length);
+    return { name, adset, key: k, ...agg(byAdKey[k]) };
+  }).sort((a,b) => b.spend - a.spend);
 
   // Age
   const byAge = groupBy(rows, 'age');
@@ -802,12 +817,11 @@ function computeData(since, until) {
     ageByAdset[adsetName] = ageOrder.filter(s=>byA[s]).map(s=>({ seg:s, ...agg(byA[s]) }));
   });
 
-  // Ads audience (age breakdown per ad)
+  // Ads audience — keyed by the same composite key (ad|||adset)
   const adsAudience = {};
-  Object.keys(byAd).forEach(adName => {
-    const adRows = byAd[adName];
-    const byA = groupBy(adRows, 'age');
-    adsAudience[adName] = ageOrder.filter(s=>byA[s]).map(s=>({ seg:s, ...agg(byA[s]) }));
+  Object.keys(byAdKey).forEach(k => {
+    const byA = groupBy(byAdKey[k], 'age');
+    adsAudience[k] = ageOrder.filter(s=>byA[s]).map(s=>({ seg:s, ...agg(byA[s]) }));
   });
 
   return { core, daily, weekly, adsets, ads, age, gender, ageByAdset, adsAudience };
@@ -916,12 +930,17 @@ function initCharts() {
   });
 
   // ── Update creative score tiles ───────────────────────────────────────────
+  // adNameCounts: number of ad-adset pairs per creative name (>1 = same creative in multiple ad sets)
+  const adNameCounts = D.ads.reduce((m,a)=>(m[a.name]=(m[a.name]||0)+1,m), {});
+  function adDisplayName(a) {
+    return adNameCounts[a.name] > 1 ? `${a.name} (${shortAdsetTag(a.adset)})` : a.name;
+  }
   const bestAd = D.ads.filter(a=>a.cpr).reduce((b,a)=>(!b||a.cpr<b.cpr)?a:b, null);
   const topAd  = D.ads.reduce((b,a)=>a.spend>b.spend?a:b, D.ads[0]);
   const tiles  = document.querySelectorAll('.score-val');
   if(tiles[0]) tiles[0].textContent = f$4(m.cpr);
-  if(tiles[1]) { tiles[1].textContent = f$4(bestAd?.cpr); tiles[1].nextElementSibling&&(tiles[1].nextElementSibling.textContent=bestAd?.name||''); }
-  if(tiles[2]) { tiles[2].textContent = fpct(topAd?.spend/m.spend*100); tiles[2].nextElementSibling&&(tiles[2].nextElementSibling.textContent=`${topAd?.name} — ${f$(topAd?.spend)} of ${f$(m.spend)}`); }
+  if(tiles[1]) { tiles[1].textContent = f$4(bestAd?.cpr); tiles[1].nextElementSibling&&(tiles[1].nextElementSibling.textContent=bestAd?adDisplayName(bestAd):''); }
+  if(tiles[2]) { tiles[2].textContent = fpct(topAd?.spend/m.spend*100); tiles[2].nextElementSibling&&(tiles[2].nextElementSibling.textContent=topAd?`${adDisplayName(topAd)} — ${f$(topAd.spend)} of ${f$(m.spend)}`:''); }
 
   // ── Weekly overview bar ───────────────────────────────────────────────────
   charts.weeklyOverview = new Chart(document.getElementById('chart-weekly-overview'), {
@@ -1004,10 +1023,14 @@ function initCharts() {
   updateTrendChart();
 
   // ── Ads horizontal bar ────────────────────────────────────────────────────
+  function adLabel(a, maxLen=22) {
+    const base = a.name.length > maxLen ? a.name.slice(0, maxLen)+'…' : a.name;
+    return adNameCounts[a.name] > 1 ? base + ' · ' + shortAdsetTag(a.adset) : base;
+  }
   charts.adsSpend = new Chart(document.getElementById('chart-ads-spend'), {
     type:'bar',
     data:{
-      labels:D.ads.map(a=>a.name.length>22?a.name.slice(0,22)+'…':a.name),
+      labels:D.ads.map(a=>adLabel(a)),
       datasets:[{ label:'Spend ($)', data:D.ads.map(a=>a.spend), backgroundColor:'#E8410A', borderRadius:4, barPercentage:.6 }]
     },
     options:{...chartOpts(), indexAxis:'y', scales:{
@@ -1018,7 +1041,7 @@ function initCharts() {
   document.getElementById('cpr-rank-list').innerHTML = [...D.ads].filter(a=>a.cpr).sort((a,b)=>a.cpr-b.cpr).map((ad,i)=>`
     <div class="cpr-rank-item">
       <div class="cpr-rank-top">
-        <span class="cpr-rank-name">${ad.name}</span>
+        <span class="cpr-rank-name">${ad.name}${adNameCounts[ad.name]>1?` <span style="font-size:10px;color:#7A8595;font-weight:400">(${shortAdsetTag(ad.adset)})</span>`:''}</span>
         <span class="cpr-rank-val" style="color:${i===0?'#0A7C52':'#0D1526'}">${f$4(ad.cpr)}${i===0?' ▲':''}</span>
       </div>
       <div class="cpr-rank-bot">
@@ -1397,23 +1420,23 @@ function downloadPDF() {
 function initAdAudienceSelect() {
   const sel = document.getElementById('ad-audience-select');
   if(!sel) return;
-  // Rebuild options from current D.ads
   while(sel.options.length > 1) sel.remove(1);
+  const counts = D.ads.reduce((m,a)=>(m[a.name]=(m[a.name]||0)+1,m), {});
   D.ads.forEach(ad => {
     const opt = document.createElement('option');
-    opt.value = ad.name;
-    opt.textContent = ad.name;
+    opt.value = ad.key;
+    opt.textContent = counts[ad.name] > 1 ? `${ad.name} · ${shortAdsetTag(ad.adset)}` : ad.name;
     sel.appendChild(opt);
   });
 }
 
-function setAdAudience(adName) {
+function setAdAudience(adKey) {
   const panel = document.getElementById('ad-audience-panel');
-  if(!adName) { panel.style.display='none'; return; }
-  const data = D.adsAudience[adName];
+  if(!adKey) { panel.style.display='none'; return; }
+  const data = D.adsAudience[adKey];
   if(!data || data.length===0) return;
   panel.style.display='block';
-  const ad = D.ads.find(a=>a.name===adName);
+  const ad = D.ads.find(a=>a.key===adKey);
   const maxR = Math.max(...data.map(d=>d.results), 1);
   panel.innerHTML = `
     <div class="card">

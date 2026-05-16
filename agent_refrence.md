@@ -190,15 +190,18 @@ D.core        // { spend, reach, impressions, results, cpr, engRate }
 D.daily       // [ { week(label), ws, we, spend, results, impressions, reach, cpr } ] — one entry per day
 D.weekly      // [ { week(label), ws, we, spend, results, impressions, reach, cpr } ] — one entry per Mon–Sun calendar week
 D.adsets      // [ { name, spend, results, impressions, reach, cpr } ]
-D.ads         // [ { name, adset, spend, results, impressions, reach, cpr } ]
+D.ads         // [ { name, adset, key, spend, results, impressions, reach, cpr } ]
+              //   key = "adName|||adsetName" — unique per ad+adset delivery unit
+              //   ⚠ same creative in multiple ad sets = multiple entries with different key/adset/cpr
 D.age         // [ { seg, spend, results, impressions, reach, cpr } ]
 D.gender      // [ { seg, spend, results, impressions, reach, cpr } ]
 D.ageByAdset  // { adsetName: [ { seg, ... } ] }
-D.adsAudience // { adName: [ { seg, ... } ] }
+D.adsAudience // { "adName|||adsetName": [ { seg, ... } ] }  — keyed by composite, NOT ad name alone
 ```
 
 `D.daily` is used by: Overview "Daily" toggle.  
-`D.weekly` is used by: Overview "Weekly" toggle, Weekly tab charts, Weekly tab table.
+`D.weekly` is used by: Overview "Weekly" toggle, Weekly tab charts, Weekly tab table.  
+`D.ads[].key` is used by: audience dropdown option values, `setAdAudience`, `adsAudience` lookup.
 
 ## PDF export notes
 

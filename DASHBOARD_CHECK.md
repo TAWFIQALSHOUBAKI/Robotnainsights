@@ -128,17 +128,23 @@ All three must pass before proceeding.
 
 ## 8. Creative & Ads Tab
 
+> **Performance marketer note:** The correct unit of analysis is `ad + adset` (the delivery unit Meta tracks), NOT creative name alone. The same creative running in two ad sets must appear as **two separate rows** with independent CPR, spend, and results.
+
 | # | Check | How to verify |
 |---|---|---|
-| 8.1 | `chart-ads-spend` horizontal bar renders | Bars visible, one per ad |
-| 8.2 | CPR rank list is populated | Ads listed with CPR values, best has green ▲ |
-| 8.3 | `table-ads` has rows | Rows match number of unique ads in data |
-| 8.4 | Best-performing ad row is highlighted | Row with lowest CPR has distinct background |
-| 8.5 | Column header click sorts table | Click "Spend" → rows re-order descending |
+| 8.1 | `chart-ads-spend` bar count = unique ad+adset pairs | Run `D.ads.length` in console — must equal number of `ad\|\|\|adset` pairs, not unique creative names |
+| 8.2 | Same creative in two ad sets = two bars with different labels | `لغة الأرقام_Reel` should appear twice: `"لغة الأرقام_R… · Broad"` and `"لغة الأرقام_R… · Custom"` |
+| 8.3 | CPR rank list separates same-name creatives | Both entries visible with `(Broad)` / `(Custom)` tag — CPR values differ ($0.0013 vs $0.0024) |
+| 8.4 | `table-ads` row count = `D.ads.length` | Rows match ad+adset pair count, not just unique creative names |
+| 8.5 | `table-ads` "Ad Set" column shows correct parent | Each row's Ad Set cell shows the ad set that delivered that specific creative |
+| 8.6 | Best-performing ad row is highlighted | Row with lowest CPR has distinct background and `▲ Best` badge |
+| 8.7 | Column header click sorts table | Click "Spend" → rows re-order descending |
 
 ---
 
 ## 9. Audience Tab
+
+> **Performance marketer note:** Audience breakdown is per `ad+adset` pair. If `لغة الأرقام_Reel` runs in Broad and Custom, each has its own demographic delivery — they must not be merged.
 
 | # | Check | How to verify |
 |---|---|---|
@@ -146,9 +152,10 @@ All three must pass before proceeding.
 | 9.2 | Ad set filter button count matches data | Run `document.querySelectorAll('#adset-filter-btns .filter-btn').length` — must equal unique ad set count |
 | 9.3 | Filter button updates age chart | Click each ad set button — chart data changes |
 | 9.4 | "All" button restores full data | Click All after filtering — chart shows combined data |
-| 9.5 | Ad dropdown populated from data | `#ad-audience-select` has one option per unique ad |
-| 9.6 | Selecting ad updates `chart-ad-age` | Choose an ad → ad-level age chart appears |
-| 9.7 | Audience table updates with selection | `#table-ad-audience` rows match selected ad's age breakdown |
+| 9.5 | Ad dropdown shows one option per `ad+adset` pair | `#ad-audience-select` option count = `D.ads.length`; duplicated creatives show `"Name · Broad"` / `"Name · Custom"` disambiguation |
+| 9.6 | Selecting creative+adset shows correct audience | Choose `لغة الأرقام_Reel · Custom` → age chart shows only Custom audience, not merged with Broad |
+| 9.7 | Audience table rows match selected pair's age data | `#table-ad-audience` shows only age breakdown for selected ad+adset |
+| 9.8 | Spend/CPR header values match selected ad+adset | Header CPR for Broad entry = $0.0013, for Custom = $0.0024 — not the same value |
 
 ---
 
@@ -214,23 +221,41 @@ All three must pass before proceeding.
 Run after loading `index.html` with latest `data.js`:
 
 ```js
-// Ad set count matches cards
+// 1. Ad set cards match data
 const dataAdsets = [...new Set(RAW_DATA.map(r => r.adset))];
 const cardCount  = document.querySelectorAll('#adset-cards .card').length;
 console.assert(cardCount === dataAdsets.length, `Cards: ${cardCount} vs data: ${dataAdsets.length}`);
 
-// Audience filter buttons match ad set count
+// 2. Audience filter buttons match ad set count
 const filterBtns = document.querySelectorAll('#adset-filter-btns .filter-btn').length;
 console.assert(filterBtns === dataAdsets.length, `Filter btns: ${filterBtns} vs data: ${dataAdsets.length}`);
 
-// Tab meta is not hardcoded
+// 3. D.ads uses ad+adset composite — no merging across ad sets
+const adPairs = [...new Set(RAW_DATA.map(r => r.ad + '|||' + r.adset))];
+console.assert(D.ads.length === adPairs.length,
+  `D.ads has ${D.ads.length} entries but data has ${adPairs.length} ad+adset pairs — collision detected!`);
+
+// 4. D.adsAudience keyed by composite — audience data not merged
+console.assert(Object.keys(D.adsAudience).length === adPairs.length,
+  `adsAudience keys: ${Object.keys(D.adsAudience).length} vs pairs: ${adPairs.length}`);
+
+// 5. Same creative in different ad sets has different CPR (data integrity)
+const byName = {};
+D.ads.forEach(a => (byName[a.name] = byName[a.name] || []).push(a));
+Object.entries(byName).filter(([,v]) => v.length > 1).forEach(([name, entries]) => {
+  const cprs = entries.map(e => e.cpr?.toFixed(4));
+  console.log(`  ⚠ "${name}" runs in ${entries.length} ad sets — CPRs: ${cprs.join(', ')} (should differ)`);
+  console.assert(new Set(cprs).size > 1 || cprs.every(c=>c==null),
+    `"${name}" has identical CPR across ad sets — possible data collapse!`);
+});
+
+// 6. Tab meta is dynamic
 const meta = document.getElementById('tab-meta').textContent;
 console.assert(meta && !meta.includes('2 weeks · 6 ads'), 'Tab meta is still hardcoded!');
 
-// FINDINGS panel state
+// 7. FINDINGS panel state
 if (FINDINGS.length === 0) {
-  console.assert(document.getElementById('findings-panel').style.display === 'none' ||
-    getComputedStyle(document.getElementById('findings-panel')).display === 'none',
+  console.assert(getComputedStyle(document.getElementById('findings-panel')).display === 'none',
     'Findings panel visible with empty FINDINGS');
 } else {
   console.assert(document.getElementById('findings-panel').style.display === 'block',
@@ -262,3 +287,4 @@ if (FINDINGS.length === 0) {
 | 2026-05-16 | Fixed ad set cards — dynamic from `D.adsets`; removed 2-card hardcoded HTML | — |
 | 2026-05-16 | Fixed audience filter buttons — dynamic from `D.adsets`; removed hardcoded 2-button HTML | — |
 | 2026-05-16 | Fixed tab meta — dynamic count of weeks/ad sets/ads; removed hardcoded "2 weeks · 6 ads" | — |
+| 2026-05-17 | Fixed ad collision — `D.ads` now keyed by `ad\|\|\|adset` composite; same creative in multiple ad sets appears as separate entries with independent CPR, spend, and audience data | — |
