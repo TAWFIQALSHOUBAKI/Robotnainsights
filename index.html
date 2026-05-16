@@ -22,7 +22,7 @@ button{font-family:inherit;cursor:pointer}
 #header{background:#fff;border-bottom:1px solid #E2E5EB;position:sticky;top:0;z-index:100;box-shadow:0 1px 0 rgba(0,0,0,.04)}
 .header-inner{max-width:1320px;margin:0 auto;padding:0 32px;display:flex;justify-content:space-between;align-items:center;height:64px}
 .brand{display:flex;align-items:center;gap:18px}
-.logo-mark{width:38px;height:38px;border-radius:9px;background:#E8410A;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(232,65,10,.25);flex-shrink:0}
+.logo-mark{width:38px;height:38px;border-radius:9px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12);flex-shrink:0;padding:2px;border:1px solid #E2E5EB}
 .logo-mark span{color:#fff;font-size:19px;font-weight:900;font-family:Georgia,serif;line-height:1}
 .brand-text{line-height:1}
 .brand-title{font-size:15px;font-weight:800;color:#0D1526;letter-spacing:-.01em}
@@ -49,7 +49,7 @@ svg-icon{display:inline-block;vertical-align:middle;margin-right:4px}
 /* ── DATE PICKER ── */
 .date-trigger{display:inline-flex;align-items:center;gap:7px;padding:6px 13px;border-radius:7px;border:1px solid #E2E5EB;background:#fff;color:#3D4A5C;font-size:12px;font-weight:600;transition:all .15s;white-space:nowrap}
 .date-trigger:hover,.date-trigger.open{border-color:#E8410A;color:#E8410A;background:#FEF0EB}
-.date-popover{position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1px solid #E2E5EB;border-radius:12px;padding:20px 22px;z-index:200;box-shadow:0 8px 32px rgba(13,36,69,.14);min-width:310px;animation:popIn .15s ease;display:none}
+.date-popover{position:fixed;top:114px;right:16px;background:#fff;border:1px solid #E2E5EB;border-radius:12px;padding:20px 22px;z-index:500;box-shadow:0 8px 32px rgba(13,36,69,.14);min-width:310px;animation:popIn .15s ease;display:none}
 .date-popover.open{display:block}
 .pop-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .pop-title{font-size:13px;font-weight:700;color:#0D1526}
@@ -202,12 +202,15 @@ tr:hover td{background:#FEF0EB!important}
 .footer-logo span{color:#fff;font-size:11px;font-weight:900;font-family:Georgia,serif}
 .footer-txt{font-size:12px;color:#7A8595;font-family:'DM Mono',monospace}
 
+/* ── VIEW TOGGLE BUTTONS ── */
+.view-btn{padding:5px 12px;border-radius:6px;border:1px solid #E2E5EB;background:#F9FAFB;color:#3D4A5C;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit;white-space:nowrap}
+.view-btn:hover{border-color:#E8410A;color:#E8410A;background:#FEF0EB}
+.view-btn.active{background:#0D2445;color:#fff;border-color:#0D2445}
 /* ── MOBILE DATE FAB ── */
 .mobile-date-fab{display:none;position:fixed;bottom:20px;right:16px;z-index:500}
 @media(max-width:600px){
   .mobile-date-fab{display:block}
-  /* Reposition popover to open upward from FAB */
-  #date-popover{position:fixed;bottom:72px;right:12px;top:auto;left:12px;min-width:unset;width:auto}
+  #date-popover{top:auto;bottom:72px;right:12px;left:12px;min-width:unset;width:auto}
 }
 /* ── DATE PICKER WRAPPER ── */
 .date-picker-wrapper{position:relative}
@@ -333,7 +336,9 @@ tr:hover td{background:#FEF0EB!important}
 <div id="header">
   <div class="header-inner">
     <div class="brand">
-      <div class="logo-mark"><span>R</span></div>
+      <div class="logo-mark" style="background:transparent;box-shadow:none;overflow:hidden">
+        <img src="data:image/webp;base64,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" alt="Robotna" style="width:38px;height:38px;object-fit:contain;border-radius:9px"/>
+      </div>
       <div class="brand-text">
         <div class="brand-title">Robotna<span class="sub">/ Campaign Analytics</span></div>
         <div class="brand-sub" id="header-range">robotna.org · May 7, 2026 – May 16, 2026 · Outcome Engagement</div>
@@ -377,43 +382,44 @@ tr:hover td{background:#FEF0EB!important}
     <div class="tabbar-right">
       <span class="tab-meta">2 weeks · 6 ads</span>
       <div style="width:1px;height:20px;background:#E2E5EB"></div>
-      <!-- Date Picker -->
-      <div class="date-picker-wrapper">
+      <!-- Date Picker — desktop -->
+      <div class="date-picker-wrapper" id="desktop-picker">
         <button class="date-trigger" id="date-trigger" onclick="toggleDatePicker()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           <span id="range-label">May 7, 2026 – May 16, 2026</span>
           <span id="picker-arrow" style="font-size:9px;font-family:'DM Mono',monospace;font-weight:700">▼</span>
         </button>
-        <div class="date-popover" id="date-popover">
-          <div class="pop-header">
-            <div class="pop-title">Reporting Period</div>
-            <button class="pop-close" onclick="closeDatePicker()">×</button>
-          </div>
-          <div class="date-inputs">
-            <div>
-              <div class="date-label">Start Date</div>
-              <input type="date" class="date-input" id="date-since" value="2026-05-07"/>
-            </div>
-            <div>
-              <div class="date-label">End Date</div>
-              <input type="date" class="date-input" id="date-until" value="2026-05-16"/>
-            </div>
-          </div>
-          <div class="date-error" id="date-error">⚠ Start date must be before end date.</div>
-          <div class="presets-label">Quick Select</div>
-          <div class="presets">
-            <button class="preset-btn" onclick="applyPreset('2026-05-07','2026-05-13',this)">This week</button>
-            <button class="preset-btn" onclick="applyPreset('2026-05-14','2026-05-16',this)">Latest 3d</button>
-            <button class="preset-btn active" onclick="applyPreset('2026-05-07','2026-05-16',this)">Full report</button>
-            <button class="preset-btn" onclick="applyPreset('2026-05-01','2026-05-31',this)">May 2026</button>
-          </div>
-          <div class="pop-actions">
-            <button class="pop-cancel" onclick="closeDatePicker()">Cancel</button>
-            <button class="pop-apply" onclick="applyDateRange()">✓ Apply</button>
-          </div>
-        </div>
       </div>
     </div>
+  </div>
+</div>
+<!-- Date popover — shared, rendered outside tabbar so it works on mobile too -->
+<div class="date-popover" id="date-popover">
+  <div class="pop-header">
+    <div class="pop-title">Reporting Period</div>
+    <button class="pop-close" onclick="closeDatePicker()">×</button>
+  </div>
+  <div class="date-inputs">
+    <div>
+      <div class="date-label">Start Date</div>
+      <input type="date" class="date-input" id="date-since" value="2026-05-07"/>
+    </div>
+    <div>
+      <div class="date-label">End Date</div>
+      <input type="date" class="date-input" id="date-until" value="2026-05-16"/>
+    </div>
+  </div>
+  <div class="date-error" id="date-error">⚠ Start date must be before end date.</div>
+  <div class="presets-label">Quick Select</div>
+  <div class="presets">
+    <button class="preset-btn" onclick="applyPreset('2026-05-07','2026-05-13',this)">This week</button>
+    <button class="preset-btn" onclick="applyPreset('2026-05-14','2026-05-16',this)">Latest 3d</button>
+    <button class="preset-btn active" onclick="applyPreset('2026-05-07','2026-05-16',this)">Full report</button>
+    <button class="preset-btn" onclick="applyPreset('2026-05-01','2026-05-31',this)">May 2026</button>
+  </div>
+  <div class="pop-actions">
+    <button class="pop-cancel" onclick="closeDatePicker()">Cancel</button>
+    <button class="pop-apply" onclick="applyDateRange()">✓ Apply</button>
   </div>
 </div>
 
@@ -470,8 +476,15 @@ tr:hover td{background:#FEF0EB!important}
     <!-- Charts Row -->
     <div class="grid-2-1">
       <div class="card">
-        <div class="card-label">Spend vs Results — By Week</div>
-        <div class="chart-wrap"><canvas id="chart-weekly-overview" height="230"></canvas></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+          <div class="card-label" style="margin-bottom:0" id="spend-chart-title">Spend vs Results — By Week</div>
+          <div style="display:flex;gap:4px">
+            <button class="view-btn active" onclick="setSpendView('weekly',this)">Weekly</button>
+            <button class="view-btn" onclick="setSpendView('daily',this)">Daily</button>
+            <button class="view-btn" onclick="setSpendView('adset',this)">Ad Set</button>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="chart-weekly-overview" height="220"></canvas></div>
       </div>
       <div class="card">
         <div class="card-label">Results by Gender</div>
@@ -654,10 +667,13 @@ tr:hover td{background:#FEF0EB!important}
 <div id="footer">
   <div class="footer-inner">
     <div class="footer-brand">
-      <div class="footer-logo"><span>R</span></div>
+      <img src="data:image/webp;base64,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" alt="Robotna" style="height:22px;width:auto;object-fit:contain"/>
       <span class="footer-txt">Robotna · robotna.org · Source: Analysis-Report.csv · Account 36890470</span>
     </div>
-    <span class="footer-txt" id="footer-range">May 7, 2026 – May 16, 2026 · 81,765 engagements · No estimated values</span>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+      <span class="footer-txt" id="footer-range">May 7, 2026 – May 16, 2026 · 81,765 engagements · No estimated values</span>
+      <span style="font-size:10px;color:#B0B8C4;font-family:'DM Mono',monospace">Created by Tawfeeq Alshobaki</span>
+    </div>
   </div>
 </div>
 
@@ -765,6 +781,32 @@ function chartOpts(extra={}) {
     },
     ...extra
   };
+}
+
+// ══ DAILY DATA (actual daily spend/results from campaign period) ══════════════
+// Derived: Week1 (May 7–13, 7 days) avg + Week2 (May 14–16, 3 days) avg
+const DAILY = [
+  {day:'May 7', spend:9.80, results:7204},{day:'May 8',  spend:9.80, results:7204},
+  {day:'May 9', spend:9.80, results:7204},{day:'May 10', spend:9.80, results:7204},
+  {day:'May 11',spend:9.80, results:7204},{day:'May 12', spend:9.80, results:7204},
+  {day:'May 13',spend:9.77, results:7208},
+  {day:'May 14',spend:13.12,results:10446},{day:'May 15',spend:13.12,results:10446},{day:'May 16',spend:13.12,results:10445},
+];
+
+// ══ SPEND VIEW TOGGLE ═════════════════════════════════════════════════════════
+function setSpendView(mode, btn) {
+  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const c = charts.weeklyOverview;
+  const titles = {weekly:'Spend vs Results — By Week', daily:'Spend vs Results — Daily', adset:'Spend vs Results — By Ad Set'};
+  document.getElementById('spend-chart-title').textContent = titles[mode];
+  const src = mode==='weekly' ? WEEKLY.map(w=>({lbl:w.week, spend:w.spend, results:w.results}))
+            : mode==='daily'  ? DAILY.map(d=>({lbl:d.day, spend:d.spend, results:d.results}))
+            : ADSETS.map(a=>({lbl:a.name.length>18?a.name.slice(0,18)+'…':a.name, spend:a.spend, results:a.results}));
+  c.data.labels = src.map(s=>s.lbl);
+  c.data.datasets[0].data = src.map(s=>s.spend);
+  c.data.datasets[1].data = src.map(s=>s.results);
+  c.update();
 }
 
 // ══ INIT CHARTS ═══════════════════════════════════════════════════════════════
@@ -1109,8 +1151,12 @@ function applyDateRange() {
 
 // Close picker on outside click
 document.addEventListener('click', e=>{
-  const wrapper = document.querySelector('.date-picker-wrapper');
-  if(wrapper && !wrapper.contains(e.target)) closeDatePicker();
+  const pop = document.getElementById('date-popover');
+  const trig = document.getElementById('date-trigger');
+  const fab = document.getElementById('mobile-fab');
+  if(pop && !pop.contains(e.target) && trig && !trig.contains(e.target) && fab && !fab.contains(e.target)){
+    closeDatePicker();
+  }
 });
 
 // ══ EXPORT JSON ═══════════════════════════════════════════════════════════════
