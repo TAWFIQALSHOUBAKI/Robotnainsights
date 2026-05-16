@@ -264,56 +264,83 @@ function handleFileSelect(file) {
 
 function parseCSV(text) {
   try {
-    const lines = text.trim().split('\n');
-    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+    // Strip BOM, normalize line endings
+    const clean = text.replace(/^﻿/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    const lines = clean.split('\n').filter(l => l.trim() !== '');
+    if (!lines.length) { setStatus('parse-status', 'File is empty.', 'err'); return; }
 
-    const idx = name => headers.indexOf(name);
+    // Auto-detect delimiter (Meta uses comma, some locales use semicolon)
+    const delim = lines[0].includes(';') && !lines[0].includes(',') ? ';' : ',';
+
+    const headers = splitCSVLine(lines[0], delim).map(h => h.replace(/^"|"$/g, '').trim());
+
+    // Find the real header row (some Meta exports have metadata rows on top)
+    let headerIdx = 0;
     const need = ['Day','Ad set name','Ad name','Age','Gender','Results','Amount spent (USD)','Impressions','Reach'];
+    for (let r = 0; r < Math.min(10, lines.length); r++) {
+      const h = splitCSVLine(lines[r], delim).map(v => v.replace(/^"|"$/g, '').trim());
+      if (need.every(n => h.includes(n))) { headerIdx = r; break; }
+    }
+    const hdrs = splitCSVLine(lines[headerIdx], delim).map(h => h.replace(/^"|"$/g, '').trim());
+    const idx = name => hdrs.indexOf(name);
+
     const missing = need.filter(n => idx(n) === -1);
     if (missing.length) {
       setStatus('parse-status', `Missing columns: ${missing.join(', ')}`, 'err');
       return;
     }
 
+    const minCols = Math.max(...need.map(n => idx(n))) + 1;
     const rows = [];
-    for (let i = 1; i < lines.length; i++) {
-      const cols = splitCSVLine(lines[i]);
-      if (!cols[idx('Ad set name')]) continue;
+    for (let i = headerIdx + 1; i < lines.length; i++) {
+      const cols = splitCSVLine(lines[i], delim);
+      if (!cols || cols.length < minCols) continue;
+      const adset = cols[idx('Ad set name')];
+      if (!adset || !String(adset).trim()) continue;
       rows.push({
-        day:         cols[idx('Day')].trim(),
-        adset:       cols[idx('Ad set name')],
-        ad:          cols[idx('Ad name')],
-        age:         cols[idx('Age')],
-        gender:      cols[idx('Gender')].toLowerCase(),
+        day:         String(cols[idx('Day')]         ?? '').trim(),
+        adset:       String(cols[idx('Ad set name')] ?? '').trim(),
+        ad:          String(cols[idx('Ad name')]      ?? '').trim(),
+        age:         String(cols[idx('Age')]          ?? '').trim(),
+        gender:      String(cols[idx('Gender')]       ?? '').trim().toLowerCase(),
         spend:       parseFloat(cols[idx('Amount spent (USD)')]) || 0,
-        results:     parseInt(cols[idx('Results')]) || 0,
-        impressions: parseInt(cols[idx('Impressions')]) || 0,
-        reach:       parseInt(cols[idx('Reach')]) || 0
+        results:     parseInt(cols[idx('Results')])              || 0,
+        impressions: parseInt(cols[idx('Impressions')])          || 0,
+        reach:       parseInt(cols[idx('Reach')])                || 0
       });
     }
 
     if (!rows.length) { setStatus('parse-status', 'No valid rows found.', 'err'); return; }
 
     parsedRows = rows;
-    const days = rows.map(r => r.day).sort();
-    document.getElementById('meta-since').value = days[0];
-    document.getElementById('meta-until').value = days[days.length-1];
+    const days = rows.map(r => r.day).filter(Boolean).sort();
+    document.getElementById('meta-since').value = days[0]  || '';
+    document.getElementById('meta-until').value = days[days.length-1] || '';
     setStatus('parse-status', `Parsed ${rows.length} rows · ${days[0]} → ${days[days.length-1]}`, 'ok');
     showPreview(rows);
     saveToStorage();
   } catch(err) {
-    setStatus('parse-status', 'Parse error: ' + err.message, 'err');
+    console.error('parseCSV error:', err);
+    setStatus('parse-status', 'Parse error: ' + err.message + ' — check browser console (F12) for details.', 'err');
   }
 }
 
-function splitCSVLine(line) {
+function splitCSVLine(line, delim = ',') {
+  if (line == null) return [];
   const result = [];
   let cur = '', inQ = false;
   for (let i = 0; i < line.length; i++) {
     const c = line[i];
-    if (c === '"') { inQ = !inQ; }
-    else if (c === ',' && !inQ) { result.push(cur.trim()); cur = ''; }
-    else cur += c;
+    if (c === '"') {
+      // Handle escaped quotes ("")
+      if (inQ && line[i+1] === '"') { cur += '"'; i++; }
+      else inQ = !inQ;
+    } else if (c === delim && !inQ) {
+      result.push(cur.trim());
+      cur = '';
+    } else {
+      cur += c;
+    }
   }
   result.push(cur.trim());
   return result;
