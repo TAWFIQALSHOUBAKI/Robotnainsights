@@ -78,9 +78,11 @@
 ---
 
 ## 9. Analyst Findings Panel
+> **Fixed 2026-05-16** — `#findings-panel` div was missing from HTML; also added `display:none` default so the panel stays hidden until `renderFindings()` shows it.
 - [ ] When `FINDINGS = []` in `data.js` — panel is hidden (no empty box)
-- [ ] When `FINDINGS` has entries — yellow panel appears below tabbar with notes
+- [ ] When `FINDINGS` has entries — yellow panel appears between tabbar and body with notes
 - [ ] HTML in note text is escaped (no XSS)
+- [ ] Panel does not flash empty on load before JS runs
 
 ---
 
@@ -110,10 +112,11 @@
 - [ ] CSV drag-and-drop or browse parses file and shows preview table
 - [ ] Date inputs auto-fill from CSV date range after parse
 - [ ] Campaign goal dropdown has all 6 goal types
-- [ ] Add Finding → row appears; remove (✕) removes it
-- [ ] **Download data.js** downloads file with correct JSON
+- [ ] Add Finding → row appears with date + note fields; remove (✕) removes it
+- [ ] **Download data.js** downloads file containing `CAMPAIGN_META`, `FINDINGS`, and `RAW_DATA`
 - [ ] Downloaded `data.js` drop-in replaces existing file → dashboard reloads with new data
-- [ ] Portal state persists after page refresh (localStorage)
+- [ ] Portal state (rows, findings, meta) persists after page refresh (localStorage)
+- [ ] Multi-line CSV fields and non-comma delimiters parse correctly
 
 ---
 
@@ -140,6 +143,7 @@ Array.isArray(FINDINGS)
 | File | Purpose |
 |---|---|
 | `index.html` | Stakeholder dashboard |
-| `portal.html` | Analyst control portal |
-| `data.js` | Live data layer (replace to update) |
-| `agent_refrence.md` | Manual update protocol |
+| `portal.html` | Analyst control portal — generates `data.js` |
+| `data.js` | Live data layer — replace to update dashboard |
+| `agent_refrence.md` | Update protocol (manual + portal paths) |
+| `DASHBOARD_CHECK.md` | This QA checklist |

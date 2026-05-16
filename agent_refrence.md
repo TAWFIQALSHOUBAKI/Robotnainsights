@@ -2,24 +2,38 @@
 
 ## Architecture (important — read first)
 
-The dashboard is **fully dynamic**. There are NO static data constants to patch.
-All data lives in `const RAW_DATA = [...]` — a flat array of daily rows.
+The dashboard is **fully dynamic**. There are NO static data constants to patch inside `index.html`.
+All data lives in **`data.js`** — a separate file loaded by `index.html` as a script tag.
+
+`data.js` exports three constants:
+
+```js
+const CAMPAIGN_META = { name, goal, since, until };
+const FINDINGS      = [ { date, note }, ... ];   // empty array = panel hidden
+const RAW_DATA      = [ { day, adset, ad, age, gender, spend, results, impressions, reach }, ... ];
+```
+
 Every chart, table, KPI, and dropdown recomputes from `RAW_DATA` on every date filter change.
 
-**To update the dashboard: replace only `RAW_DATA` + date defaults.**
+**To update the dashboard: generate a new `data.js` (via portal) and replace the file.**
 
 ---
 
-## Daily update prompt (paste as-is)
+## Preferred update path — Control Portal (`portal.html`)
 
-```
-Update robotna-dashboard.html with this new CSV/XLSX.
-Follow UPDATE_PROTOCOL.md
-```
+1. Open `portal.html` in a browser and log in (password: `robotna2026`)
+2. Upload the new `.csv` export from Meta Ads Manager
+3. Fill in Campaign Meta (name, goal, date range)
+4. Add / edit Analyst Findings if needed
+5. Click **Download data.js**
+6. Replace `data.js` in the project root with the downloaded file
+7. Reload `index.html` — dashboard updates automatically
 
 ---
 
-## Step 1 — Run extraction script
+## Manual update path — script extraction (fallback)
+
+Use when the portal is unavailable or CSV needs pre-processing.
 
 ### Daily CSV (preferred — has `Day` column)
 
@@ -82,40 +96,34 @@ for _, r in df.iterrows():
 print('const RAW_DATA =', json.dumps(rows, ensure_ascii=False) + ';')
 ```
 
-> Note: for weekly XLSX also update `filterRows` to use `r.ws <= until && r.we >= since` instead of `r.day`.
+> Note: for weekly XLSX also update `filterRows` in `index.html` to use `r.ws <= until && r.we >= since` instead of `r.day`.
 
 ---
 
-## Step 2 — Patch exactly these 5 things
+## `data.js` full template
 
-| # | What | Where in HTML |
-|---|---|---|
-| 1 | `const RAW_DATA = [...]` | Replace entire JS array |
-| 2 | `currentRange = { since:'...', until:'...' }` | First/last day from new data |
-| 3 | `id="date-since" value="..."` | HTML date input |
-| 4 | `id="date-until" value="..."` | HTML date input |
-| 5 | Static display strings (5 elements) | See below |
+```js
+// ── CAMPAIGN META ──────────────────────────────────────────────
+const CAMPAIGN_META = {
+  "name":  "Robotna",
+  "goal":  "Outcome Engagement",
+  "since": "YYYY-MM-DD",
+  "until": "YYYY-MM-DD"
+};
 
-### Static display strings to update
+// ── ANALYST FINDINGS ────────────────────────────────────────────
+const FINDINGS = [
+  { "date": "YYYY-MM-DD", "note": "your note here" }
+];
+// Set FINDINGS = []; to hide the panel entirely.
 
-```
-id="header-range"  → "robotna.org · [DATE RANGE] · Outcome Engagement"
-id="range-label"   → "[DATE RANGE]"
-id="notice-range"  → "Reporting period: [DATE RANGE]"
-id="weekly-sub"    → "[DATE RANGE]"
-id="footer-range"  → "[DATE RANGE] · No estimated values"
-id="mob-range-label" → short format e.g. "May 10 – May 16"
-```
-
-### Preset buttons (update since/until values)
-
-```html
-<button ... onclick="applyPreset('[SINCE]','[UNTIL]',this)">Full report</button>
+// ── RAW DATA ─────────────────────────────────────────────────────
+const RAW_DATA = [...];
 ```
 
 ---
 
-## What NOT to touch
+## What NOT to touch in `index.html`
 
 - `filterRows()` — already handles `day` field
 - `computeData()` — auto-groups by day, computes all aggregates
@@ -131,8 +139,8 @@ id="mob-range-label" → short format e.g. "May 10 – May 16"
 |---|---|
 | Extraction script | ~200 |
 | RAW_DATA replace | ~500 |
-| 5 str_replace patches | ~300 |
-| **Total** | **~1,000** |
+| CAMPAIGN_META + FINDINGS | ~100 |
+| **Total** | **~800** |
 
 ---
 
@@ -151,6 +159,8 @@ id="mob-range-label" → short format e.g. "May 10 – May 16"
 | Per-ad audience dropdown (Audience tab) | ✓ | |
 | Embedded Robotna logo (base64 webp) | ✓ | No external URL needed |
 | Mobile responsive — scroll tabs, FAB date button | ✓ | |
+| Analyst Findings Panel | ✓ | Yellow panel below tabbar; hidden when `FINDINGS = []` |
+| Control Portal (`portal.html`) | ✓ | CSV upload → `data.js` generation |
 | Footer: Created by Tawfeeq Alshobaki | ✓ | |
 | Export JSON | ✗ | Removed |
 
@@ -188,16 +198,18 @@ D.adsAudience // { adName: [ { seg, ... } ] }
 ## PDF export notes
 
 - Uses **html2canvas** — browser renders HTML including Arabic RTL text natively
-- Arabic cells detected via `/[\u0600-\u06FF]/` regex → `direction:rtl` applied
+- Arabic cells detected via `/[؀-ۿ]/` regex → `direction:rtl` applied
 - 2 pages: Page 1 = KPIs + Daily + Ad Sets | Page 2 = Ads + Age + Gender
 - Reflects **current date filter** — PDF matches what's on screen
 - Button shows `⏳ Generating…` during render (~1–2 seconds)
 
 ## File locations
 
-| File | Path |
+| File | Purpose |
 |---|---|
-| Dashboard HTML | `/mnt/user-data/outputs/robotna-dashboard.html` |
-| This protocol | `/mnt/user-data/outputs/UPDATE_PROTOCOL.md` |
-| CSV/XLSX uploads | `/mnt/user-data/uploads/<filename>` |
+| `index.html` | Stakeholder dashboard |
+| `portal.html` | Analyst control portal — generates `data.js` |
+| `data.js` | Live data layer — replace to update dashboard |
+| `agent_refrence.md` | This update protocol |
+| `DASHBOARD_CHECK.md` | QA checklist |
 | GitHub repo | https://github.com/TAWFIQALSHOUBAKI/Robotnainsights |
