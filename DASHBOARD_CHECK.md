@@ -145,44 +145,55 @@ All three must pass before proceeding.
 ## 9. Audience Tab
 
 > **Performance marketer note:** Audience breakdown is per `ad+adset` pair. If `لغة الأرقام_Reel` runs in Broad and Custom, each has its own demographic delivery — they must not be merged.
+> **Agent note:** The Per Ad dropdown option `value` is the composite key `"adName|||adsetName"`. `setAdAudience(adKey)` must use `ad.key === adKey` to find the ad, not `ad.name`. The panel template must reference `ad.name`, not the deleted variable `adName`.
 
 | # | Check | How to verify |
 |---|---|---|
 | 9.1 | Age filter "All" button active on load | First filter button has `.active` class |
 | 9.2 | Ad set filter button count matches data | Run `document.querySelectorAll('#adset-filter-btns .filter-btn').length` — must equal unique ad set count |
-| 9.3 | Filter button updates age chart | Click each ad set button — chart data changes |
+| 9.3 | Filter button updates age chart | Click each ad set button — chart data changes, table updates |
 | 9.4 | "All" button restores full data | Click All after filtering — chart shows combined data |
-| 9.5 | Ad dropdown shows one option per `ad+adset` pair | `#ad-audience-select` option count = `D.ads.length`; duplicated creatives show `"Name · Broad"` / `"Name · Custom"` disambiguation |
-| 9.6 | Selecting creative+adset shows correct audience | Choose `لغة الأرقام_Reel · Custom` → age chart shows only Custom audience, not merged with Broad |
-| 9.7 | Audience table rows match selected pair's age data | `#table-ad-audience` shows only age breakdown for selected ad+adset |
-| 9.8 | Spend/CPR header values match selected ad+adset | Header CPR for Broad entry = $0.0013, for Custom = $0.0024 — not the same value |
+| 9.5 | Ad dropdown option count = `D.ads.length` | Open Per Ad dropdown — count options (excluding "— All Ads —"); must equal `D.ads.length` |
+| 9.6 | Duplicate creative shows disambiguation tag | `لغة الأرقام_Reel` appears twice: `"لغة الأرقام_Reel · Broad"` and `"لغة الأرقام_Reel · Custom"` |
+| 9.7 | Selecting an ad shows the audience panel | Choose any option — `#ad-audience-panel` becomes visible with a chart |
+| 9.8 | Audience data is isolated per ad+adset | Broad entry CPR = $0.0013; Custom entry CPR = $0.0024 in the panel header |
+| 9.9 | Audience table populates | `#table-ad-audience` has rows after selection |
+| 9.10 | "— All Ads —" hides panel | Select blank option — panel disappears |
 
 ---
 
 ## 10. Analyst Findings Panel
 
+> **Agent note:** `const FINDINGS` in a non-module script does NOT attach to `window`. Guard must use `typeof FINDINGS === 'undefined'`, NOT `!window.FINDINGS` (which is always `undefined` for `const`).
+
 | # | Check | How to verify |
 |---|---|---|
-| 10.1 | Panel hidden when `FINDINGS = []` | Set FINDINGS to `[]`, reload — `#findings-panel` has `display:none` |
-| 10.2 | Panel visible with entries | Current data has 1 finding — yellow card appears below tabbar |
-| 10.3 | Date and note render correctly | Finding shows date chip "2026-05-16" and note text |
-| 10.4 | HTML in note is escaped | Set `note:"<script>alert(1)</script>"` — must render as text, not execute |
-| 10.5 | Panel updates on date filter | Panel is static (findings are not date-filtered); it always shows all findings |
+| 10.1 | Panel hidden when `FINDINGS = []` | Set FINDINGS to `[]`, reload — `#findings-panel` stays `display:none` |
+| 10.2 | Panel visible with entries | Current data: 1 finding — yellow card appears between tabbar and body |
+| 10.3 | Date chip renders | Finding shows orange date badge "2026-05-16" |
+| 10.4 | Note text renders | Note "new ad set started" visible next to date chip |
+| 10.5 | HTML in note is escaped | Set `note:"<img src=x onerror=alert(1)>"` — must render as literal text, no alert |
+| 10.6 | Console check | Run `renderFindings()` in console after `FINDINGS=[{date:'test',note:'ok'}]` — panel should show |
 
 ---
 
 ## 11. PDF Export
 
+> **Agent — root causes fixed:**
+> 1. `unit:'px'` → jsPDF page was 595px wide vs 794px HTML → ratio 0.375 → tiny text. Fix: `unit:'mm'`.
+> 2. Container had no explicit width → html2canvas captured viewport width → wrong canvas ratio. Fix: `container width:794px;overflow:hidden`.
+> 3. `white-space:nowrap` on `<td>` caused Arabic names to overflow 794px wrap → canvas wider than expected. Fix: removed from `td`/`tdAr` styles.
+
 | # | Check | How to verify |
 |---|---|---|
-| 11.1 | Button shows `⏳ Generating…` during render | Click "Print PDF" — button text changes while generating |
-| 11.2 | PDF downloads as 2-page A4 portrait | File downloads; open and check page size is A4 (210×297mm) |
-| 11.3 | Content fills full page width | Tables and text span the full width — not a narrow column |
-| 11.4 | Margins are ~15mm on all sides | Content does not touch page edges; clear white margin visible |
-| 11.5 | Page 1 content: KPIs + Daily table + Ad Sets table | Verify all 3 sections present on page 1 |
-| 11.6 | Page 2 content: Ads + Age + Gender tables | Verify all 3 sections present on page 2 |
-| 11.7 | Arabic text is readable and RTL | Ad names in Arabic (e.g. لغة الأرقام) display right-to-left |
-| 11.8 | PDF reflects active date filter | Apply Mon–Wed preset → download PDF → data matches that filter |
+| 11.1 | Button shows `⏳ Generating…` | Click "Print PDF" — button text changes |
+| 11.2 | PDF is 2-page A4 portrait | Page count = 2; dimensions = 210×297mm in viewer |
+| 11.3 | Content fills full page width | Tables span full width — not a narrow column |
+| 11.4 | Margins ~15mm on all sides | No content touching page edges |
+| 11.5 | Page 1: KPIs + Daily table + Ad Sets table | All 3 sections present |
+| 11.6 | Page 2: Ads + Age + Gender tables | All 3 sections present |
+| 11.7 | Arabic names wrap within cells | Long Arabic names wrap to next line, don't push table off-page |
+| 11.8 | PDF reflects active date filter | Mon–Wed preset → download → data shows Mon–Wed only |
 
 ---
 
@@ -288,3 +299,6 @@ if (FINDINGS.length === 0) {
 | 2026-05-16 | Fixed audience filter buttons — dynamic from `D.adsets`; removed hardcoded 2-button HTML | — |
 | 2026-05-16 | Fixed tab meta — dynamic count of weeks/ad sets/ads; removed hardcoded "2 weeks · 6 ads" | — |
 | 2026-05-17 | Fixed ad collision — `D.ads` now keyed by `ad\|\|\|adset` composite; same creative in multiple ad sets appears as separate entries with independent CPR, spend, and audience data | — |
+| 2026-05-17 | Fixed Analyst Findings never showing — `const FINDINGS` does not attach to `window`; guard changed from `!window.FINDINGS` to `typeof FINDINGS === 'undefined'` | — |
+| 2026-05-17 | Fixed Per Ad audience dropdown — `setAdAudience` template referenced deleted variable `adName`; changed to `ad.name` | — |
+| 2026-05-17 | Fixed PDF zoom — container now `width:794px;overflow:hidden`; removed `white-space:nowrap` from `td`/`tdAr` to prevent canvas overflow | — |

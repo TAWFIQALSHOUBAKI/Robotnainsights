@@ -1276,12 +1276,12 @@ function downloadPDF() {
 
   // ── Shared styles ─────────────────────────────────────────────────────────
   const S = {
-    wrap:  'font-family:"Plus Jakarta Sans",-apple-system,sans-serif;color:#0D1526;background:#fff;width:794px;padding:48px 56px;box-sizing:border-box;font-size:12px',
+    wrap:  'font-family:"Plus Jakarta Sans",-apple-system,sans-serif;color:#0D1526;background:#fff;width:794px;max-width:794px;overflow:hidden;padding:48px 56px;box-sizing:border-box;font-size:12px',
     hdr:   'background:#E8410A;margin:-48px -56px 28px;padding:14px 56px;display:flex;justify-content:space-between;align-items:center',
     sec:   'background:#FEF0EB;border-left:4px solid #E8410A;padding:6px 12px;margin:20px 0 8px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#E8410A',
     th:    'background:#0D2445;color:#fff;padding:7px 10px;font-size:10px;font-weight:700;letter-spacing:.04em;white-space:nowrap;text-align:right',
-    td:    'padding:7px 10px;border-bottom:1px solid #E2E5EB;white-space:nowrap;text-align:right',
-    tdAr:  'padding:7px 10px;border-bottom:1px solid #E2E5EB;white-space:nowrap;text-align:right;direction:rtl',
+    td:    'padding:7px 10px;border-bottom:1px solid #E2E5EB;text-align:right',
+    tdAr:  'padding:7px 10px;border-bottom:1px solid #E2E5EB;text-align:right;direction:rtl',
     best:  'background:#ECFDF5;color:#0A7C52;font-weight:700',
     alt:   'background:#F9FAFB',
   };
@@ -1380,7 +1380,8 @@ function downloadPDF() {
   if(btn) btn.innerHTML = '⏳ Generating…';
 
   const container = document.createElement('div');
-  container.style.cssText = 'position:fixed;top:-9999px;left:0;z-index:-1';
+  // Explicit width locks html2canvas to exactly 794px — prevents viewport-width capture
+  container.style.cssText = 'position:fixed;top:-9999px;left:-9999px;z-index:-1;width:794px;overflow:hidden';
   document.body.appendChild(container);
 
   const pages = [page1, page2];
@@ -1443,7 +1444,7 @@ function setAdAudience(adKey) {
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
         <div>
           <div class="card-label" style="margin-bottom:4px">Audience Breakdown</div>
-          <div style="font-size:14px;font-weight:700;color:#0D1526;direction:rtl">${adName}</div>
+          <div style="font-size:14px;font-weight:700;color:#0D1526;direction:rtl">${ad ? ad.name : ''}</div>
         </div>
         <div style="display:flex;gap:10px">
           <div style="text-align:right">
@@ -1612,7 +1613,8 @@ function updateTrendChart() {
 // ══ BOOT ══════════════════════════════════════════════════════════════════════
 
 function renderFindings() {
-  if (!window.FINDINGS || !FINDINGS.length) return;
+  // const declarations don't attach to window — check with typeof, not window.FINDINGS
+  if (typeof FINDINGS === 'undefined' || !FINDINGS.length) return;
   const panel = document.getElementById('findings-panel');
   panel.innerHTML = '<div class="findings-card"><div class="findings-title">&#128269; Analyst Findings</div>'
     + FINDINGS.map(f => '<div class="finding-item">'
