@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Robotna — Campaign Analytics</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ── RESET & BASE ── */
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:#F5F6F8;color:#0D1526;min-height:100vh}
+button{font-family:inherit;cursor:pointer}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes popIn{from{opacity:0;transform:translateY(-6px) scale(.97)}to{opacity:1;transform:none}}
+.fade-in{animation:fadeIn .2s ease}
+
+/* ── STICKY HEADER ── */
+#header{background:#fff;border-bottom:1px solid #E2E5EB;position:sticky;top:0;z-index:100;box-shadow:0 1px 0 rgba(0,0,0,.04)}
+.header-inner{max-width:1320px;margin:0 auto;padding:0 32px;display:flex;justify-content:space-between;align-items:center;height:64px}
+.brand{display:flex;align-items:center;gap:18px}
+.logo-mark{width:38px;height:38px;border-radius:9px;background:#E8410A;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(232,65,10,.25);flex-shrink:0}
+.logo-mark span{color:#fff;font-size:19px;font-weight:900;font-family:Georgia,serif;line-height:1}
+.brand-text{line-height:1}
+.brand-title{font-size:15px;font-weight:800;color:#0D1526;letter-spacing:-.01em}
+.brand-title .sub{color:#7A8595;font-weight:500;margin-left:8px;font-size:13px}
+.brand-sub{font-size:11px;color:#7A8595;font-family:'DM Mono',monospace;margin-top:1px}
+.divider-v{width:1px;height:28px;background:#E2E5EB}
+.chip{display:inline-flex;align-items:center;padding:2px 9px;border-radius:5px;font-size:11px;font-weight:600;letter-spacing:.05em;font-family:'DM Mono',monospace;text-transform:uppercase;white-space:nowrap}
+.header-controls{display:flex;align-items:center;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:7px;border:1px solid #E2E5EB;background:#fff;color:#3D4A5C;font-size:12px;font-weight:600;letter-spacing:.01em;transition:all .15s}
+.btn:hover{border-color:#E8410A;color:#E8410A;background:#FEF0EB}
+.btn-navy{background:#0D2445;color:#fff;border-color:#0D2445}
+.btn-navy:hover{background:#1A3A60;border-color:#1A3A60;color:#fff}
+svg-icon{display:inline-block;vertical-align:middle;margin-right:4px}
+
+/* ── TAB BAR ── */
+#tabbar{background:#fff;border-bottom:1px solid #E2E5EB}
+.tabbar-inner{max-width:1320px;margin:0 auto;padding:0 32px;display:flex;align-items:center;height:50px;gap:2px}
+.tab-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:7px;border:1px solid transparent;font-size:13px;font-weight:600;color:#7A8595;transition:all .15s;background:transparent}
+.tab-btn:hover{background:#FEF0EB;color:#E8410A}
+.tab-btn.active{background:#E8410A;color:#fff}
+.tabbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.tab-meta{font-size:11px;color:#7A8595;font-family:'DM Mono',monospace}
+
+/* ── DATE PICKER ── */
+.date-trigger{display:inline-flex;align-items:center;gap:7px;padding:6px 13px;border-radius:7px;border:1px solid #E2E5EB;background:#fff;color:#3D4A5C;font-size:12px;font-weight:600;transition:all .15s;white-space:nowrap}
+.date-trigger:hover,.date-trigger.open{border-color:#E8410A;color:#E8410A;background:#FEF0EB}
+.date-popover{position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1px solid #E2E5EB;border-radius:12px;padding:20px 22px;z-index:200;box-shadow:0 8px 32px rgba(13,36,69,.14);min-width:310px;animation:popIn .15s ease;display:none}
+.date-popover.open{display:block}
+.pop-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.pop-title{font-size:13px;font-weight:700;color:#0D1526}
+.pop-close{background:none;border:none;color:#7A8595;font-size:18px;line-height:1;padding:2px 4px}
+.date-inputs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.date-label{font-size:11px;font-weight:600;color:#7A8595;letter-spacing:.06em;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:6px}
+.date-input{width:100%;padding:8px 10px;border-radius:7px;border:1.5px solid #E2E5EB;font-size:13px;color:#0D1526;font-family:inherit;outline:none;transition:border-color .15s}
+.date-input:focus{border-color:#E8410A}
+.presets-label{font-size:11px;font-weight:600;color:#7A8595;letter-spacing:.06em;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:8px}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.preset-btn{padding:5px 11px;border-radius:6px;font-size:12px;font-weight:600;border:1px solid #E2E5EB;background:#F9FAFB;color:#3D4A5C;transition:all .12s}
+.preset-btn:hover,.preset-btn.active{border-color:#E8410A;background:#FEF0EB;color:#E8410A}
+.pop-actions{display:flex;gap:8px;justify-content:flex-end;padding-top:14px;border-top:1px solid #E2E5EB}
+.pop-cancel{padding:8px 16px;border-radius:7px;border:1px solid #E2E5EB;background:#fff;color:#3D4A5C;font-size:12px;font-weight:600}
+.pop-apply{padding:8px 18px;border-radius:7px;border:1px solid #E8410A;background:#E8410A;color:#fff;font-size:12px;font-weight:700}
+.date-error{font-size:12px;color:#BE2B2B;margin-bottom:12px;display:none}
+
+/* ── PAGE BODY ── */
+#body{max-width:1320px;margin:0 auto;padding:30px 32px 64px}
+.page{display:none}
+.page.active{display:block;animation:fadeIn .2s ease}
+
+/* ── CARDS ── */
+.card{background:#fff;border:1px solid #E2E5EB;border-radius:10px;padding:22px 24px}
+.card-label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#7A8595;margin-bottom:14px;font-family:'DM Mono',monospace}
+
+/* ── GRIDS ── */
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.grid-2-1{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-bottom:18px}
+.grid-3-2{display:grid;grid-template-columns:3fr 2fr;gap:18px;margin-bottom:22px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+.mb-18{margin-bottom:18px}
+.mb-22{margin-bottom:22px}
+.mb-24{margin-bottom:24px}
+.mt-24{margin-top:24px}
+.mt-28{margin-top:28px}
+
+/* ── KPI CARDS ── */
+.kpi{border-radius:10px;padding:20px 22px;position:relative;overflow:hidden;border:1px solid #E2E5EB}
+.kpi-default{background:#fff}
+.kpi-accent{background:#E8410A;border-color:#E8410A}
+.kpi-navy{background:#0D2445;border-color:#0D2445}
+.kpi-blob{position:absolute;top:-28px;right:-28px;width:88px;height:88px;border-radius:50%;background:rgba(255,255,255,.06)}
+.kpi-row{display:flex;align-items:center;gap:9px;margin-bottom:13px}
+.kpi-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
+.kpi-icon-default{background:#FEF0EB}
+.kpi-icon-inv{background:rgba(255,255,255,.18)}
+.kpi-lbl{font-size:12px;font-weight:600}
+.kpi-val{font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.kpi-sub{font-size:12px;margin-top:7px;line-height:1.4}
+.c-white{color:#fff}.c-white-mid{color:rgba(255,255,255,.72)}.c-white-low{color:rgba(255,255,255,.55)}
+.c-t1{color:#0D1526}.c-t2{color:#3D4A5C}.c-t3{color:#7A8595}.c-brand{color:#E8410A}.c-pos{color:#0A7C52}
+
+/* ── SECTION HEADER ── */
+.shead{margin-bottom:20px}
+.shead-eyebrow{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#E8410A;margin-bottom:5px;font-family:'DM Mono',monospace}
+.shead-title{font-size:18px;font-weight:700;color:#0D1526;letter-spacing:-.01em}
+.shead-sub{font-size:13px;color:#3D4A5C;margin-top:4px}
+
+/* ── SCORE TILES ── */
+.score{border-radius:10px;padding:22px}
+.score-lbl{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:10px}
+.score-val{font-size:34px;font-weight:800;letter-spacing:-.03em;line-height:1;color:#0D1526}
+.score-sub{font-size:12px;color:#7A8595;margin-top:8px;line-height:1.5}
+
+/* ── NOTICE BANNER ── */
+.notice{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding:10px 16px;border-radius:8px;background:#EBF0F8;border:1px solid rgba(13,36,69,.13)}
+.notice span{font-size:13px;color:#0D2445;font-weight:600}
+.notice small{font-size:12px;color:#7A8595;margin-left:4px}
+
+/* ── MINI BAR ROW ── */
+.mrow{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid #E2E5EB}
+.mrow-label{flex:1;font-size:13px;color:#3D4A5C}
+.mrow-bar-wrap{width:100px;height:5px;border-radius:3px;background:#E2E5EB;overflow:hidden}
+.mrow-bar{height:100%;border-radius:3px}
+.mrow-val{width:68px;text-align:right;font-size:12px;font-weight:700;color:#0D1526;font-family:'DM Mono',monospace}
+
+/* ── GENDER LIST ── */
+.gender-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.gender-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.gender-name{font-size:13px;color:#3D4A5C;margin-left:8px;flex:1}
+.gender-num{font-size:12px;font-family:'DM Mono',monospace;font-weight:600;color:#0D1526}
+.gender-pct{font-size:12px;font-family:'DM Mono',monospace;color:#7A8595;width:40px;text-align:right;margin-left:14px}
+
+/* ── ADSET MINI CARDS ── */
+.adset-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.adset-mini{background:#F9FAFB;border-radius:7px;border:1px solid #E2E5EB;padding:10px 12px}
+.adset-mini-lbl{font-size:10px;font-weight:600;color:#7A8595;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.adset-mini-val{font-size:16px;font-weight:800;letter-spacing:-.01em;color:#0D1526}
+.adset-mini-val.green{color:#0A7C52}
+
+/* ── SORTABLE TABLE ── */
+.table-wrap{overflow-x:auto;border-radius:8px;border:1px solid #E2E5EB}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{background:#F9FAFB}
+th{padding:10px 14px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#7A8595;cursor:pointer;white-space:nowrap;border-bottom:2px solid #E2E5EB;user-select:none;font-family:'DM Mono',monospace}
+th:hover{color:#E8410A}
+th.sort-asc::after{content:' ↑';color:#E8410A}
+th.sort-desc::after{content:' ↓';color:#E8410A}
+td{padding:11px 14px;border-bottom:1px solid #E2E5EB;white-space:nowrap}
+td.num{font-family:'DM Mono',monospace;font-size:12px;font-weight:600;text-align:right}
+tr.best-row td{background:#ECFDF5;color:#0A7C52;font-weight:700}
+tr.alt-row{background:#F9FAFB}
+tr:hover td{background:#FEF0EB!important}
+.best-badge{margin-left:6px;font-size:10px;color:#0A7C52}
+
+/* ── CPR RANK LIST ── */
+.cpr-rank-item{padding:10px 0;border-bottom:1px solid #E2E5EB}
+.cpr-rank-top{display:flex;justify-content:space-between;margin-bottom:3px}
+.cpr-rank-name{font-size:12px;color:#3D4A5C;direction:rtl}
+.cpr-rank-val{font-size:12px;font-weight:700;font-family:'DM Mono',monospace}
+.cpr-rank-bot{display:flex;justify-content:space-between}
+.cpr-rank-meta{font-size:11px;color:#7A8595;font-family:'DM Mono',monospace}
+
+/* ── AGE RANK ── */
+.age-rank-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #E2E5EB}
+.age-seg{font-size:13px;font-weight:600;color:#0D1526;width:44px;font-family:'DM Mono',monospace}
+.age-bar-wrap{flex:1;height:5px;border-radius:3px;background:#E2E5EB;overflow:hidden}
+.age-bar{height:100%;border-radius:3px}
+.age-cpr{font-size:12px;font-family:'DM Mono',monospace;font-weight:700;width:64px;text-align:right}
+.age-best-chip{margin-left:4px}
+
+/* ── GENDER TILES ── */
+.gender-tile{border-radius:10px;border:1px solid #E2E5EB;padding:18px 20px}
+.gender-tile-header{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.gender-dot-lg{width:12px;height:12px;border-radius:3px}
+.gender-tile-name{font-size:13px;font-weight:700;color:#0D1526}
+.gender-tile-val{font-size:24px;font-weight:800;color:#0D1526;letter-spacing:-.02em;margin-bottom:6px}
+.gender-tile-lbl{font-size:11px;color:#7A8595;font-family:'DM Mono',monospace}
+.gender-tile-footer{margin-top:12px;padding-top:12px;border-top:1px solid #E2E5EB;display:flex;justify-content:space-between}
+.gender-tile-stat-lbl{font-size:10px;color:#7A8595;font-family:'DM Mono',monospace;margin-bottom:3px}
+.gender-tile-stat-val{font-size:13px;font-weight:700;font-family:'DM Mono',monospace}
+
+/* ── ADSET FILTER ── */
+.filter-row{display:flex;align-items:center;gap:8px;margin-bottom:20px}
+.filter-lbl{font-size:12px;color:#7A8595;font-family:'DM Mono',monospace}
+.filter-btn{padding:6px 14px;border-radius:6px;border:1px solid #E2E5EB;background:#fff;color:#3D4A5C;font-size:12px;font-weight:600;transition:all .15s}
+.filter-btn:hover{border-color:#E8410A;color:#E8410A}
+.filter-btn.active{background:#0D2445;color:#fff;border-color:#0D2445}
+
+/* ── CHART CONTAINERS ── */
+.chart-wrap{position:relative}
+
+/* ── FOOTER ── */
+#footer{background:#fff;border-top:1px solid #E2E5EB;padding:14px 32px}
+.footer-inner{max-width:1320px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.footer-brand{display:flex;align-items:center;gap:10px}
+.footer-logo{width:22px;height:22px;border-radius:5px;background:#E8410A;display:flex;align-items:center;justify-content:center}
+.footer-logo span{color:#fff;font-size:11px;font-weight:900;font-family:Georgia,serif}
+.footer-txt{font-size:12px;color:#7A8595;font-family:'DM Mono',monospace}
+
+/* ── DATE PICKER WRAPPER ── */
+.date-picker-wrapper{position:relative}
+
+/* ── PRINT STYLES ── */
+@media print{
+  #header,#tabbar,#footer,.header-controls,.tabbar-right{display:none!important}
+  #body{padding:0!important;max-width:100%!important}
+  .page{display:block!important}
+  .card{page-break-inside:avoid}
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .grid-4,.grid-2,.grid-2-1,.grid-3-2,.grid-3{grid-template-columns:1fr}
+  .header-inner,.tabbar-inner,.footer-inner{padding:0 16px}
+  #body{padding:20px 16px 48px}
+  .brand .chip{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<div id="header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="logo-mark"><span>R</span></div>
+      <div class="brand-text">
+        <div class="brand-title">Robotna<span class="sub">/ Campaign Analytics</span></div>
+        <div class="brand-sub" id="header-range">robotna.org · May 7, 2026 – May 16, 2026 · Outcome Engagement</div>
+      </div>
+      <div class="divider-v"></div>
+      <span class="chip" style="color:#0A7C52;background:#ECFDF5">● Active</span>
+      <span class="chip" style="color:#7A8595;background:#F5F6F8">Account 36890470</span>
+    </div>
+    <div class="header-controls">
+      <button class="btn" onclick="exportJSON()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export JSON
+      </button>
+      <button class="btn btn-navy" onclick="printReport()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Print PDF
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB BAR ══ -->
+<div id="tabbar">
+  <div class="tabbar-inner">
+    <button class="tab-btn active" onclick="setTab('overview',this)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Overview
+    </button>
+    <button class="tab-btn" onclick="setTab('weekly',this)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Weekly
+    </button>
+    <button class="tab-btn" onclick="setTab('creative',this)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Creative & Ads
+    </button>
+    <button class="tab-btn" onclick="setTab('audience',this)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      Audience
+    </button>
+    <div class="tabbar-right">
+      <span class="tab-meta">2 weeks · 6 ads</span>
+      <div style="width:1px;height:20px;background:#E2E5EB"></div>
+      <!-- Date Picker -->
+      <div class="date-picker-wrapper">
+        <button class="date-trigger" id="date-trigger" onclick="toggleDatePicker()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span id="range-label">May 7, 2026 – May 16, 2026</span>
+          <span id="picker-arrow" style="font-size:9px;font-family:'DM Mono',monospace;font-weight:700">▼</span>
+        </button>
+        <div class="date-popover" id="date-popover">
+          <div class="pop-header">
+            <div class="pop-title">Reporting Period</div>
+            <button class="pop-close" onclick="closeDatePicker()">×</button>
+          </div>
+          <div class="date-inputs">
+            <div>
+              <div class="date-label">Start Date</div>
+              <input type="date" class="date-input" id="date-since" value="2026-05-07"/>
+            </div>
+            <div>
+              <div class="date-label">End Date</div>
+              <input type="date" class="date-input" id="date-until" value="2026-05-16"/>
+            </div>
+          </div>
+          <div class="date-error" id="date-error">⚠ Start date must be before end date.</div>
+          <div class="presets-label">Quick Select</div>
+          <div class="presets">
+            <button class="preset-btn" onclick="applyPreset('2026-05-07','2026-05-13',this)">This week</button>
+            <button class="preset-btn" onclick="applyPreset('2026-05-14','2026-05-16',this)">Latest 3d</button>
+            <button class="preset-btn active" onclick="applyPreset('2026-05-07','2026-05-16',this)">Full report</button>
+            <button class="preset-btn" onclick="applyPreset('2026-05-01','2026-05-31',this)">May 2026</button>
+          </div>
+          <div class="pop-actions">
+            <button class="pop-cancel" onclick="closeDatePicker()">Cancel</button>
+            <button class="pop-apply" onclick="applyDateRange()">✓ Apply</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BODY ══ -->
+<div id="body">
+
+  <!-- ════ OVERVIEW PAGE ════ -->
+  <div class="page active" id="page-overview">
+
+    <div class="notice">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0D2445" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span id="notice-range">Reporting period: May 7, 2026 – May 16, 2026</span>
+      <small>— data sourced from Analysis-Report.csv</small>
+    </div>
+
+    <!-- KPI Row 1 -->
+    <div class="grid-4">
+      <div class="kpi kpi-accent">
+        <div class="kpi-blob"></div>
+        <div class="kpi-row">
+          <div class="kpi-icon kpi-icon-inv">💰</div>
+          <span class="kpi-lbl c-white-mid">Total Spend</span>
+        </div>
+        <div class="kpi-val c-white">$107.93</div>
+        <div class="kpi-sub c-white-low">$53.96 avg / period</div>
+      </div>
+      <div class="kpi kpi-navy">
+        <div class="kpi-blob"></div>
+        <div class="kpi-row">
+          <div class="kpi-icon kpi-icon-inv">👁</div>
+          <span class="kpi-lbl c-white-mid">Reach</span>
+        </div>
+        <div class="kpi-val c-white">164.2K</div>
+        <div class="kpi-sub c-white-low">197.0K total impressions</div>
+      </div>
+      <div class="kpi kpi-default">
+        <div class="kpi-row">
+          <div class="kpi-icon kpi-icon-default">🎯</div>
+          <span class="kpi-lbl c-t2">Post Engagements</span>
+        </div>
+        <div class="kpi-val c-t1">81.8K</div>
+        <div class="kpi-sub c-t3">$0.0013 cost per result</div>
+      </div>
+      <div class="kpi kpi-default">
+        <div class="kpi-row">
+          <div class="kpi-icon kpi-icon-default">📊</div>
+          <span class="kpi-lbl c-t2">Engagement Rate</span>
+        </div>
+        <div class="kpi-val c-t1">41.50%</div>
+        <div class="kpi-sub c-t3">Results ÷ Impressions</div>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="grid-2-1">
+      <div class="card">
+        <div class="card-label">Spend vs Results — By Week</div>
+        <div class="chart-wrap"><canvas id="chart-weekly-overview" height="230"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Results by Gender</div>
+        <div class="chart-wrap" style="max-height:160px"><canvas id="chart-gender-donut" height="160"></canvas></div>
+        <div style="margin-top:14px" id="gender-legend"></div>
+      </div>
+    </div>
+
+    <!-- Ad Set Cards -->
+    <div class="grid-2 mb-18">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div>
+            <div class="card-label" style="margin-bottom:5px">Ad Set</div>
+            <div style="font-size:15px;font-weight:700;color:#0D1526">DM_Broad_AMM_ZAR_IRB</div>
+          </div>
+          <span class="chip" style="color:#E8410A;background:#FEF0EB">65.4% of spend</span>
+        </div>
+        <div class="adset-mini-grid">
+          <div class="adset-mini"><div class="adset-mini-lbl">Spend</div><div class="adset-mini-val">$70.64</div></div>
+          <div class="adset-mini"><div class="adset-mini-lbl">Results</div><div class="adset-mini-val">52,670</div></div>
+          <div class="adset-mini"><div class="adset-mini-lbl">CPR</div><div class="adset-mini-val green">$0.0013</div></div>
+          <div class="adset-mini"><div class="adset-mini-lbl">Reach</div><div class="adset-mini-val">108.9K</div></div>
+          <div class="adset-mini"><div class="adset-mini-lbl">Impressions</div><div class="adset-mini-val">130.0K</div></div>
+          <div class="adset-mini"><div class="adset-mini-lbl">Eng. Rate</div><div class="adset-mini-val">40.5%</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div>
+            <div class="card-label" style="margin-bottom:5px">Ad Set</div>
+            <div style="font-size:15px;font-weight:700;color:#0D1526">Parents_Braod_AMM</div>
+          </div>
+          <span class="chip" style="color:#0D2445;background:#EBF0F8">34.6% of spend</span>
+        </div>
+        <div class="adset-mini-grid">
+          <div class="adset-mini"><div class="adset-mini-lbl">Spend</div><div class="adset-mini-val">$37.29</div></div>
+          <div class="adset-mini"><div class="adset-mini-lbl">Results</div><div class="adset-mini-val">29,095</div></div>
+          <div class="adset-mini"><div class="adset-mini-lbl">CPR</div><div class="adset-mini-val green">$0.0013</div></div>
+          <div class="adset-mini"><div class="adset-mini-lbl">Reach</div><div class="adset-mini-val">55.3K</div></div>
+          <div class="adset-mini"><div class="adset-mini-lbl">Impressions</div><div class="adset-mini-val">67.1K</div></div>
+          <div class="adset-mini"><div class="adset-mini-lbl">Eng. Rate</div><div class="adset-mini-val">43.4%</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Age + Spend bar -->
+    <div class="card">
+      <div class="card-label">Results & Spend by Age Group — Combined</div>
+      <div class="chart-wrap"><canvas id="chart-age-overview" height="200"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ════ WEEKLY PAGE ════ -->
+  <div class="page" id="page-weekly">
+    <div class="shead">
+      <div class="shead-eyebrow">Time Series</div>
+      <div class="shead-title">Weekly Performance</div>
+      <div class="shead-sub" id="weekly-sub">May 7, 2026 – May 16, 2026 · May 7–13 (full week) vs May 14–16 (3 days)</div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-label">Spend per Week</div>
+        <div class="chart-wrap"><canvas id="chart-weekly-spend" height="210"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Results per Week</div>
+        <div class="chart-wrap"><canvas id="chart-weekly-results" height="210"></canvas></div>
+      </div>
+    </div>
+    <div class="table-wrap mb-24">
+      <table id="table-weekly"></table>
+    </div>
+    <div class="card">
+      <div class="card-label">Cost Per Result — Week over Week</div>
+      <div class="chart-wrap"><canvas id="chart-weekly-cpr" height="180"></canvas></div>
+      <div style="margin-top:12px;display:flex;gap:24px" id="weekly-cpr-legend"></div>
+    </div>
+  </div>
+
+  <!-- ════ CREATIVE PAGE ════ -->
+  <div class="page" id="page-creative">
+    <div class="shead">
+      <div class="shead-eyebrow">Creative Performance</div>
+      <div class="shead-title">Ad & Ad Set Analysis</div>
+      <div class="shead-sub">Sorted by cost per result — lower is better</div>
+    </div>
+    <div class="grid-3 mb-22">
+      <div class="score" style="background:#FEF0EB;border:1px solid rgba(232,65,10,.2)">
+        <div class="score-lbl" style="color:#E8410A">Overall CPR</div>
+        <div class="score-val">$0.001320</div>
+        <div class="score-sub">Campaign avg cost per engagement</div>
+      </div>
+      <div class="score" style="background:#ECFDF5;border:1px solid rgba(10,124,82,.2)">
+        <div class="score-lbl" style="color:#0A7C52">Best Ad CPR</div>
+        <div class="score-val">$0.001282</div>
+        <div class="score-sub">رسالة لكل أب وأم_Reel</div>
+      </div>
+      <div class="score" style="background:#EBF0F8;border:1px solid rgba(13,36,69,.2)">
+        <div class="score-lbl" style="color:#0D2445">Top Ad Spend %</div>
+        <div class="score-val">61.6%</div>
+        <div class="score-sub">لغة الأرقام_Reel — $66.52 of $107.93</div>
+      </div>
+    </div>
+    <div class="grid-3-2">
+      <div class="card">
+        <div class="card-label">Spend by Ad Creative</div>
+        <div class="chart-wrap"><canvas id="chart-ads-spend" height="240"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Cost Per Result — Ranked</div>
+        <div id="cpr-rank-list"></div>
+      </div>
+    </div>
+    <div class="shead">
+      <div class="shead-eyebrow">Ad Level</div>
+      <div class="shead-title">Full Ad Performance Table</div>
+    </div>
+    <div class="table-wrap mb-24">
+      <table id="table-ads"></table>
+    </div>
+    <div class="shead mt-24">
+      <div class="shead-eyebrow">Ad Set Level</div>
+      <div class="shead-title">Ad Set Performance</div>
+    </div>
+    <div class="table-wrap">
+      <table id="table-adsets"></table>
+    </div>
+  </div>
+
+  <!-- ════ AUDIENCE PAGE ════ -->
+  <div class="page" id="page-audience">
+    <div class="shead">
+      <div class="shead-eyebrow">Audience Analysis</div>
+      <div class="shead-title">Age & Gender Breakdown</div>
+      <div class="shead-sub">Engagement and spend by demographic segment</div>
+    </div>
+    <div class="filter-row">
+      <span class="filter-lbl">Filter by ad set:</span>
+      <button class="filter-btn active" onclick="setAgeFilter('all',this)">All Ad Sets</button>
+      <button class="filter-btn" onclick="setAgeFilter('DM_Broad_AMM_ZAR_IRB',this)">DM_Broad_AMM_ZAR_IRB</button>
+      <button class="filter-btn" onclick="setAgeFilter('Parents_Braod_AMM',this)">Parents_Braod_AMM</button>
+    </div>
+    <div class="grid-2 mb-22">
+      <div class="card">
+        <div class="card-label" id="age-chart-label">Results by Age Group</div>
+        <div class="chart-wrap"><canvas id="chart-age-main" height="230"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Cost Per Result — Ranked by Age</div>
+        <div id="age-rank-list"></div>
+      </div>
+    </div>
+    <div class="table-wrap mb-24">
+      <table id="table-age"></table>
+    </div>
+    <div class="shead mt-28">
+      <div class="shead-eyebrow">Gender</div>
+      <div class="shead-title">Gender Performance</div>
+    </div>
+    <div class="grid-3 mb-22">
+      <div class="gender-tile" style="background:#EBF0F8" id="gtile-0"></div>
+      <div class="gender-tile" style="background:#FEF0EB" id="gtile-1"></div>
+      <div class="gender-tile" style="background:#F5F6F8" id="gtile-2"></div>
+    </div>
+    <div class="table-wrap">
+      <table id="table-gender"></table>
+    </div>
+  </div>
+
+</div><!-- /body -->
+
+<!-- ══ FOOTER ══ -->
+<div id="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo"><span>R</span></div>
+      <span class="footer-txt">Robotna · robotna.org · Source: Analysis-Report.csv · Account 36890470</span>
+    </div>
+    <span class="footer-txt" id="footer-range">May 7, 2026 – May 16, 2026 · 81,765 engagements · No estimated values</span>
+  </div>
+</div>
+
+<script>
+// ══ DATA ══════════════════════════════════════════════════════════════════════
+const CORE = { spend:107.9275, avgDaily:53.96, reach:164207, impressions:197027, results:81765, cpr:0.001320, engRate:41.50 };
+
+const WEEKLY = [
+  { week:'May 7–13',  spend:68.57,   results:50428, impressions:126407, reach:103297, cpr:0.001360 },
+  { week:'May 14–16', spend:39.3575, results:31337, impressions:70620,  reach:60910,  cpr:0.001256 },
+];
+
+const ADSETS = [
+  { name:'DM_Broad_AMM_ZAR_IRB', spend:70.6383, results:52670, impressions:129977, reach:108862, cpr:0.001341 },
+  { name:'Parents_Braod_AMM',    spend:37.2892, results:29095, impressions:67050,  reach:55345,  cpr:0.001282 },
+];
+
+const ADS = [
+  { name:'لغة الأرقام_Reel',            adset:'DM_Broad_AMM_ZAR_IRB', spend:66.5183, results:50233, impressions:121065, reach:100493, cpr:0.001324 },
+  { name:'رسالة لكل أب وأم_Reel',      adset:'Parents_Braod_AMM',    spend:37.2892, results:29095, impressions:67050,  reach:55345,  cpr:0.001282 },
+  { name:'شغف الطالب عندما يعود_Reel', adset:'DM_Broad_AMM_ZAR_IRB', spend:1.45,    results:747,   impressions:2862,   reach:2656,   cpr:0.001941 },
+  { name:'نشاط الروبوتكس اليوم_Reel',  adset:'DM_Broad_AMM_ZAR_IRB', spend:1.19,    results:724,   impressions:2398,   reach:2264,   cpr:0.001644 },
+  { name:'الفرق بين حصة حاسوب مملة_Reel', adset:'DM_Broad_AMM_ZAR_IRB', spend:0.88, results:587,   impressions:2279,   reach:2145,   cpr:0.001499 },
+  { name:'شراء أجهزة حديثة_Reel',      adset:'DM_Broad_AMM_ZAR_IRB', spend:0.60,    results:379,   impressions:1373,   reach:1304,   cpr:0.001583 },
+];
+
+const AGE = [
+  { seg:'18–24', spend:1.1804,  results:1206,  impressions:2970,  reach:2614,  cpr:0.000979 },
+  { seg:'25–34', spend:27.2389, results:19205, impressions:50865, reach:41273, cpr:0.001418 },
+  { seg:'35–44', spend:24.3175, results:16705, impressions:46058, reach:38290, cpr:0.001456 },
+  { seg:'45–54', spend:36.2512, results:26573, impressions:66672, reach:55243, cpr:0.001364 },
+  { seg:'55–64', spend:7.2033,  results:6968,  impressions:12843, reach:11605, cpr:0.001034 },
+  { seg:'65+',   spend:11.7362, results:11108, impressions:17619, reach:15182, cpr:0.001057 },
+];
+
+const GENDER = [
+  { seg:'Male',    spend:60.9104, results:46340, impressions:118844, reach:97662, cpr:0.001314 },
+  { seg:'Female',  spend:46.4870, results:35007, impressions:77218,  reach:65734, cpr:0.001328 },
+  { seg:'Unknown', spend:0.5302,  results:418,   impressions:965,    reach:811,   cpr:0.001268 },
+];
+
+const AGE_BY_ADSET = {
+  'DM_Broad_AMM_ZAR_IRB': [
+    { seg:'18–24', spend:0.8604,  results:802,   impressions:2063,  reach:1795,  cpr:0.001073 },
+    { seg:'25–34', spend:17.0164, results:11885, impressions:32875, reach:26820, cpr:0.001432 },
+    { seg:'35–44', spend:15.5753, results:10606, impressions:30133, reach:25139, cpr:0.001469 },
+    { seg:'45–54', spend:23.3183, results:16680, impressions:42734, reach:35609, cpr:0.001398 },
+    { seg:'55–64', spend:5.4628,  results:5046,  impressions:9468,  reach:8567,  cpr:0.001083 },
+    { seg:'65+',   spend:8.4052,  results:7651,  impressions:12704, reach:10932, cpr:0.001099 },
+  ],
+  'Parents_Braod_AMM': [
+    { seg:'18–24', spend:0.3200,  results:404,  impressions:907,   reach:819,   cpr:0.000792 },
+    { seg:'25–34', spend:10.2225, results:7320, impressions:17990, reach:14453, cpr:0.001397 },
+    { seg:'35–44', spend:8.7422,  results:6099, impressions:15925, reach:13151, cpr:0.001433 },
+    { seg:'45–54', spend:12.9329, results:9893, impressions:23938, reach:19634, cpr:0.001307 },
+    { seg:'55–64', spend:1.7405,  results:1922, impressions:3375,  reach:3038,  cpr:0.000906 },
+    { seg:'65+',   spend:3.3311,  results:3457, impressions:4915,  reach:4250,  cpr:0.000964 },
+  ],
+};
+
+const GCOLS = { male:'#0D2445', female:'#7C3AED', unknown:'#C8CDD8' };
+
+// ══ FORMATTERS ════════════════════════════════════════════════════════════════
+const f$ = v => v==null?'—':'$'+v.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+const f$4 = v => v==null?'—':'$'+v.toFixed(4);
+const fn = v => v==null?'—':v.toLocaleString();
+const fnK = v => v==null?'—':v>=1000?(v/1000).toFixed(1)+'K':String(v);
+const fpct = v => v==null?'—':v.toFixed(2)+'%';
+
+function prettyDate(iso) {
+  if(!iso) return '';
+  const [y,m,d] = iso.split('-').map(Number);
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${months[m-1]} ${d}, ${y}`;
+}
+
+// ══ STATE ══════════════════════════════════════════════════════════════════════
+let currentRange = { since:'2026-05-07', until:'2026-05-16' };
+let currentAgeFilter = 'all';
+const charts = {};
+
+// ══ CHART DEFAULTS ════════════════════════════════════════════════════════════
+Chart.defaults.font.family = "'DM Mono', monospace";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#7A8595';
+
+const gridPlugin = { id:'noGrid', beforeDatasetsDraw(chart) {
+  const {ctx,chartArea:{top,bottom,left,right},scales} = chart;
+  if(!scales.x || !scales.y) return;
+}};
+
+function chartOpts(extra={}) {
+  return {
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{ legend:{display:false}, tooltip:{
+      backgroundColor:'#0D2445', titleColor:'rgba(255,255,255,.5)',
+      bodyColor:'#fff', padding:10, cornerRadius:8,
+      titleFont:{family:"'DM Mono',monospace",size:11},
+      bodyFont:{family:"'DM Mono',monospace",size:12,weight:'bold'},
+    }},
+    scales:{
+      x:{ grid:{display:false}, border:{display:false}, ticks:{color:'#7A8595'} },
+      y:{ grid:{color:'#EDF0F5'}, border:{display:false}, ticks:{color:'#7A8595'} },
+    },
+    ...extra
+  };
+}
+
+// ══ INIT CHARTS ═══════════════════════════════════════════════════════════════
+function initCharts() {
+  destroyCharts();
+
+  // Overview — weekly combo
+  charts.weeklyOverview = new Chart(document.getElementById('chart-weekly-overview'), {
+    type:'bar',
+    data:{
+      labels: WEEKLY.map(w=>w.week),
+      datasets:[
+        { label:'Spend ($)', data:WEEKLY.map(w=>w.spend), backgroundColor:'#E8410A', borderRadius:4, yAxisID:'y', order:1 },
+        { label:'Results',   data:WEEKLY.map(w=>w.results), backgroundColor:'#0D2445', borderRadius:4, yAxisID:'y2', order:2 },
+      ]
+    },
+    options:{...chartOpts(), scales:{
+      x:{ grid:{display:false}, border:{display:false}, ticks:{color:'#7A8595'} },
+      y:{ grid:{color:'#EDF0F5'}, border:{display:false}, ticks:{color:'#7A8595'}, position:'left' },
+      y2:{ grid:{display:false}, border:{display:false}, ticks:{color:'#7A8595',callback:v=>fnK(v)}, position:'right' },
+    }}
+  });
+
+  // Overview — gender donut
+  charts.genderDonut = new Chart(document.getElementById('chart-gender-donut'), {
+    type:'doughnut',
+    data:{
+      labels:GENDER.map(g=>g.seg),
+      datasets:[{ data:GENDER.map(g=>g.results), backgroundColor:GENDER.map(g=>GCOLS[g.seg.toLowerCase()]||'#ccc'), borderWidth:2, borderColor:'#fff', hoverOffset:4 }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false, cutout:'65%',
+      plugins:{ legend:{display:false}, tooltip:{
+        backgroundColor:'#0D2445', bodyColor:'#fff', padding:10, cornerRadius:8,
+        bodyFont:{family:"'DM Mono',monospace",size:12,weight:'bold'},
+        callbacks:{label:ctx=>`${ctx.label}: ${fn(ctx.raw)}`}
+      }}
+    }
+  });
+
+  // Render gender legend
+  const gl = document.getElementById('gender-legend');
+  gl.innerHTML = GENDER.map(g=>`
+    <div class="gender-row">
+      <div class="gender-dot" style="background:${GCOLS[g.seg.toLowerCase()]||'#ccc'}"></div>
+      <span class="gender-name">${g.seg}</span>
+      <span class="gender-num">${fn(g.results)}</span>
+      <span class="gender-pct">${fpct(g.spend/CORE.spend*100)}</span>
+    </div>`).join('');
+
+  // Overview — age bar
+  charts.ageOverview = new Chart(document.getElementById('chart-age-overview'), {
+    type:'bar',
+    data:{
+      labels:AGE.map(a=>a.seg),
+      datasets:[
+        { label:'Results', data:AGE.map(a=>a.results), backgroundColor:'#E8410A', borderRadius:4, barPercentage:.4 },
+        { label:'Spend',   data:AGE.map(a=>a.spend),   backgroundColor:'#0D2445', borderRadius:4, barPercentage:.4 },
+      ]
+    },
+    options:{...chartOpts(), scales:{
+      x:{ grid:{display:false}, border:{display:false}, ticks:{color:'#7A8595'} },
+      y:{ grid:{color:'#EDF0F5'}, border:{display:false}, ticks:{color:'#7A8595',callback:v=>fnK(v)} },
+    }}
+  });
+
+  // Weekly — spend bar
+  charts.weeklySpend = new Chart(document.getElementById('chart-weekly-spend'), {
+    type:'bar',
+    data:{ labels:WEEKLY.map(w=>w.week), datasets:[{ label:'Spend ($)', data:WEEKLY.map(w=>w.spend), backgroundColor:'#E8410A', borderRadius:4, barPercentage:.5 }] },
+    options: chartOpts()
+  });
+
+  // Weekly — results bar
+  charts.weeklyResults = new Chart(document.getElementById('chart-weekly-results'), {
+    type:'bar',
+    data:{ labels:WEEKLY.map(w=>w.week), datasets:[{ label:'Results', data:WEEKLY.map(w=>w.results), backgroundColor:'#0D2445', borderRadius:4, barPercentage:.5 }] },
+    options:{...chartOpts(), scales:{
+      x:{ grid:{display:false}, border:{display:false}, ticks:{color:'#7A8595'} },
+      y:{ grid:{color:'#EDF0F5'}, border:{display:false}, ticks:{color:'#7A8595',callback:v=>fnK(v)} },
+    }}
+  });
+
+  // Weekly — CPR line
+  charts.weeklyCPR = new Chart(document.getElementById('chart-weekly-cpr'), {
+    type:'line',
+    data:{ labels:WEEKLY.map(w=>w.week), datasets:[{ label:'CPR', data:WEEKLY.map(w=>w.cpr), borderColor:'#0A7C52', backgroundColor:'rgba(10,124,82,.1)', borderWidth:2.5, pointRadius:6, pointBackgroundColor:'#0A7C52', fill:true, tension:.3 }] },
+    options:{...chartOpts(), scales:{
+      x:{ grid:{display:false}, border:{display:false}, ticks:{color:'#7A8595'} },
+      y:{ grid:{color:'#EDF0F5'}, border:{display:false}, ticks:{color:'#7A8595',callback:v=>'$'+v.toFixed(4)}, min:0.00120, max:0.00142 },
+    }}
+  });
+
+  // CPR legend
+  document.getElementById('weekly-cpr-legend').innerHTML = WEEKLY.map((w,i)=>`
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:10px;height:10px;border-radius:50%;background:#0A7C52"></div>
+      <span style="font-size:12px;color:#3D4A5C">${w.week}</span>
+      <span style="font-size:13px;font-weight:700;color:#0D1526;font-family:'DM Mono',monospace">${f$4(w.cpr)}</span>
+      ${i===1?'<span class="chip" style="color:#0A7C52;background:#ECFDF5">↓ Improving</span>':''}
+    </div>`).join('');
+
+  // Ads — horizontal bar
+  const adsSorted = [...ADS].sort((a,b)=>b.spend-a.spend);
+  charts.adsSpend = new Chart(document.getElementById('chart-ads-spend'), {
+    type:'bar',
+    data:{
+      labels:adsSorted.map(a=>a.name.length>22?a.name.slice(0,22)+'…':a.name),
+      datasets:[{ label:'Spend ($)', data:adsSorted.map(a=>a.spend), backgroundColor:'#E8410A', borderRadius:4, barPercentage:.6 }]
+    },
+    options:{...chartOpts(), indexAxis:'y', scales:{
+      x:{ grid:{color:'#EDF0F5'}, border:{display:false}, ticks:{color:'#7A8595',callback:v=>'$'+v} },
+      y:{ grid:{display:false}, border:{display:false}, ticks:{color:'#7A8595'} },
+    }}
+  });
+
+  // CPR rank list
+  const cprList = document.getElementById('cpr-rank-list');
+  cprList.innerHTML = [...ADS].sort((a,b)=>a.cpr-b.cpr).map((ad,i)=>`
+    <div class="cpr-rank-item">
+      <div class="cpr-rank-top">
+        <span class="cpr-rank-name">${ad.name}</span>
+        <span class="cpr-rank-val" style="color:${i===0?'#0A7C52':'#0D1526'}">${f$4(ad.cpr)}${i===0?' ▲':''}</span>
+      </div>
+      <div class="cpr-rank-bot">
+        <span class="cpr-rank-meta">${f$(ad.spend)} spend</span>
+        <span class="cpr-rank-meta">${fn(ad.results)} results</span>
+      </div>
+    </div>`).join('');
+
+  // Init age chart
+  renderAgeCharts('all');
+
+  // Gender tiles
+  const gColors = ['#EBF0F8','#FEF0EB','#F5F6F8'];
+  GENDER.forEach((g,i)=>{
+    document.getElementById(`gtile-${i}`).innerHTML = `
+      <div class="gender-tile-header">
+        <div class="gender-dot-lg" style="background:${GCOLS[g.seg.toLowerCase()]||'#ccc'}"></div>
+        <span class="gender-tile-name">${g.seg}</span>
+      </div>
+      <div class="gender-tile-val">${fn(g.results)}</div>
+      <div class="gender-tile-lbl">results</div>
+      <div class="gender-tile-footer">
+        <div><div class="gender-tile-stat-lbl">SPEND</div><div class="gender-tile-stat-val" style="color:#0D1526">${f$(g.spend)}</div></div>
+        <div><div class="gender-tile-stat-lbl">CPR</div><div class="gender-tile-stat-val" style="color:#0A7C52">${f$4(g.cpr)}</div></div>
+      </div>`;
+  });
+
+  // Build all tables
+  buildTable('table-weekly', [
+    {k:'week',label:'Period'},
+    {k:'spend',label:'Spend',fmt:f$,r:true},
+    {k:'results',label:'Results',fmt:fn,r:true},
+    {k:'impressions',label:'Impressions',fmt:fn,r:true},
+    {k:'reach',label:'Reach',fmt:fn,r:true},
+    {k:'cpr',label:'Cost/Result',fmt:f$4,r:true},
+  ], WEEKLY, 'cpr');
+
+  buildTable('table-ads', [
+    {k:'name',label:'Ad Creative'},
+    {k:'adset',label:'Ad Set'},
+    {k:'spend',label:'Spend',fmt:f$,r:true},
+    {k:'results',label:'Results',fmt:fn,r:true},
+    {k:'impressions',label:'Impressions',fmt:fn,r:true},
+    {k:'reach',label:'Reach',fmt:fn,r:true},
+    {k:'cpr',label:'Cost/Result',fmt:f$4,r:true},
+  ], ADS, 'cpr');
+
+  buildTable('table-adsets', [
+    {k:'name',label:'Ad Set'},
+    {k:'spend',label:'Spend',fmt:f$,r:true},
+    {k:'results',label:'Results',fmt:fn,r:true},
+    {k:'impressions',label:'Impressions',fmt:fn,r:true},
+    {k:'reach',label:'Reach',fmt:fn,r:true},
+    {k:'cpr',label:'Cost/Result',fmt:f$4,r:true},
+  ], ADSETS, 'cpr');
+
+  buildTable('table-gender', [
+    {k:'seg',label:'Gender'},
+    {k:'spend',label:'Spend',fmt:f$,r:true},
+    {k:'results',label:'Results',fmt:fn,r:true},
+    {k:'impressions',label:'Impressions',fmt:fn,r:true},
+    {k:'reach',label:'Reach',fmt:fn,r:true},
+    {k:'cpr',label:'Cost/Result',fmt:f$4,r:true},
+  ], GENDER, 'cpr');
+}
+
+function destroyCharts() {
+  Object.values(charts).forEach(c=>c&&c.destroy());
+  Object.keys(charts).forEach(k=>delete charts[k]);
+}
+
+// ══ AGE CHART (filterable) ════════════════════════════════════════════════════
+function renderAgeCharts(filter) {
+  const data = filter==='all' ? AGE : (AGE_BY_ADSET[filter]||AGE);
+  const maxR = Math.max(...data.map(a=>a.results));
+
+  if(charts.ageMain) charts.ageMain.destroy();
+  charts.ageMain = new Chart(document.getElementById('chart-age-main'), {
+    type:'bar',
+    data:{
+      labels:data.map(a=>a.seg),
+      datasets:[
+        { label:'Results', data:data.map(a=>a.results), backgroundColor:'#E8410A', borderRadius:4, barPercentage:.4 },
+        { label:'Spend',   data:data.map(a=>a.spend),   backgroundColor:'#0D2445', borderRadius:4, barPercentage:.4 },
+      ]
+    },
+    options:{...chartOpts(), scales:{
+      x:{ grid:{display:false}, border:{display:false}, ticks:{color:'#7A8595'} },
+      y:{ grid:{color:'#EDF0F5'}, border:{display:false}, ticks:{color:'#7A8595',callback:v=>fnK(v)} },
+    }}
+  });
+
+  // Rank list
+  const sorted = [...data].sort((a,b)=>a.cpr-b.cpr);
+  document.getElementById('age-rank-list').innerHTML = sorted.map((a,i)=>`
+    <div class="age-rank-row">
+      <span class="age-seg">${a.seg}</span>
+      <div class="age-bar-wrap">
+        <div class="age-bar" style="width:${a.results/maxR*100}%;background:${i===0?'#0A7C52':'#E8410A'}"></div>
+      </div>
+      <span class="age-cpr" style="color:${i===0?'#0A7C52':'#0D1526'}">${f$4(a.cpr)}</span>
+      ${i===0?'<span class="chip age-best-chip" style="color:#0A7C52;background:#ECFDF5">Best</span>':''}
+    </div>`).join('');
+
+  // Table
+  buildTable('table-age', [
+    {k:'seg',label:filter==='all'?'Age Group':`Age (${filter})`},
+    {k:'spend',label:'Spend',fmt:f$,r:true},
+    {k:'results',label:'Results',fmt:fn,r:true},
+    {k:'impressions',label:'Impressions',fmt:fn,r:true},
+    {k:'reach',label:'Reach',fmt:fn,r:true},
+    {k:'cpr',label:'Cost/Result',fmt:f$4,r:true},
+  ], data, 'cpr');
+}
+
+// ══ SORTABLE TABLE BUILDER ════════════════════════════════════════════════════
+function buildTable(id, cols, data, bestKey) {
+  const el = document.getElementById(id);
+  const vals = bestKey ? data.map(r=>r[bestKey]).filter(v=>v!=null) : [];
+  const best = vals.length ? Math.min(...vals) : null;
+  let sortKey=null, sortDir='desc';
+
+  function render(rows) {
+    const bestVal = bestKey ? Math.min(...rows.map(r=>r[bestKey]).filter(v=>v!=null)) : null;
+    el.innerHTML = `
+      <thead><tr>${cols.map(c=>`
+        <th data-k="${c.k}" class="" style="text-align:${c.r?'right':'left'}">${c.label}</th>
+      `).join('')}</tr></thead>
+      <tbody>${rows.map((r,i)=>{
+        const isBest = bestKey && r[bestKey]===bestVal;
+        return `<tr class="${isBest?'best-row':i%2?'alt-row':''}">${cols.map(c=>`
+          <td class="${c.r?'num':''}" style="${c.r?'text-align:right':''}">
+            ${c.fmt?c.fmt(r[c.k]):(r[c.k]??'—')}
+            ${c.k===bestKey&&isBest?'<span class="best-badge">▲ Best</span>':''}
+          </td>`).join('')}</tr>`;
+      }).join('')}</tbody>`;
+
+    // Sort headers
+    el.querySelectorAll('th').forEach(th=>{
+      th.addEventListener('click',()=>{
+        const k = th.dataset.k;
+        if(sortKey===k) sortDir = sortDir==='asc'?'desc':'asc';
+        else { sortKey=k; sortDir='desc'; }
+        el.querySelectorAll('th').forEach(t=>t.className='');
+        th.className = 'sort-'+sortDir;
+        const sorted = [...rows].sort((a,b)=>{
+          const [av,bv]=[a[k],b[k]];
+          if(av==null)return 1; if(bv==null)return -1;
+          if(typeof av==='number') return sortDir==='asc'?av-bv:bv-av;
+          return sortDir==='asc'?String(av).localeCompare(String(bv)):String(bv).localeCompare(String(av));
+        });
+        render(sorted);
+      });
+    });
+  }
+  render(data);
+}
+
+// ══ TAB SWITCHING ════════════════════════════════════════════════════════════
+function setTab(id, btn) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ══ AGE FILTER ════════════════════════════════════════════════════════════════
+function setAgeFilter(filter, btn) {
+  currentAgeFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('age-chart-label').textContent =
+    'Results by Age Group' + (filter!=='all'?` — ${filter}`:'');
+  renderAgeCharts(filter);
+}
+
+// ══ DATE PICKER ═══════════════════════════════════════════════════════════════
+function toggleDatePicker() {
+  const pop = document.getElementById('date-popover');
+  const trig = document.getElementById('date-trigger');
+  const open = pop.classList.contains('open');
+  pop.classList.toggle('open');
+  trig.classList.toggle('open', !open);
+  document.getElementById('picker-arrow').textContent = open?'▼':'▲';
+}
+
+function closeDatePicker() {
+  document.getElementById('date-popover').classList.remove('open');
+  document.getElementById('date-trigger').classList.remove('open');
+  document.getElementById('picker-arrow').textContent = '▼';
+  document.getElementById('date-error').style.display = 'none';
+}
+
+function applyPreset(since, until, btn) {
+  document.getElementById('date-since').value = since;
+  document.getElementById('date-until').value = until;
+  document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function applyDateRange() {
+  const since = document.getElementById('date-since').value;
+  const until = document.getElementById('date-until').value;
+  const errEl = document.getElementById('date-error');
+  if(!since||!until){ errEl.textContent='⚠ Both dates are required.'; errEl.style.display='flex'; return; }
+  if(since>until){ errEl.textContent='⚠ Start date must be before end date.'; errEl.style.display='flex'; return; }
+  errEl.style.display='none';
+  currentRange = { since, until };
+  const label = `${prettyDate(since)} – ${prettyDate(until)}`;
+  document.getElementById('range-label').textContent = label;
+  document.getElementById('header-range').textContent = `robotna.org · ${label} · Outcome Engagement`;
+  document.getElementById('notice-range').textContent = `Reporting period: ${label}`;
+  document.getElementById('weekly-sub').textContent = `${label} · May 7–13 (full week) vs May 14–16 (3 days)`;
+  document.getElementById('footer-range').textContent = `${label} · 81,765 engagements · No estimated values`;
+  closeDatePicker();
+}
+
+// Close picker on outside click
+document.addEventListener('click', e=>{
+  const wrapper = document.querySelector('.date-picker-wrapper');
+  if(wrapper && !wrapper.contains(e.target)) closeDatePicker();
+});
+
+// ══ EXPORT JSON ═══════════════════════════════════════════════════════════════
+function exportJSON() {
+  const payload = { meta:{campaign:'Engagements_Robotna_',account:'36890470',source:'Analysis-Report.csv'}, range:currentRange, core:CORE, weekly:WEEKLY, adsets:ADSETS, ads:ADS, age:AGE, gender:GENDER };
+  const b = new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const u = URL.createObjectURL(b);
+  const a = document.createElement('a'); a.href=u; a.download='robotna_campaign_data.json'; a.click();
+  URL.revokeObjectURL(u);
+}
+
+// ══ PRINT PDF ════════════════════════════════════════════════════════════════
+function printReport() {
+  const label = document.getElementById('range-label').textContent;
+  const tableRows = (rows, cols) => rows.map((r,i)=>`<tr class="${i%2?'alt':''}">
+    ${cols.map(c=>`<td style="text-align:${c.r?'right':'left'}">${c.fmt?c.fmt(r[c.k]):(r[c.k]||'—')}</td>`).join('')}</tr>`).join('');
+  const thead = cols => `<tr>${cols.map(c=>`<th style="text-align:${c.r?'right':'left'}">${c.label}</th>`).join('')}</tr>`;
+  const tc = [
+    {k:'seg',label:'Segment'},{k:'spend',label:'Spend',fmt:f$,r:true},{k:'results',label:'Results',fmt:fn,r:true},
+    {k:'impressions',label:'Impressions',fmt:fn,r:true},{k:'reach',label:'Reach',fmt:fn,r:true},{k:'cpr',label:'CPR',fmt:f$4,r:true}
+  ];
+  const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Robotna Report</title>
+<style>
+@page{size:A4 landscape;margin:14mm 16mm}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#0D1526;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{page-break-after:always;padding-bottom:12mm}.page:last-child{page-break-after:avoid}
+.cover{display:flex;flex-direction:column;justify-content:center;min-height:160mm}
+.lbar{display:flex;align-items:center;gap:14px;margin-bottom:28px}
+.lm{width:54px;height:54px;border-radius:12px;background:#E8410A;color:#fff;font-size:30px;font-weight:900;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif}
+.bn{font-size:22px;font-weight:800}.bu{font-size:12px;color:#7A8595;font-family:monospace;margin-top:2px}
+.rule{height:3px;background:#E8410A;width:64px;border-radius:2px;margin-bottom:24px}
+.ct{font-size:36px;font-weight:800;color:#0D2445;letter-spacing:-0.02em;line-height:1.1;margin-bottom:10px}
+.cs{font-size:16px;color:#3D4A5C;margin-bottom:32px}
+.mg{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 28px}
+.mi{display:flex;flex-direction:column;gap:3px}
+.ml{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#7A8595;font-family:monospace}
+.mv{font-size:13px;font-weight:600}
+hr{border:none;border-top:1px solid #E2E5EB;margin:28px 0 14px}
+.note{font-size:11px;color:#7A8595;font-style:italic}
+.sh{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#E8410A;margin:18px 0 10px;padding-bottom:6px;border-bottom:2px solid #E8410A;font-family:monospace}
+.sh:first-child{margin-top:0}
+.kg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px}
+.kc{background:#F5F6F8;border:1px solid #E2E5EB;border-radius:8px;padding:12px 14px}
+.ka{background:#FEF0EB;border-color:#F06030}.kn{background:#EBF0F8;border-color:#0D2445}
+.kl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#7A8595;font-family:monospace;margin-bottom:6px}
+.kv{font-size:22px;font-weight:800;letter-spacing:-0.02em}.ks{font-size:10px;color:#7A8595;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:10px}
+th{background:#0D2445;color:#fff;padding:7px 8px;font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:.05em;font-family:monospace;white-space:nowrap}
+td{padding:6px 8px;border-bottom:1px solid #E2E5EB;font-family:monospace}
+tr.alt td{background:#F9FAFB}.best td{background:#ECFDF5}
+.foot{margin-top:16px;padding-top:8px;border-top:1px solid #E2E5EB;display:flex;justify-content:space-between;font-size:9px;color:#7A8595;font-family:monospace}
+</style></head><body>
+<div class="page cover">
+<div class="lbar"><div class="lm">R</div><div><div class="bn">Robotna</div><div class="bu">robotna.org</div></div></div>
+<div class="rule"></div><div class="ct">Campaign Performance Report</div>
+<div class="cs">Meta Ads · Paid Engagement · ${label}</div>
+<div class="mg">
+<div class="mi"><span class="ml">Campaign</span><span class="mv">Engagements_Robotna_</span></div>
+<div class="mi"><span class="ml">Objective</span><span class="mv">Outcome Engagement</span></div>
+<div class="mi"><span class="ml">Status</span><span class="mv">Active</span></div>
+<div class="mi"><span class="ml">Period</span><span class="mv">${label}</span></div>
+<div class="mi"><span class="ml">Account</span><span class="mv">36890470</span></div>
+<div class="mi"><span class="ml">Campaign ID</span><span class="mv">6939423326522</span></div>
+</div><hr><div class="note">Source: Analysis-Report.csv · Meta Ads Manager export · No estimated values.</div></div>
+
+<div class="page">
+<div class="sh">Executive Summary</div>
+<div class="kg">
+<div class="kc ka"><div class="kl">Total Spend</div><div class="kv">$107.93</div><div class="ks">$53.96 avg/period</div></div>
+<div class="kc kn"><div class="kl">Reach</div><div class="kv">164,207</div><div class="ks">197,027 impressions</div></div>
+<div class="kc"><div class="kl">Engagements</div><div class="kv">81,765</div><div class="ks">$0.0013 CPR</div></div>
+<div class="kc"><div class="kl">Eng. Rate</div><div class="kv">41.50%</div><div class="ks">Results ÷ Impressions</div></div>
+</div>
+<div class="sh">Weekly</div>
+<table><thead>${thead([{k:'week',label:'Week'},{k:'spend',label:'Spend',fmt:f$,r:true},{k:'results',label:'Results',fmt:fn,r:true},{k:'impressions',label:'Impressions',fmt:fn,r:true},{k:'reach',label:'Reach',fmt:fn,r:true},{k:'cpr',label:'CPR',fmt:f$4,r:true}])}</thead>
+<tbody>${tableRows(WEEKLY,[{k:'week'},{k:'spend',fmt:f$,r:true},{k:'results',fmt:fn,r:true},{k:'impressions',fmt:fn,r:true},{k:'reach',fmt:fn,r:true},{k:'cpr',fmt:f$4,r:true}])}</tbody></table>
+<div class="sh">Ad Sets</div>
+<table><thead>${thead([{k:'name',label:'Ad Set'},{k:'spend',label:'Spend',fmt:f$,r:true},{k:'results',label:'Results',fmt:fn,r:true},{k:'impressions',label:'Impressions',fmt:fn,r:true},{k:'reach',label:'Reach',fmt:fn,r:true},{k:'cpr',label:'CPR',fmt:f$4,r:true}])}</thead>
+<tbody>${tableRows(ADSETS,[{k:'name'},{k:'spend',fmt:f$,r:true},{k:'results',fmt:fn,r:true},{k:'impressions',fmt:fn,r:true},{k:'reach',fmt:fn,r:true},{k:'cpr',fmt:f$4,r:true}])}</tbody></table>
+</div>
+
+<div class="page">
+<div class="sh">Ad-Level Performance</div>
+<table><thead>${thead([{k:'name',label:'Ad'},{k:'adset',label:'Ad Set'},{k:'spend',label:'Spend',fmt:f$,r:true},{k:'results',label:'Results',fmt:fn,r:true},{k:'impressions',label:'Impr.',fmt:fn,r:true},{k:'reach',label:'Reach',fmt:fn,r:true},{k:'cpr',label:'CPR',fmt:f$4,r:true}])}</thead>
+<tbody>${tableRows([...ADS].sort((a,b)=>a.cpr-b.cpr),[{k:'name'},{k:'adset'},{k:'spend',fmt:f$,r:true},{k:'results',fmt:fn,r:true},{k:'impressions',fmt:fn,r:true},{k:'reach',fmt:fn,r:true},{k:'cpr',fmt:f$4,r:true}])}</tbody></table>
+</div>
+
+<div class="page">
+<div class="sh">Age Breakdown</div>
+<table><thead>${thead(tc)}</thead><tbody>${tableRows([...AGE].sort((a,b)=>a.cpr-b.cpr),tc)}</tbody></table>
+<div class="sh">Gender Breakdown</div>
+<table><thead>${thead(tc)}</thead><tbody>${tableRows(GENDER,tc)}</tbody></table>
+<div class="foot">
+<span>Robotna · robotna.org · Meta Ads Campaign Report · ${label}</span>
+<span>Source: Analysis-Report.csv · Account 36890470 · No estimated values</span>
+</div></div>
+</body></html>`;
+  const win=window.open('','_blank','width=1200,height=900');
+  win.document.write(html); win.document.close(); win.focus();
+  setTimeout(()=>win.print(),500);
+}
+
+// ══ BOOT ══════════════════════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', initCharts);
+</script>
+</body>
+</html>
