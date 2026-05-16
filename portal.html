@@ -286,27 +286,30 @@ function parseCSV(text) {
 
     const missing = need.filter(n => idx(n) === -1);
     if (missing.length) {
-      setStatus('parse-status', `Missing columns: ${missing.join(', ')}`, 'err');
+      console.warn('Detected headers:', hdrs);
+      setStatus('parse-status', `Missing columns: ${missing.join(', ')} — check F12 console for detected column names`, 'err');
       return;
     }
+    console.info('Headers OK at row', headerIdx, ':', hdrs);
 
-    const minCols = Math.max(...need.map(n => idx(n))) + 1;
     const rows = [];
     for (let i = headerIdx + 1; i < lines.length; i++) {
       const cols = splitCSVLine(lines[i], delim);
-      if (!cols || cols.length < minCols) continue;
-      const adset = cols[idx('Ad set name')];
-      if (!adset || !String(adset).trim()) continue;
+      if (!cols || !cols.length) continue;
+      const adset = String(cols[idx('Ad set name')] ?? '').trim();
+      const day   = String(cols[idx('Day')]         ?? '').trim();
+      // Skip aggregate/total rows — they have no ad set or no date
+      if (!adset || !day) continue;
       rows.push({
-        day:         String(cols[idx('Day')]         ?? '').trim(),
-        adset:       String(cols[idx('Ad set name')] ?? '').trim(),
-        ad:          String(cols[idx('Ad name')]      ?? '').trim(),
-        age:         String(cols[idx('Age')]          ?? '').trim(),
-        gender:      String(cols[idx('Gender')]       ?? '').trim().toLowerCase(),
-        spend:       parseFloat(cols[idx('Amount spent (USD)')]) || 0,
-        results:     parseInt(cols[idx('Results')])              || 0,
-        impressions: parseInt(cols[idx('Impressions')])          || 0,
-        reach:       parseInt(cols[idx('Reach')])                || 0
+        day,
+        adset,
+        ad:          String(cols[idx('Ad name')]  ?? '').trim(),
+        age:         String(cols[idx('Age')]       ?? '').trim(),
+        gender:      String(cols[idx('Gender')]    ?? '').trim().toLowerCase(),
+        spend:       parseFloat(String(cols[idx('Amount spent (USD)')] ?? '').replace(/,/g,'')) || 0,
+        results:     parseInt(String(cols[idx('Results')]    ?? '').replace(/,/g,''))           || 0,
+        impressions: parseInt(String(cols[idx('Impressions')]?? '').replace(/,/g,''))           || 0,
+        reach:       parseInt(String(cols[idx('Reach')]      ?? '').replace(/,/g,''))           || 0
       });
     }
 
