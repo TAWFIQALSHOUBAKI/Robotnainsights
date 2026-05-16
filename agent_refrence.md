@@ -155,7 +155,8 @@ const RAW_DATA = [...];
 | Metrics: CPR, Post Engagements, CTR, Frequency | ✓ | |
 | Download PDF — html2canvas, 2-page vertical A4 | ✓ | Arabic renders natively; `unit:'mm'` for correct A4 sizing |
 | Sortable tables, best-row highlight | ✓ | |
-| Age filter by ad set (Audience tab) | ✓ | |
+| Ad set cards — dynamic from `D.adsets` | ✓ | Any number of ad sets; was previously hardcoded to 2 |
+| Age filter by ad set (Audience tab) | ✓ | Filter buttons generated dynamically from `D.adsets` |
 | Per-ad audience dropdown (Audience tab) | ✓ | |
 | Embedded Robotna logo (base64 webp) | ✓ | No external URL needed |
 | Mobile responsive — scroll tabs, FAB date button | ✓ | |

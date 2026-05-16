@@ -388,7 +388,7 @@ tr:hover td{background:#FEF0EB!important}
       Audience
     </button>
     <div class="tabbar-right">
-      <span class="tab-meta">2 weeks · 6 ads</span>
+      <span class="tab-meta" id="tab-meta"></span>
       <div style="width:1px;height:20px;background:#E2E5EB"></div>
       <!-- Date Picker — desktop -->
       <div class="date-picker-wrapper" id="desktop-picker">
@@ -504,43 +504,8 @@ tr:hover td{background:#FEF0EB!important}
       </div>
     </div>
 
-    <!-- Ad Set Cards -->
-    <div class="grid-2 mb-18">
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-          <div>
-            <div class="card-label" style="margin-bottom:5px">Ad Set</div>
-            <div style="font-size:15px;font-weight:700;color:#0D1526">DM_Broad_AMM_ZAR_IRB</div>
-          </div>
-          <span class="chip" style="color:#E8410A;background:#FEF0EB">65.4% of spend</span>
-        </div>
-        <div class="adset-mini-grid">
-          <div class="adset-mini"><div class="adset-mini-lbl">Spend</div><div class="adset-mini-val">$70.64</div></div>
-          <div class="adset-mini"><div class="adset-mini-lbl">Results</div><div class="adset-mini-val">52,670</div></div>
-          <div class="adset-mini"><div class="adset-mini-lbl">CPR</div><div class="adset-mini-val green">$0.0013</div></div>
-          <div class="adset-mini"><div class="adset-mini-lbl">Reach</div><div class="adset-mini-val">108.9K</div></div>
-          <div class="adset-mini"><div class="adset-mini-lbl">Impressions</div><div class="adset-mini-val">130.0K</div></div>
-          <div class="adset-mini"><div class="adset-mini-lbl">Eng. Rate</div><div class="adset-mini-val">40.5%</div></div>
-        </div>
-      </div>
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-          <div>
-            <div class="card-label" style="margin-bottom:5px">Ad Set</div>
-            <div style="font-size:15px;font-weight:700;color:#0D1526">Parents_Braod_AMM</div>
-          </div>
-          <span class="chip" style="color:#0D2445;background:#EBF0F8">34.6% of spend</span>
-        </div>
-        <div class="adset-mini-grid">
-          <div class="adset-mini"><div class="adset-mini-lbl">Spend</div><div class="adset-mini-val">$37.29</div></div>
-          <div class="adset-mini"><div class="adset-mini-lbl">Results</div><div class="adset-mini-val">29,095</div></div>
-          <div class="adset-mini"><div class="adset-mini-lbl">CPR</div><div class="adset-mini-val green">$0.0013</div></div>
-          <div class="adset-mini"><div class="adset-mini-lbl">Reach</div><div class="adset-mini-val">55.3K</div></div>
-          <div class="adset-mini"><div class="adset-mini-lbl">Impressions</div><div class="adset-mini-val">67.1K</div></div>
-          <div class="adset-mini"><div class="adset-mini-lbl">Eng. Rate</div><div class="adset-mini-val">43.4%</div></div>
-        </div>
-      </div>
-    </div>
+    <!-- Ad Set Cards — generated dynamically from D.adsets in initCharts() -->
+    <div id="adset-cards" class="mb-18" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px"></div>
 
     <!-- Age + Spend bar -->
     <div class="card">
@@ -661,8 +626,7 @@ tr:hover td{background:#FEF0EB!important}
       <div class="filter-row" style="margin-bottom:0;flex-wrap:wrap">
         <span class="filter-lbl">Ad Set:</span>
         <button class="filter-btn active" onclick="setAgeFilter('all',this)">All</button>
-        <button class="filter-btn" onclick="setAgeFilter('DM_Broad_AMM_ZAR_IRB',this)">DM_Broad</button>
-        <button class="filter-btn" onclick="setAgeFilter('Parents_Braod_AMM',this)">Parents</button>
+        <span id="adset-filter-btns"></span>
       </div>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         <span class="filter-lbl">Per Ad:</span>
@@ -899,6 +863,10 @@ function initCharts() {
   destroyCharts();
   const m = D.core;
 
+  // ── Update tab meta summary ───────────────────────────────────────────────
+  const tabMeta = document.getElementById('tab-meta');
+  if(tabMeta) tabMeta.textContent = `${D.weekly.length} week${D.weekly.length!==1?'s':''} · ${D.adsets.length} ad set${D.adsets.length!==1?'s':''} · ${D.ads.length} ad${D.ads.length!==1?'s':''}`;
+
   // ── Update KPI cards ──────────────────────────────────────────────────────
   document.querySelector('.kpi-accent .kpi-val').textContent = f$(m.spend);
   document.querySelector('.kpi-accent .kpi-sub').textContent = `${f$(m.spend/Math.max(D.daily.length,1))} avg / day`;
@@ -907,19 +875,44 @@ function initCharts() {
   if(kpis[1]){ kpis[1].querySelector('.kpi-val').textContent=fnK(m.results); kpis[1].querySelector('.kpi-sub').textContent=`${f$4(m.cpr)} cost per result`; }
   if(kpis[2]){ kpis[2].querySelector('.kpi-val').textContent=fpct(m.engRate); }
 
-  // ── Update adset mini-cards ───────────────────────────────────────────────
-  D.adsets.forEach((as,i)=>{
-    const card = document.querySelectorAll('.grid-2.mb-18 .card')[i];
-    if(!card) return;
-    const vals = card.querySelectorAll('.adset-mini-val');
-    if(vals[0]) vals[0].textContent = f$(as.spend);
-    if(vals[1]) vals[1].textContent = fn(as.results);
-    if(vals[2]) vals[2].textContent = f$4(as.cpr);
-    if(vals[3]) vals[3].textContent = fnK(as.reach);
-    if(vals[4]) vals[4].textContent = fnK(as.impressions);
-    if(vals[5]) vals[5].textContent = fpct(as.results/as.impressions*100);
-    const chip = card.querySelector('.chip');
-    if(chip) chip.textContent = fpct(as.spend/m.spend*100)+' of spend';
+  // ── Render adset mini-cards dynamically (works for any number of ad sets) ──
+  const CHIP_COLORS = [
+    {c:'#E8410A',bg:'#FEF0EB'}, {c:'#0D2445',bg:'#EBF0F8'},
+    {c:'#0A7C52',bg:'#ECFDF5'}, {c:'#7C3AED',bg:'#F5F3FF'},
+  ];
+  document.getElementById('adset-cards').innerHTML = D.adsets.map((as, i) => {
+    const {c, bg} = CHIP_COLORS[i % CHIP_COLORS.length];
+    return `<div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+        <div>
+          <div class="card-label" style="margin-bottom:5px">Ad Set</div>
+          <div style="font-size:15px;font-weight:700;color:#0D1526">${as.name}</div>
+        </div>
+        <span class="chip" style="color:${c};background:${bg}">${fpct(as.spend/m.spend*100)} of spend</span>
+      </div>
+      <div class="adset-mini-grid">
+        <div class="adset-mini"><div class="adset-mini-lbl">Spend</div><div class="adset-mini-val">${f$(as.spend)}</div></div>
+        <div class="adset-mini"><div class="adset-mini-lbl">Results</div><div class="adset-mini-val">${fn(as.results)}</div></div>
+        <div class="adset-mini"><div class="adset-mini-lbl">CPR</div><div class="adset-mini-val green">${f$4(as.cpr)}</div></div>
+        <div class="adset-mini"><div class="adset-mini-lbl">Reach</div><div class="adset-mini-val">${fnK(as.reach)}</div></div>
+        <div class="adset-mini"><div class="adset-mini-lbl">Impressions</div><div class="adset-mini-val">${fnK(as.impressions)}</div></div>
+        <div class="adset-mini"><div class="adset-mini-lbl">Eng. Rate</div><div class="adset-mini-val">${fpct(as.results/as.impressions*100)}</div></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // ── Rebuild audience ad-set filter buttons ────────────────────────────────
+  const filterSpan = document.getElementById('adset-filter-btns');
+  filterSpan.innerHTML = '';
+  D.adsets.forEach(as => {
+    const label = as.name.includes(' - Custom')
+      ? as.name.split('_')[0] + '_Custom'
+      : as.name.split('_')[0];
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.textContent = label;
+    btn.onclick = function() { setAgeFilter(as.name, this); };
+    filterSpan.appendChild(btn);
   });
 
   // ── Update creative score tiles ───────────────────────────────────────────
