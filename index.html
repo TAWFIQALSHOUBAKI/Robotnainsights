@@ -774,15 +774,37 @@ function computeData(since, until) {
   const core = agg(rows);
   core.engRate = core.impressions>0 ? parseFloat((core.results/core.impressions*100).toFixed(4)) : 0;
 
-  // Daily breakdown
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  // Daily breakdown (one entry per day)
   const byDay = groupBy(rows, 'day');
-  const weeklyFixed = Object.keys(byDay).sort().map(day => {
+  const daily = Object.keys(byDay).sort().map(day => {
     const d = new Date(day + 'T00:00:00');
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const label = `${months[d.getMonth()]} ${d.getDate()}`;
-    return { week: label, ws: day, we: day, ...agg(byDay[day]) };
+    return { week: `${MONTHS[d.getMonth()]} ${d.getDate()}`, ws: day, we: day, ...agg(byDay[day]) };
   });
-  // stub so rest of function works
+
+  // Weekly grouping — Mon–Sun calendar weeks
+  function weekMonday(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00');
+    const dow = d.getDay(); // 0=Sun
+    d.setDate(d.getDate() - (dow === 0 ? 6 : dow - 1));
+    return d.toISOString().slice(0, 10);
+  }
+  const byWeek = {};
+  Object.keys(byDay).sort().forEach(day => {
+    const ws = weekMonday(day);
+    (byWeek[ws] = byWeek[ws] || []).push(...byDay[day]);
+  });
+  const weekly = Object.keys(byWeek).sort().map(ws => {
+    const weDate = new Date(ws + 'T00:00:00');
+    weDate.setDate(weDate.getDate() + 6);
+    const we = weDate.toISOString().slice(0, 10);
+    const wsD = new Date(ws + 'T00:00:00');
+    const label = wsD.getMonth() === weDate.getMonth()
+      ? `${MONTHS[wsD.getMonth()]} ${wsD.getDate()}–${weDate.getDate()}`
+      : `${MONTHS[wsD.getMonth()]} ${wsD.getDate()} – ${MONTHS[weDate.getMonth()]} ${weDate.getDate()}`;
+    return { week: label, ws, we, ...agg(byWeek[ws]) };
+  });
 
   // Adsets
   const byAdset = groupBy(rows, 'adset');
@@ -824,7 +846,7 @@ function computeData(since, until) {
     adsAudience[adName] = ageOrder.filter(s=>byA[s]).map(s=>({ seg:s, ...agg(byA[s]) }));
   });
 
-  return { core, weekly: weeklyFixed, adsets, ads, age, gender, ageByAdset, adsAudience };
+  return { core, daily, weekly, adsets, ads, age, gender, ageByAdset, adsAudience };
 }
 
 // ══ STATE ══════════════════════════════════════════════════════════════════════
@@ -861,11 +883,11 @@ function setSpendView(mode, btn) {
   document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   const c = charts.weeklyOverview;
-  const titles = {weekly:'Spend vs Results — By Week', daily:'Spend vs Results — By Week', adset:'Spend vs Results — By Ad Set'};
+  const titles = {weekly:'Spend vs Results — By Week', daily:'Spend vs Results — By Day', adset:'Spend vs Results — By Ad Set'};
   document.getElementById('spend-chart-title').textContent = titles[mode];
   const src = mode==='adset'
     ? D.adsets.map(a=>({lbl:a.name.length>18?a.name.slice(0,18)+'…':a.name, spend:a.spend, results:a.results}))
-    : D.weekly.map(w=>({lbl:w.week, spend:w.spend, results:w.results}));
+    : (mode==='daily' ? D.daily : D.weekly).map(w=>({lbl:w.week, spend:w.spend, results:w.results}));
   c.data.labels = src.map(s=>s.lbl);
   c.data.datasets[0].data = src.map(s=>s.spend);
   c.data.datasets[1].data = src.map(s=>s.results);
@@ -879,7 +901,7 @@ function initCharts() {
 
   // ── Update KPI cards ──────────────────────────────────────────────────────
   document.querySelector('.kpi-accent .kpi-val').textContent = f$(m.spend);
-  document.querySelector('.kpi-accent .kpi-sub').textContent = `${f$(m.spend/Math.max(D.weekly.length,1))} avg / period`;
+  document.querySelector('.kpi-accent .kpi-sub').textContent = `${f$(m.spend/Math.max(D.daily.length,1))} avg / day`;
   const kpis = document.querySelectorAll('.kpi-navy,.kpi-default');
   if(kpis[0]){ kpis[0].querySelector('.kpi-val').textContent=fnK(m.reach); kpis[0].querySelector('.kpi-sub').textContent=`${fnK(m.impressions)} total impressions`; }
   if(kpis[1]){ kpis[1].querySelector('.kpi-val').textContent=fnK(m.results); kpis[1].querySelector('.kpi-sub').textContent=`${f$4(m.cpr)} cost per result`; }
@@ -1238,8 +1260,8 @@ function downloadPDF() {
 
   // ── Shared styles ─────────────────────────────────────────────────────────
   const S = {
-    wrap:  'font-family:"Plus Jakarta Sans",-apple-system,sans-serif;color:#0D1526;background:#fff;width:794px;padding:32px;box-sizing:border-box;font-size:12px',
-    hdr:   'background:#E8410A;margin:-32px -32px 24px;padding:10px 32px;display:flex;justify-content:space-between;align-items:center',
+    wrap:  'font-family:"Plus Jakarta Sans",-apple-system,sans-serif;color:#0D1526;background:#fff;width:794px;padding:48px 56px;box-sizing:border-box;font-size:12px',
+    hdr:   'background:#E8410A;margin:-48px -56px 28px;padding:14px 56px;display:flex;justify-content:space-between;align-items:center',
     sec:   'background:#FEF0EB;border-left:4px solid #E8410A;padding:6px 12px;margin:20px 0 8px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#E8410A',
     th:    'background:#0D2445;color:#fff;padding:7px 10px;font-size:10px;font-weight:700;letter-spacing:.04em;white-space:nowrap;text-align:right',
     td:    'padding:7px 10px;border-bottom:1px solid #E2E5EB;white-space:nowrap;text-align:right',
@@ -1329,10 +1351,13 @@ function downloadPDF() {
   </div>`;
 
   // ── Render pages to PDF via html2canvas ───────────────────────────────────
+  // unit:'mm' + format:'a4' → PW=210mm, PH=297mm
+  // HTML wrap is 794px = A4 width at 96dpi; scale:2 → canvas 1588px wide
+  // image ratio: 210mm / 1588px → fills full page width, proportional height
   const { jsPDF } = window.jspdf;
-  const doc  = new jsPDF({ orientation:'portrait', unit:'px', format:'a4' });
-  const PW   = doc.internal.pageSize.getWidth();
-  const PH   = doc.internal.pageSize.getHeight();
+  const doc  = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+  const PW   = doc.internal.pageSize.getWidth();   // 210mm
+  const PH   = doc.internal.pageSize.getHeight();  // 297mm
 
   const btn  = document.querySelector('.btn-navy');
   const orig = btn ? btn.innerHTML : '';
@@ -1359,15 +1384,11 @@ function downloadPDF() {
         scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false,
       }).then(canvas => {
         const imgData = canvas.toDataURL('image/jpeg', 0.95);
-        const ratio   = PW / canvas.width;
-        const imgH    = canvas.height * ratio;
+        // canvas.width = 1588px (794px × scale:2); PW = 210mm
+        // imgH in mm = canvas.height × (210 / 1588) = proportional to A4 width
+        const imgH = canvas.height / canvas.width * PW;
         if(idx > 0) doc.addPage();
-        // Fit to page height if needed
-        if(imgH <= PH) {
-          doc.addImage(imgData, 'JPEG', 0, 0, PW, imgH);
-        } else {
-          doc.addImage(imgData, 'JPEG', 0, 0, PW, PH);
-        }
+        doc.addImage(imgData, 'JPEG', 0, 0, PW, imgH);
         idx++;
         renderNext();
       });

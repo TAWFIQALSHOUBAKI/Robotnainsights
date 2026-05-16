@@ -42,7 +42,11 @@
 ---
 
 ## 5. Overview Tab
-- [ ] `#chart-weekly-overview` renders — toggle **Daily / Weekly / Ad Set** cycles correctly
+- [ ] `#chart-weekly-overview` renders — toggle **Weekly / Daily / Ad Set** cycles correctly
+- [ ] **Weekly** button groups bars by Mon–Sun calendar week (one bar per week)
+- [ ] **Daily** button shows one bar per day
+- [ ] **Ad Set** button groups by ad set name
+- [ ] Chart title updates ("By Week" / "By Day" / "By Ad Set") on toggle
 - [ ] `#chart-gender-donut` renders with gender segments
 - [ ] `#chart-age-overview` renders with age segments
 - [ ] `#table-adsets` has rows; clicking column headers sorts ascending/descending
@@ -51,10 +55,10 @@
 ---
 
 ## 6. Weekly Tab
-- [ ] `#chart-weekly-spend` renders
-- [ ] `#chart-weekly-results` renders
-- [ ] `#chart-weekly-cpr` renders
-- [ ] `#table-weekly` has rows and is sortable
+- [ ] `#chart-weekly-spend` renders — bars represent Mon–Sun weeks, not individual days
+- [ ] `#chart-weekly-results` renders — same weekly grouping
+- [ ] `#chart-weekly-cpr` (trend line) renders — day-over-day metric line
+- [ ] `#table-weekly` shows one row per calendar week (e.g. "May 10–16") and is sortable
 - [ ] Trend chart: `#trend-metric` dropdown changes Y-axis metric
 - [ ] Trend chart: `#trend-campaign` filters by campaign
 - [ ] Trend chart: `#trend-adset` filters by ad set
@@ -87,10 +91,13 @@
 ---
 
 ## 10. PDF Export
+> **Fixed 2026-05-16** — jsPDF was using `unit:'px'` (595px page) against a 794px HTML wrap, making the ratio 0.375 and text unreadably tiny. Now uses `unit:'mm'` (210mm × 297mm) so the image fills the full A4 width. Padding also increased from 32px to 48px/56px.
 - [ ] Click **Download PDF** — button shows `⏳ Generating…`
-- [ ] PDF downloads (2-page A4 vertical)
-- [ ] Page 1: KPIs + main chart + Ad Sets table
-- [ ] Page 2: Ads table + Age chart + Gender chart
+- [ ] PDF downloads as 2-page A4 portrait
+- [ ] Page fills full width — no narrow column or small text
+- [ ] Padding: visible margins (~15mm) on all sides — not cramped, not clipped
+- [ ] Page 1: KPIs + Daily table + Ad Sets table
+- [ ] Page 2: Ads table (sorted by CPR) + Age table + Gender table
 - [ ] Arabic text is readable and RTL in PDF
 - [ ] PDF reflects **current** date filter (not full range if filtered)
 

@@ -153,7 +153,7 @@ const RAW_DATA = [...];
 | Daily / Weekly / Ad Set chart toggle (Overview) | ✓ | |
 | Trend chart with Metric + Campaign + Ad Set + Ad dropdowns | ✓ | Weekly tab |
 | Metrics: CPR, Post Engagements, CTR, Frequency | ✓ | |
-| Download PDF — html2canvas, 2-page vertical A4 | ✓ | Arabic renders natively |
+| Download PDF — html2canvas, 2-page vertical A4 | ✓ | Arabic renders natively; `unit:'mm'` for correct A4 sizing |
 | Sortable tables, best-row highlight | ✓ | |
 | Age filter by ad set (Audience tab) | ✓ | |
 | Per-ad audience dropdown (Audience tab) | ✓ | |
@@ -186,7 +186,8 @@ const RAW_DATA = [...];
 
 ```js
 D.core        // { spend, reach, impressions, results, cpr, engRate }
-D.weekly      // [ { week(label), ws, we, spend, results, impressions, reach, cpr } ]
+D.daily       // [ { week(label), ws, we, spend, results, impressions, reach, cpr } ] — one entry per day
+D.weekly      // [ { week(label), ws, we, spend, results, impressions, reach, cpr } ] — one entry per Mon–Sun calendar week
 D.adsets      // [ { name, spend, results, impressions, reach, cpr } ]
 D.ads         // [ { name, adset, spend, results, impressions, reach, cpr } ]
 D.age         // [ { seg, spend, results, impressions, reach, cpr } ]
@@ -195,11 +196,17 @@ D.ageByAdset  // { adsetName: [ { seg, ... } ] }
 D.adsAudience // { adName: [ { seg, ... } ] }
 ```
 
+`D.daily` is used by: Overview "Daily" toggle.  
+`D.weekly` is used by: Overview "Weekly" toggle, Weekly tab charts, Weekly tab table.
+
 ## PDF export notes
 
-- Uses **html2canvas** — browser renders HTML including Arabic RTL text natively
+- Uses **html2canvas + jsPDF** — browser renders HTML including Arabic RTL text natively
+- jsPDF: `unit:'mm', format:'a4'` → page = 210mm × 297mm; HTML wrap = 794px (A4 at 96dpi)
+- html2canvas: `scale:2` → 1588px-wide canvas; placed in PDF at full 210mm width, proportional height
+- Padding: 48px top/bottom, 56px left/right (~15mm margins)
 - Arabic cells detected via `/[؀-ۿ]/` regex → `direction:rtl` applied
-- 2 pages: Page 1 = KPIs + Daily + Ad Sets | Page 2 = Ads + Age + Gender
+- 2 pages: Page 1 = KPIs + Daily table + Ad Sets table | Page 2 = Ads + Age + Gender
 - Reflects **current date filter** — PDF matches what's on screen
 - Button shows `⏳ Generating…` during render (~1–2 seconds)
 
