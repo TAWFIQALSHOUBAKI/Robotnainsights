@@ -7,6 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
@@ -557,9 +558,33 @@ tr:hover td{background:#FEF0EB!important}
       <table id="table-weekly"></table>
     </div>
     <div class="card">
-      <div class="card-label">Cost Per Result — Week over Week</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <div class="card-label" style="margin-bottom:0" id="trend-chart-label">Cost Per Result — Day over Day</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+          <!-- Metric selector -->
+          <select id="trend-metric" onchange="updateTrendChart()" style="padding:5px 10px;border-radius:6px;border:1px solid #E2E5EB;background:#fff;color:#0D1526;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;outline:none">
+            <option value="cpr">Cost per Result</option>
+            <option value="results">Post Engagements</option>
+            <option value="engrate">CTR (Eng. Rate %)</option>
+            <option value="frequency">Frequency</option>
+          </select>
+          <!-- Campaign selector (always one campaign but keeps pattern) -->
+          <select id="trend-campaign" onchange="updateTrendChart()" style="padding:5px 10px;border-radius:6px;border:1px solid #E2E5EB;background:#fff;color:#0D1526;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;outline:none">
+            <option value="">All Campaigns</option>
+            <option value="Engagements_Robotna_">Engagements_Robotna_</option>
+          </select>
+          <!-- Ad Set selector -->
+          <select id="trend-adset" onchange="updateTrendChart()" style="padding:5px 10px;border-radius:6px;border:1px solid #E2E5EB;background:#fff;color:#0D1526;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;outline:none">
+            <option value="">All Ad Sets</option>
+          </select>
+          <!-- Ad selector -->
+          <select id="trend-ad" onchange="updateTrendChart()" style="padding:5px 10px;border-radius:6px;border:1px solid #E2E5EB;background:#fff;color:#0D1526;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;outline:none">
+            <option value="">All Ads</option>
+          </select>
+        </div>
+      </div>
       <div class="chart-wrap"><canvas id="chart-weekly-cpr" height="180"></canvas></div>
-      <div style="margin-top:12px;display:flex;gap:24px" id="weekly-cpr-legend"></div>
+      <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:16px" id="weekly-cpr-legend"></div>
     </div>
   </div>
 
@@ -940,19 +965,17 @@ function initCharts() {
   const cprMax = Math.max(...D.weekly.map(w=>w.cpr).filter(Boolean)) * 1.02;
   charts.weeklyCPR = new Chart(document.getElementById('chart-weekly-cpr'), {
     type:'line',
-    data:{ labels:D.weekly.map(w=>w.week), datasets:[{ label:'CPR', data:D.weekly.map(w=>w.cpr), borderColor:'#0A7C52', backgroundColor:'rgba(10,124,82,.1)', borderWidth:2.5, pointRadius:6, pointBackgroundColor:'#0A7C52', fill:true, tension:.3 }] },
+    data:{ labels:[], datasets:[{ label:'', data:[], borderColor:'#0A7C52', backgroundColor:'rgba(10,124,82,.1)', borderWidth:2.5, pointRadius:5, pointBackgroundColor:'#0A7C52', fill:true, tension:.3 }] },
     options:{...chartOpts(), scales:{
       x:{ grid:{display:false}, border:{display:false}, ticks:{color:'#7A8595'} },
-      y:{ grid:{color:'#EDF0F5'}, border:{display:false}, ticks:{color:'#7A8595',callback:v=>'$'+v.toFixed(4)}, min:cprMin, max:cprMax },
+      y:{ grid:{color:'#EDF0F5'}, border:{display:false}, ticks:{color:'#7A8595'} },
     }}
   });
-  document.getElementById('weekly-cpr-legend').innerHTML = D.weekly.map((w,i)=>`
-    <div style="display:flex;align-items:center;gap:10px">
-      <div style="width:10px;height:10px;border-radius:50%;background:#0A7C52"></div>
-      <span style="font-size:12px;color:#3D4A5C">${w.week}</span>
-      <span style="font-size:13px;font-weight:700;color:#0D1526;font-family:'DM Mono',monospace">${f$4(w.cpr)}</span>
-      ${i===D.weekly.length-1&&D.weekly.length>1?'<span class="chip" style="color:#0A7C52;background:#ECFDF5">↓ Improving</span>':''}
-    </div>`).join('');
+
+  // Populate entity dropdowns
+  populateTrendDropdowns();
+  // Draw initial state
+  updateTrendChart();
 
   // ── Ads horizontal bar ────────────────────────────────────────────────────
   charts.adsSpend = new Chart(document.getElementById('chart-ads-spend'), {
@@ -1200,123 +1223,147 @@ document.addEventListener('click', e=>{
 
 // ══ DOWNLOAD PDF (jsPDF vertical A4) ═════════════════════════════════════════
 function downloadPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
   const label = document.getElementById('range-label').textContent;
-  const PW = 210, PH = 297, ML = 16, MR = 16, MT = 16, usable = PW - ML - MR;
-  let y = MT;
 
-  function addPage() { doc.addPage(); y = MT; }
-  function checkY(need) { if(y + need > PH - 14) addPage(); }
+  // ── Shared styles ─────────────────────────────────────────────────────────
+  const S = {
+    wrap:  'font-family:"Plus Jakarta Sans",-apple-system,sans-serif;color:#0D1526;background:#fff;width:794px;padding:32px;box-sizing:border-box;font-size:12px',
+    hdr:   'background:#E8410A;margin:-32px -32px 24px;padding:10px 32px;display:flex;justify-content:space-between;align-items:center',
+    sec:   'background:#FEF0EB;border-left:4px solid #E8410A;padding:6px 12px;margin:20px 0 8px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#E8410A',
+    th:    'background:#0D2445;color:#fff;padding:7px 10px;font-size:10px;font-weight:700;letter-spacing:.04em;white-space:nowrap;text-align:right',
+    td:    'padding:7px 10px;border-bottom:1px solid #E2E5EB;white-space:nowrap;text-align:right',
+    tdAr:  'padding:7px 10px;border-bottom:1px solid #E2E5EB;white-space:nowrap;text-align:right;direction:rtl',
+    best:  'background:#ECFDF5;color:#0A7C52;font-weight:700',
+    alt:   'background:#F9FAFB',
+  };
 
-  // Header bar
-  doc.setFillColor(232,65,10);
-  doc.rect(0,0,PW,12,'F');
-  doc.setTextColor(255,255,255);
-  doc.setFontSize(8); doc.setFont('helvetica','bold');
-  doc.text('ROBOTNA · Campaign Analytics', ML, 8);
-  doc.text(label, PW-MR, 8, {align:'right'});
-  y = 22;
+  // ── Table builder — Arabic cells use direction:rtl ────────────────────────
+  function tbl(cols, rows, bestMetricIdx) {
+    const vals = bestMetricIdx != null ? rows.map(r => parseFloat(r[bestMetricIdx]) || 99) : [];
+    const minV = vals.length ? Math.min(...vals) : null;
+    const hdrs = cols.map(c => `<th style="${S.th}">${c}</th>`).join('');
+    const body = rows.map((r, ri) => {
+      const isBest = bestMetricIdx != null && (parseFloat(r[bestMetricIdx]) || 99) === minV;
+      const cells = r.map((cell, ci) => {
+        const isAr = /[؀-ۿ]/.test(cell);
+        const bg   = isBest ? S.best : ri % 2 ? S.alt : '';
+        const base = isAr ? S.tdAr : S.td;
+        const mark = isBest && ci === bestMetricIdx ? ' ▲' : '';
+        return `<td style="${base};${bg}">${cell}${mark}</td>`;
+      }).join('');
+      return `<tr>${cells}</tr>`;
+    }).join('');
+    return `<table style="width:100%;border-collapse:collapse;margin-bottom:16px"><thead><tr>${hdrs}</tr></thead><tbody>${body}</tbody></table>`;
+  }
 
-  // Title
-  doc.setTextColor(13,21,38);
-  doc.setFontSize(18); doc.setFont('helvetica','bold');
-  doc.text('Campaign Performance Report', ML, y); y += 8;
-  doc.setFontSize(10); doc.setFont('helvetica','normal');
-  doc.setTextColor(58,74,92);
-  doc.text('Meta Ads · Paid Engagement · Engagements_Robotna_', ML, y); y += 10;
+  function sec(t) { return `<div style="${S.sec}">${t}</div>`; }
 
-  // KPI row
+  // ── KPI row ───────────────────────────────────────────────────────────────
   const kpis = [
-    ['Total Spend',f$(D.core.spend)],['Reach',fn(D.core.reach)],['Engagements',fn(D.core.results)],['Eng. Rate',fpct(D.core.engRate)]
+    ['Total Spend', f$(D.core.spend),   '#FEF0EB', '#E8410A'],
+    ['Reach',       fn(D.core.reach),   '#EBF0F8', '#0D2445'],
+    ['Engagements', fn(D.core.results), '#F9FAFB', '#0D1526'],
+    ['Eng. Rate',   fpct(D.core.engRate),'#ECFDF5','#0A7C52'],
   ];
-  const kw = usable/4;
-  kpis.forEach((k,i)=>{
-    const x = ML + i*kw;
-    doc.setFillColor(245,246,248);
-    doc.roundedRect(x,y,kw-2,18,2,2,'F');
-    doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(122,133,149);
-    doc.text(k[0], x+4, y+6);
-    doc.setFontSize(13); doc.setFont('helvetica','bold'); doc.setTextColor(13,21,38);
-    doc.text(k[1], x+4, y+14);
-  });
-  y += 24;
+  const kpiHtml = `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px">
+    ${kpis.map(([l,v,bg,c]) => `<div style="background:${bg};border-radius:8px;padding:12px 14px">
+      <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#7A8595;margin-bottom:5px">${l}</div>
+      <div style="font-size:20px;font-weight:800;color:${c};letter-spacing:-.01em">${v}</div>
+    </div>`).join('')}
+  </div>`;
 
-  // Section helper
-  function section(title) {
-    checkY(14);
-    doc.setFillColor(254,240,235);
-    doc.rect(ML,y,usable,7,'F');
-    doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(232,65,10);
-    doc.text(title.toUpperCase(), ML+3, y+5);
-    y += 10;
+  // ── Page 1: header + KPIs + daily + adsets ────────────────────────────────
+  const page1 = `<div style="${S.wrap}">
+    <div style="${S.hdr}">
+      <span style="color:#fff;font-size:13px;font-weight:800">Robotna — Campaign Analytics</span>
+      <span style="color:rgba(255,255,255,.8);font-size:11px">${label}</span>
+    </div>
+    <div style="font-size:22px;font-weight:800;color:#0D2445;letter-spacing:-.01em">Campaign Performance Report</div>
+    <div style="font-size:12px;color:#3D4A5C;margin-top:4px;margin-bottom:16px">Meta Ads · Paid Engagement · Engagements_Robotna_</div>
+    <div style="height:1px;background:#E2E5EB;margin-bottom:20px"></div>
+    ${kpiHtml}
+    ${sec('Daily Performance')}
+    ${tbl(['Day','Spend','Results','Impressions','Reach','CPR'],
+      D.weekly.map(w=>[w.week,f$(w.spend),fn(w.results),fn(w.impressions),fn(w.reach),f$4(w.cpr)]), 5)}
+    ${sec('Ad Set Performance')}
+    ${tbl(['Ad Set','Spend','Results','Impressions','Reach','CPR'],
+      D.adsets.map(a=>[a.name,f$(a.spend),fn(a.results),fn(a.impressions),fn(a.reach),f$4(a.cpr)]), 5)}
+    <div style="margin-top:24px;padding-top:10px;border-top:1px solid #E2E5EB;font-size:9px;color:#B0B8C4;display:flex;justify-content:space-between">
+      <span>Robotna · robotna.org · Source: Analysis-Report.csv · Account 36890470</span>
+      <span>Created by Tawfeeq Alshobaki · No estimated values</span>
+    </div>
+  </div>`;
+
+  // ── Page 2: ads + age + gender ────────────────────────────────────────────
+  const page2 = `<div style="${S.wrap}">
+    <div style="${S.hdr}">
+      <span style="color:#fff;font-size:13px;font-weight:800">Robotna — Campaign Analytics</span>
+      <span style="color:rgba(255,255,255,.8);font-size:11px">${label}</span>
+    </div>
+    ${sec('Ad-Level Performance — Sorted by CPR')}
+    ${tbl(['Ad Creative','Ad Set','Spend','Results','Impressions','Reach','CPR'],
+      [...D.ads].sort((a,b)=>(a.cpr||99)-(b.cpr||99))
+        .map(a=>[a.name,a.adset,f$(a.spend),fn(a.results),fn(a.impressions),fn(a.reach),f$4(a.cpr)]), 6)}
+    ${sec('Age Breakdown — Sorted by CPR')}
+    ${tbl(['Age','Spend','Results','Impressions','Reach','CPR'],
+      [...D.age].sort((a,b)=>(a.cpr||99)-(b.cpr||99))
+        .map(a=>[a.seg,f$(a.spend),fn(a.results),fn(a.impressions),fn(a.reach),f$4(a.cpr)]), 5)}
+    ${sec('Gender Breakdown')}
+    ${tbl(['Gender','Spend','Results','Impressions','Reach','CPR'],
+      D.gender.map(g=>[g.seg,f$(g.spend),fn(g.results),fn(g.impressions),fn(g.reach),f$4(g.cpr)]), 5)}
+    <div style="margin-top:24px;padding-top:10px;border-top:1px solid #E2E5EB;font-size:9px;color:#B0B8C4;display:flex;justify-content:space-between">
+      <span>Robotna · robotna.org · Source: Analysis-Report.csv · Account 36890470</span>
+      <span>Created by Tawfeeq Alshobaki · No estimated values</span>
+    </div>
+  </div>`;
+
+  // ── Render pages to PDF via html2canvas ───────────────────────────────────
+  const { jsPDF } = window.jspdf;
+  const doc  = new jsPDF({ orientation:'portrait', unit:'px', format:'a4' });
+  const PW   = doc.internal.pageSize.getWidth();
+  const PH   = doc.internal.pageSize.getHeight();
+
+  const btn  = document.querySelector('.btn-navy');
+  const orig = btn ? btn.innerHTML : '';
+  if(btn) btn.innerHTML = '⏳ Generating…';
+
+  const container = document.createElement('div');
+  container.style.cssText = 'position:fixed;top:-9999px;left:0;z-index:-1';
+  document.body.appendChild(container);
+
+  const pages = [page1, page2];
+  let idx = 0;
+
+  function renderNext() {
+    if(idx >= pages.length) {
+      document.body.removeChild(container);
+      if(btn) btn.innerHTML = orig;
+      doc.save('Robotna_Campaign_Report_' + label.replace(/[^a-z0-9]/gi,'_') + '.pdf');
+      return;
+    }
+    container.innerHTML = pages[idx];
+    // Small delay so browser lays out Arabic text
+    setTimeout(() => {
+      html2canvas(container.firstChild, {
+        scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false,
+      }).then(canvas => {
+        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+        const ratio   = PW / canvas.width;
+        const imgH    = canvas.height * ratio;
+        if(idx > 0) doc.addPage();
+        // Fit to page height if needed
+        if(imgH <= PH) {
+          doc.addImage(imgData, 'JPEG', 0, 0, PW, imgH);
+        } else {
+          doc.addImage(imgData, 'JPEG', 0, 0, PW, PH);
+        }
+        idx++;
+        renderNext();
+      });
+    }, 250);
   }
 
-  // Auto-table helper
-  function autoTable(head, body) {
-    doc.autoTable({
-      startY: y,
-      head: [head],
-      body: body,
-      margin: {left:ML, right:MR},
-      styles: {fontSize:8, cellPadding:2.5, font:'helvetica', textColor:[13,21,38]},
-      headStyles: {fillColor:[13,36,69], textColor:255, fontStyle:'bold', fontSize:8},
-      alternateRowStyles: {fillColor:[249,250,251]},
-      tableWidth: usable,
-      didDrawPage: (d) => { y = d.cursor.y + 4; }
-    });
-    y = doc.lastAutoTable.finalY + 6;
-  }
-
-  // Weekly
-  section('Weekly Performance');
-  autoTable(
-    ['Week','Spend','Results','Impressions','Reach','Cost/Result'],
-    D.weekly.map(w=>[w.week,f$(w.spend),fn(w.results),fn(w.impressions),fn(w.reach),f$4(w.cpr)])
-  );
-
-  // Ad Sets
-  checkY(20);
-  section('Ad Set Performance');
-  autoTable(
-    ['Ad Set','Spend','Results','Impressions','Reach','CPR'],
-    D.adsets.map(a=>[a.name,f$(a.spend),fn(a.results),fn(a.impressions),fn(a.reach),f$4(a.cpr)])
-  );
-
-  // Ads
-  checkY(20);
-  section('Ad-Level Performance');
-  autoTable(
-    ['Ad Creative','Ad Set','Spend','Results','Impressions','Reach','CPR'],
-    [...D.ads].sort((a,b)=>(a.cpr||99)-(b.cpr||99)).map(a=>[a.name,a.adset,f$(a.spend),fn(a.results),fn(a.impressions),fn(a.reach),f$4(a.cpr)])
-  );
-
-  // Age
-  checkY(20);
-  section('Age Breakdown');
-  autoTable(
-    ['Age','Spend','Results','Impressions','Reach','CPR'],
-    [...D.age].sort((a,b)=>(a.cpr||99)-(b.cpr||99)).map(a=>[a.seg,f$(a.spend),fn(a.results),fn(a.impressions),fn(a.reach),f$4(a.cpr)])
-  );
-
-  // Gender
-  checkY(20);
-  section('Gender Breakdown');
-  autoTable(
-    ['Gender','Spend','Results','Impressions','Reach','CPR'],
-    D.gender.map(g=>[g.seg,f$(g.spend),fn(g.results),fn(g.impressions),fn(g.reach),f$4(g.cpr)])
-  );
-
-  // Footer on each page
-  const pages = doc.getNumberOfPages();
-  for(let p=1;p<=pages;p++){
-    doc.setPage(p);
-    doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(176,184,196);
-    doc.text('Robotna · robotna.org · Analysis-Report.csv · Account 36890470 · Created by Tawfeeq Alshobaki', ML, PH-6);
-    doc.text(`Page ${p} / ${pages}`, PW-MR, PH-6, {align:'right'});
-  }
-
-  doc.save(`Robotna_Campaign_Report_${label.replace(/[^a-z0-9]/gi,'_')}.pdf`);
+  renderNext();
 }
 
 // ══ PER-AD AUDIENCE ══════════════════════════════════════════════════════════
@@ -1412,6 +1459,106 @@ function setAdAudience(adName) {
     {k:'reach',label:'Reach',fmt:fn,r:true},
     {k:'cpr',label:'CPR',fmt:f$4,r:true},
   ], data, 'cpr');
+}
+
+// ══ TREND CHART — METRIC + ENTITY DROPDOWNS ══════════════════════════════════
+function populateTrendDropdowns() {
+  // Ad Sets
+  const adsetSel = document.getElementById('trend-adset');
+  if(!adsetSel) return;
+  while(adsetSel.options.length > 1) adsetSel.remove(1);
+  [...new Set(RAW_DATA.map(r=>r.adset))].sort().forEach(name => {
+    const o = document.createElement('option'); o.value=name; o.textContent=name; adsetSel.appendChild(o);
+  });
+  // Ads
+  const adSel = document.getElementById('trend-ad');
+  while(adSel.options.length > 1) adSel.remove(1);
+  [...new Set(RAW_DATA.map(r=>r.ad))].sort().forEach(name => {
+    const o = document.createElement('option'); o.value=name; o.textContent=name; adSel.appendChild(o);
+  });
+}
+
+function updateTrendChart() {
+  const metric   = document.getElementById('trend-metric')?.value   || 'cpr';
+  const adsetF   = document.getElementById('trend-adset')?.value    || '';
+  const adF      = document.getElementById('trend-ad')?.value       || '';
+
+  // Filter RAW_DATA by current date range + entity selectors
+  const rows = filterRows(currentRange.since, currentRange.until).filter(r => {
+    if(adF    && r.ad    !== adF)    return false;
+    if(adsetF && r.adset !== adsetF) return false;
+    return true;
+  });
+
+  // Group by day
+  const byDay = groupBy(rows, 'day');
+  const days  = Object.keys(byDay).sort();
+
+  // Metric configs
+  const METRICS = {
+    cpr:      { label:'Cost per Result ($)', color:'#0A7C52', fmt:f$4,  extract: g=>{ const a=agg(g); return a.cpr; } },
+    results:  { label:'Post Engagements',    color:'#E8410A', fmt:fn,   extract: g=>agg(g).results },
+    engrate:  { label:'Engagement Rate (%)', color:'#0D2445', fmt:v=>v==null?'—':v.toFixed(2)+'%',
+                extract: g=>{ const a=agg(g); return a.impressions>0?parseFloat((a.results/a.impressions*100).toFixed(2)):null; } },
+    frequency:{ label:'Frequency',           color:'#7C3AED', fmt:v=>v==null?'—':v.toFixed(2),
+                extract: g=>{ const a=agg(g); return a.reach>0?parseFloat((a.impressions/a.reach).toFixed(2)):null; } },
+  };
+
+  const cfg  = METRICS[metric] || METRICS.cpr;
+  const vals = days.map(d => cfg.extract(byDay[d]));
+
+  // Update chart labels
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const labels = days.map(d=>{ const dt=new Date(d+'T00:00:00'); return `${months[dt.getMonth()]} ${dt.getDate()}`; });
+
+  // Y-axis formatter
+  const yFmt = metric==='cpr' ? (v=>f$4(v))
+             : metric==='engrate' ? (v=>v.toFixed(2)+'%')
+             : metric==='frequency' ? (v=>v.toFixed(2))
+             : (v=>fnK(v));
+
+  const c = charts.weeklyCPR;
+  if(!c) return;
+  c.data.labels = labels;
+  c.data.datasets[0].data          = vals;
+  c.data.datasets[0].label         = cfg.label;
+  c.data.datasets[0].borderColor   = cfg.color;
+  c.data.datasets[0].backgroundColor = cfg.color + '1A';
+  c.data.datasets[0].pointBackgroundColor = cfg.color;
+  c.options.scales.y.ticks.callback = yFmt;
+  delete c.options.scales.y.min;
+  delete c.options.scales.y.max;
+  c.update();
+
+  // Update card label
+  const entityLabel = adF ? adF : adsetF ? adsetF : 'All';
+  document.getElementById('trend-chart-label').textContent =
+    `${cfg.label} — Day over Day${entityLabel!=='All'?' · '+entityLabel:''}`;
+
+  // Legend
+  const nonNull = vals.filter(v=>v!=null);
+  const minVal  = nonNull.length ? Math.min(...nonNull) : null;
+  const maxVal  = nonNull.length ? Math.max(...nonNull) : null;
+  const lastVal = nonNull.length ? nonNull[nonNull.length-1] : null;
+  const trend   = nonNull.length>1 ? (nonNull[nonNull.length-1] < nonNull[0] ? '↓ Improving' : '↑ Increasing') : '';
+  const trendColor = metric==='cpr'||metric==='frequency' ? (trend.startsWith('↓')?'#0A7C52':'#BE2B2B')
+                   : (trend.startsWith('↑')?'#0A7C52':'#BE2B2B');
+
+  document.getElementById('weekly-cpr-legend').innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:10px;height:10px;border-radius:50%;background:${cfg.color}"></div>
+      <span style="font-size:12px;color:#3D4A5C">Latest</span>
+      <span style="font-size:13px;font-weight:700;color:#0D1526;font-family:'DM Mono',monospace">${lastVal!=null?cfg.fmt(lastVal):'—'}</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:12px;color:#7A8595">Min</span>
+      <span style="font-size:12px;font-weight:700;color:#0D1526;font-family:'DM Mono',monospace">${minVal!=null?cfg.fmt(minVal):'—'}</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:12px;color:#7A8595">Max</span>
+      <span style="font-size:12px;font-weight:700;color:#0D1526;font-family:'DM Mono',monospace">${maxVal!=null?cfg.fmt(maxVal):'—'}</span>
+    </div>
+    ${trend?`<span class="chip" style="color:${trendColor};background:${trendColor}18">${trend}</span>`:''}`;
 }
 
 // ══ BOOT ══════════════════════════════════════════════════════════════════════
