@@ -202,6 +202,13 @@ tr:hover td{background:#FEF0EB!important}
 .footer-logo span{color:#fff;font-size:11px;font-weight:900;font-family:Georgia,serif}
 .footer-txt{font-size:12px;color:#7A8595;font-family:'DM Mono',monospace}
 
+/* ── MOBILE DATE FAB ── */
+.mobile-date-fab{display:none;position:fixed;bottom:20px;right:16px;z-index:500}
+@media(max-width:600px){
+  .mobile-date-fab{display:block}
+  /* Reposition popover to open upward from FAB */
+  #date-popover{position:fixed;bottom:72px;right:12px;top:auto;left:12px;min-width:unset;width:auto}
+}
 /* ── DATE PICKER WRAPPER ── */
 .date-picker-wrapper{position:relative}
 
@@ -214,11 +221,109 @@ tr:hover td{background:#FEF0EB!important}
 }
 
 /* ── RESPONSIVE ── */
+/* ── TABLET ── */
 @media(max-width:900px){
-  .grid-4,.grid-2,.grid-2-1,.grid-3-2,.grid-3{grid-template-columns:1fr}
-  .header-inner,.tabbar-inner,.footer-inner{padding:0 16px}
-  #body{padding:20px 16px 48px}
+  .grid-4{grid-template-columns:1fr 1fr}
+  .grid-2,.grid-2-1,.grid-3-2,.grid-3{grid-template-columns:1fr}
+  .header-inner,.tabbar-inner,.footer-inner{padding:0 20px}
+  #body{padding:20px 20px 48px}
   .brand .chip{display:none}
+  .adset-mini-grid{grid-template-columns:repeat(3,1fr)}
+  .footer-inner{flex-direction:column;gap:6px;text-align:center;padding:14px 20px}
+}
+
+/* ── MOBILE ── */
+@media(max-width:600px){
+  /* Header */
+  .header-inner{height:auto;padding:12px 16px;flex-wrap:wrap;gap:10px}
+  .brand{flex-wrap:wrap;gap:10px}
+  .brand-title .sub{display:none}
+  .brand-sub{font-size:10px}
+  .divider-v{display:none}
+  .header-controls{width:100%;justify-content:flex-end;gap:6px}
+  .btn{padding:7px 11px;font-size:11px}
+
+  /* Tab bar — horizontal scroll */
+  #tabbar{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tabbar-inner{height:auto;padding:8px 12px;min-width:max-content;gap:4px;flex-wrap:nowrap}
+  .tab-btn{padding:7px 12px;font-size:12px;white-space:nowrap}
+  .tabbar-right{display:none}
+
+  /* Floating date trigger — fixed bottom */
+  .date-picker-wrapper{position:fixed;bottom:16px;right:16px;z-index:500}
+  .date-trigger{box-shadow:0 4px 16px rgba(13,36,69,.2);background:#E8410A;color:#fff;border-color:#E8410A;padding:10px 16px;border-radius:24px;font-size:13px}
+  .date-trigger:hover{background:#BF320A;border-color:#BF320A}
+  .date-popover{right:0;bottom:calc(100% + 10px);top:auto;min-width:290px}
+
+  /* Body */
+  #body{padding:16px 12px 100px}
+
+  /* KPI grid — 2 col on mobile */
+  .grid-4{grid-template-columns:1fr 1fr;gap:10px}
+  .kpi{padding:14px 14px}
+  .kpi-val{font-size:20px}
+  .kpi-sub{font-size:11px}
+  .kpi-icon{width:26px;height:26px}
+  .kpi-lbl{font-size:11px}
+
+  /* All grids single col */
+  .grid-2,.grid-2-1,.grid-3-2,.grid-3{grid-template-columns:1fr;gap:12px}
+
+  /* Cards */
+  .card{padding:16px 16px}
+  .card-label{font-size:10px;margin-bottom:10px}
+
+  /* Score tiles */
+  .score{padding:16px}
+  .score-val{font-size:26px}
+
+  /* Adset mini-cards */
+  .adset-mini-grid{grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .adset-mini{padding:8px 10px}
+  .adset-mini-val{font-size:13px}
+
+  /* Section headings */
+  .shead-title{font-size:16px}
+  .shead-sub{font-size:12px}
+
+  /* Tables — readable on mobile */
+  .table-wrap{border-radius:6px}
+  table{font-size:12px}
+  th{padding:8px 10px;font-size:10px}
+  td{padding:8px 10px}
+  td.num{font-size:11px}
+
+  /* CPR rank list */
+  .cpr-rank-name{font-size:11px}
+  .cpr-rank-val{font-size:11px}
+  .cpr-rank-meta{font-size:10px}
+
+  /* Age rank */
+  .age-seg{font-size:12px;width:36px}
+  .age-cpr{font-size:11px;width:54px}
+
+  /* Gender tiles — 1 col */
+  .grid-3.mb-22{grid-template-columns:1fr}
+  .gender-tile{padding:14px 16px}
+  .gender-tile-val{font-size:20px}
+
+  /* Filter row wraps */
+  .filter-row{flex-wrap:wrap;gap:6px}
+  .filter-btn{font-size:11px;padding:5px 10px}
+
+  /* Notice banner */
+  .notice{flex-wrap:wrap;gap:6px;padding:10px 12px}
+  .notice small{font-size:11px}
+
+  /* Footer */
+  .footer-inner{flex-direction:column;gap:6px;text-align:center;padding:14px 16px}
+  .footer-brand{flex-wrap:wrap;justify-content:center}
+  .footer-txt{font-size:11px}
+
+  /* Charts — allow scroll if needed */
+  .chart-wrap{overflow-x:auto}
+  /* Shorter charts on mobile */
+  canvas{max-height:200px!important}
 }
 </style>
 </head>
@@ -539,7 +644,13 @@ tr:hover td{background:#FEF0EB!important}
 
 </div><!-- /body -->
 
-<!-- ══ FOOTER ══ -->
+<!-- ══ MOBILE FLOATING DATE PILL ══ -->
+<div class="mobile-date-fab" id="mobile-fab">
+  <button onclick="toggleDatePicker()" style="display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:28px;background:#E8410A;color:#fff;border:none;font-size:13px;font-weight:700;font-family:inherit;box-shadow:0 4px 20px rgba(232,65,10,.4);cursor:pointer;white-space:nowrap">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    <span id="mob-range-label">May 7 – May 16</span>
+  </button>
+</div>
 <div id="footer">
   <div class="footer-inner">
     <div class="footer-brand">
@@ -986,6 +1097,9 @@ function applyDateRange() {
   currentRange = { since, until };
   const label = `${prettyDate(since)} – ${prettyDate(until)}`;
   document.getElementById('range-label').textContent = label;
+  // sync mobile FAB label (short format)
+  const mobEl = document.getElementById('mob-range-label');
+  if(mobEl){ const s=prettyDate(since).replace(', 2026',''), u=prettyDate(until).replace(', 2026',''); mobEl.textContent=`${s} – ${u}`; }
   document.getElementById('header-range').textContent = `robotna.org · ${label} · Outcome Engagement`;
   document.getElementById('notice-range').textContent = `Reporting period: ${label}`;
   document.getElementById('weekly-sub').textContent = `${label} · May 7–13 (full week) vs May 14–16 (3 days)`;
