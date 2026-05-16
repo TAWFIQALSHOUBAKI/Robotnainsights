@@ -343,7 +343,7 @@ tr:hover td{background:#FEF0EB!important}
       </div>
       <div class="brand-text">
         <div class="brand-title">Robotna<span class="sub">/ Campaign Analytics</span></div>
-        <div class="brand-sub" id="header-range">robotna.org · May 7, 2026 – May 16, 2026 · Outcome Engagement</div>
+        <div class="brand-sub" id="header-range">robotna.org · May 10, 2026 – May 16, 2026 · Outcome Engagement</div>
       </div>
       <div class="divider-v"></div>
       <span class="chip" style="color:#0A7C52;background:#ECFDF5">● Active</span>
@@ -384,7 +384,7 @@ tr:hover td{background:#FEF0EB!important}
       <div class="date-picker-wrapper" id="desktop-picker">
         <button class="date-trigger" id="date-trigger" onclick="toggleDatePicker()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          <span id="range-label">May 7, 2026 – May 16, 2026</span>
+          <span id="range-label">May 10, 2026 – May 16, 2026</span>
           <span id="picker-arrow" style="font-size:9px;font-family:'DM Mono',monospace;font-weight:700">▼</span>
         </button>
       </div>
@@ -400,7 +400,7 @@ tr:hover td{background:#FEF0EB!important}
   <div class="date-inputs">
     <div>
       <div class="date-label">Start Date</div>
-      <input type="date" class="date-input" id="date-since" value="2026-05-07"/>
+      <input type="date" class="date-input" id="date-since" value="2026-05-10"/>
     </div>
     <div>
       <div class="date-label">End Date</div>
@@ -410,10 +410,10 @@ tr:hover td{background:#FEF0EB!important}
   <div class="date-error" id="date-error">⚠ Start date must be before end date.</div>
   <div class="presets-label">Quick Select</div>
   <div class="presets">
-    <button class="preset-btn" onclick="applyPreset('2026-05-07','2026-05-13',this)">This week</button>
-    <button class="preset-btn" onclick="applyPreset('2026-05-14','2026-05-16',this)">Latest 3d</button>
-    <button class="preset-btn active" onclick="applyPreset('2026-05-07','2026-05-16',this)">Full report</button>
-    <button class="preset-btn" onclick="applyPreset('2026-05-01','2026-05-31',this)">May 2026</button>
+    <button class="preset-btn" onclick="applyPreset('2026-05-10','2026-05-13',this)">Mon–Wed</button>
+    <button class="preset-btn" onclick="applyPreset('2026-05-14','2026-05-16',this)">Thu–Sat</button>
+    <button class="preset-btn active" onclick="applyPreset('2026-05-10','2026-05-16',this)">Full report</button>
+    <button class="preset-btn" onclick="applyPreset('2026-05-10','2026-05-16',this)">All days</button>
   </div>
   <div class="pop-actions">
     <button class="pop-cancel" onclick="closeDatePicker()">Cancel</button>
@@ -429,7 +429,7 @@ tr:hover td{background:#FEF0EB!important}
 
     <div class="notice">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0D2445" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      <span id="notice-range">Reporting period: May 7, 2026 – May 16, 2026</span>
+      <span id="notice-range">Reporting period: May 10, 2026 – May 16, 2026</span>
       <small>— data sourced from Analysis-Report.csv</small>
     </div>
 
@@ -541,7 +541,7 @@ tr:hover td{background:#FEF0EB!important}
     <div class="shead">
       <div class="shead-eyebrow">Time Series</div>
       <div class="shead-title">Weekly Performance</div>
-      <div class="shead-sub" id="weekly-sub">May 7, 2026 – May 16, 2026 · May 7–13 (full week) vs May 14–16 (3 days)</div>
+      <div class="shead-sub" id="weekly-sub">May 10, 2026 – May 16, 2026</div>
     </div>
     <div class="grid-2">
       <div class="card">
@@ -669,7 +669,7 @@ tr:hover td{background:#FEF0EB!important}
 <div class="mobile-date-fab" id="mobile-fab">
   <button onclick="toggleDatePicker()" style="display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:28px;background:#E8410A;color:#fff;border:none;font-size:13px;font-weight:700;font-family:inherit;box-shadow:0 4px 20px rgba(232,65,10,.4);cursor:pointer;white-space:nowrap">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-    <span id="mob-range-label">May 7 – May 16</span>
+    <span id="mob-range-label">May 10 – May 16</span>
   </button>
 </div>
 <div id="footer">
@@ -679,77 +679,26 @@ tr:hover td{background:#FEF0EB!important}
       <span class="footer-txt">Robotna · robotna.org · Source: Analysis-Report.csv · Account 36890470</span>
     </div>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
-      <span class="footer-txt" id="footer-range">May 7, 2026 – May 16, 2026 · 81,765 engagements · No estimated values</span>
+      <span class="footer-txt" id="footer-range">May 10, 2026 – May 16, 2026 · No estimated values</span>
       <span style="font-size:10px;color:#B0B8C4;font-family:'DM Mono',monospace">Created by Tawfeeq Alshobaki</span>
     </div>
   </div>
 </div>
 
 <script>
-// ══ DATA ══════════════════════════════════════════════════════════════════════
-const CORE = { spend:107.9275, avgDaily:53.96, reach:164207, impressions:197027, results:81765, cpr:0.001320, engRate:41.50 };
+// ══ RAW DATA — full CSV, 157 rows, filtered dynamically by date range ══════════
+const RAW_DATA = [{"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "female", "spend": 0.08267, "results": 38, "impressions": 81, "reach": 78}, {"day": "2026-05-16", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "male", "spend": 0.54, "results": 409, "impressions": 1052, "reach": 950}, {"day": "2026-05-16", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "female", "spend": 0.29, "results": 206, "impressions": 451, "reach": 424}, {"day": "2026-05-16", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "female", "spend": 0.4, "results": 259, "impressions": 572, "reach": 559}, {"day": "2026-05-16", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-16", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "female", "spend": 0.01, "results": 8, "impressions": 19, "reach": 19}, {"day": "2026-05-16", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "male", "spend": 0.63, "results": 492, "impressions": 1243, "reach": 1148}, {"day": "2026-05-16", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "female", "spend": 0.1, "results": 127, "impressions": 180, "reach": 173}, {"day": "2026-05-16", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "male", "spend": 0.02, "results": 15, "impressions": 40, "reach": 38}, {"day": "2026-05-16", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "female", "spend": 0.52, "results": 340, "impressions": 678, "reach": 639}, {"day": "2026-05-16", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "male", "spend": 0.08, "results": 66, "impressions": 133, "reach": 128}, {"day": "2026-05-16", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "female", "spend": 0.11, "results": 74, "impressions": 122, "reach": 120}, {"day": "2026-05-16", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "unknown", "spend": 0.0, "results": 3, "impressions": 11, "reach": 11}, {"day": "2026-05-16", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "unknown", "spend": 0.0, "results": 2, "impressions": 8, "reach": 6}, {"day": "2026-05-16", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "unknown", "spend": 0.0, "results": 0, "impressions": 2, "reach": 2}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "18-24", "gender": "male", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "35-44", "gender": "female", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-16", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "male", "spend": 0.25, "results": 233, "impressions": 317, "reach": 306}, {"day": "2026-05-16", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "unknown", "spend": 0.01, "results": 2, "impressions": 8, "reach": 8}, {"day": "2026-05-16", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "male", "spend": 0.44, "results": 328, "impressions": 882, "reach": 843}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "unknown", "spend": 0.0, "results": 2, "impressions": 6, "reach": 5}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "unknown", "spend": 0.0, "results": 2, "impressions": 3, "reach": 3}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "male", "spend": 1.074711, "results": 731, "impressions": 2079, "reach": 1897}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "male", "spend": 0.775032, "results": 613, "impressions": 1056, "reach": 988}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "female", "spend": 0.423684, "results": 273, "impressions": 463, "reach": 430}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "male", "spend": 0.87837, "results": 634, "impressions": 1790, "reach": 1608}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "male", "spend": 1.167715, "results": 920, "impressions": 2409, "reach": 2133}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "unknown", "spend": 0.0, "results": 3, "impressions": 4, "reach": 3}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "female", "spend": 0.816367, "results": 542, "impressions": 1247, "reach": 1161}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "unknown", "spend": 0.010334, "results": 7, "impressions": 20, "reach": 17}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "male", "spend": 0.031001, "results": 38, "impressions": 106, "reach": 97}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "female", "spend": 1.012709, "results": 693, "impressions": 1565, "reach": 1414}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "unknown", "spend": 0.0, "results": 6, "impressions": 11, "reach": 11}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "female", "spend": 0.630359, "results": 375, "impressions": 932, "reach": 867}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "male", "spend": 0.310013, "results": 323, "impressions": 623, "reach": 568}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "female", "spend": 0.320347, "results": 238, "impressions": 412, "reach": 371}, {"day": "2026-05-16", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "unknown", "spend": 0.0, "results": 14, "impressions": 27, "reach": 25}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "male", "spend": 0.73, "results": 709, "impressions": 1866, "reach": 1659}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "female", "spend": 0.66, "results": 591, "impressions": 1265, "reach": 1173}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "male", "spend": 0.19, "results": 248, "impressions": 478, "reach": 448}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "45-54", "gender": "female", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "55-64", "gender": "male", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "18-24", "gender": "female", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "25-34", "gender": "female", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "25-34", "gender": "male", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "35-44", "gender": "male", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "18-24", "gender": "male", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "female", "spend": 0.16, "results": 139, "impressions": 240, "reach": 230}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "18-24", "gender": "female", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "male", "spend": 0.46, "results": 542, "impressions": 786, "reach": 731}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "female", "spend": 0.39, "results": 324, "impressions": 454, "reach": 424}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "female", "spend": 0.79, "results": 455, "impressions": 1098, "reach": 985}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "male", "spend": 0.97, "results": 652, "impressions": 1878, "reach": 1714}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "female", "spend": 0.44, "results": 382, "impressions": 876, "reach": 794}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "unknown", "spend": 0.01, "results": 1, "impressions": 2, "reach": 2}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "unknown", "spend": 0.0, "results": 2, "impressions": 9, "reach": 9}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "unknown", "spend": 0.0, "results": 4, "impressions": 14, "reach": 12}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "unknown", "spend": 0.0, "results": 3, "impressions": 7, "reach": 5}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "male", "spend": 1.1, "results": 958, "impressions": 2558, "reach": 2399}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "male", "spend": 0.02, "results": 42, "impressions": 94, "reach": 93}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "female", "spend": 0.0, "results": 33, "impressions": 77, "reach": 73}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "unknown", "spend": 0.0, "results": 0, "impressions": 2, "reach": 2}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "35-44", "gender": "female", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "45-54", "gender": "female", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "35-44", "gender": "male", "spend": 0.0, "results": 2, "impressions": 4, "reach": 4}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "25-34", "gender": "female", "spend": 0.01, "results": 2, "impressions": 6, "reach": 6}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "unknown", "spend": 0.0, "results": 3, "impressions": 3, "reach": 3}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "male", "spend": 1.29, "results": 999, "impressions": 2618, "reach": 2397}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "female", "spend": 1.77, "results": 1211, "impressions": 2723, "reach": 2561}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "female", "spend": 1.05, "results": 719, "impressions": 1656, "reach": 1567}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "male", "spend": 1.91, "results": 1546, "impressions": 3886, "reach": 3578}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "35-44", "gender": "male", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "female", "spend": 0.51, "results": 497, "impressions": 875, "reach": 817}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "male", "spend": 1.44, "results": 1428, "impressions": 2393, "reach": 2234}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "male", "spend": 1.37, "results": 1036, "impressions": 2693, "reach": 2442}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "female", "spend": 1.28, "results": 919, "impressions": 2093, "reach": 1984}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "unknown", "spend": 0.02, "results": 17, "impressions": 45, "reach": 39}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "unknown", "spend": 0.04, "results": 17, "impressions": 37, "reach": 33}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "male", "spend": 0.09, "results": 71, "impressions": 150, "reach": 146}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "female", "spend": 0.8, "results": 790, "impressions": 1212, "reach": 1108}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "unknown", "spend": 0.02, "results": 10, "impressions": 14, "reach": 14}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "25-34", "gender": "male", "spend": 0.0, "results": 0, "impressions": 2, "reach": 2}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "male", "spend": 0.82, "results": 744, "impressions": 1358, "reach": 1275}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "25-34", "gender": "male", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "35-44", "gender": "female", "spend": 0.0, "results": 0, "impressions": 2, "reach": 2}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "18-24", "gender": "female", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "45-54", "gender": "male", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "18-24", "gender": "male", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "25-34", "gender": "female", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "35-44", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "unknown", "spend": 0.01, "results": 7, "impressions": 23, "reach": 21}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "unknown", "spend": 0.01, "results": 9, "impressions": 12, "reach": 11}, {"day": "2026-05-15", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "female", "spend": 0.07, "results": 66, "impressions": 138, "reach": 133}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "female", "spend": 0.24, "results": 232, "impressions": 337, "reach": 333}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "unknown", "spend": 0.04, "results": 13, "impressions": 29, "reach": 28}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "male", "spend": 0.12, "results": 158, "impressions": 293, "reach": 273}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "female", "spend": 0.6, "results": 399, "impressions": 976, "reach": 869}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "female", "spend": 0.15, "results": 164, "impressions": 271, "reach": 252}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "male", "spend": 0.83, "results": 655, "impressions": 1884, "reach": 1702}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 2, "reach": 2}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "unknown", "spend": 0.0, "results": 8, "impressions": 20, "reach": 15}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "male", "spend": 0.02, "results": 36, "impressions": 87, "reach": 82}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "unknown", "spend": 0.0, "results": 9, "impressions": 24, "reach": 22}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "male", "spend": 1.22, "results": 913, "impressions": 2552, "reach": 2300}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "female", "spend": 0.79, "results": 660, "impressions": 1527, "reach": 1364}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "male", "spend": 1.03, "results": 743, "impressions": 1903, "reach": 1688}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "female", "spend": 0.01, "results": 24, "impressions": 48, "reach": 48}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "35-44", "gender": "male", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "35-44", "gender": "female", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "female", "spend": 0.68, "results": 486, "impressions": 1148, "reach": 1066}, {"day": "2026-05-14", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "male", "spend": 0.3, "results": 355, "impressions": 531, "reach": 512}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "unknown", "spend": 0.0, "results": 2, "impressions": 7, "reach": 7}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "35-44", "gender": "male", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "male", "spend": 1.32, "results": 887, "impressions": 2438, "reach": 2267}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "25-34", "gender": "male", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "female", "spend": 0.64, "results": 540, "impressions": 919, "reach": 892}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "female", "spend": 1.37, "results": 937, "impressions": 2187, "reach": 2007}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "female", "spend": 2.13, "results": 1274, "impressions": 2917, "reach": 2734}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "female", "spend": 0.93, "results": 763, "impressions": 1835, "reach": 1700}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "male", "spend": 1.37, "results": 1261, "impressions": 2133, "reach": 1970}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "male", "spend": 1.45, "results": 1024, "impressions": 2670, "reach": 2436}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "female", "spend": 0.98, "results": 728, "impressions": 1219, "reach": 1159}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "male", "spend": 1.69, "results": 1391, "impressions": 3526, "reach": 3221}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "male", "spend": 0.53, "results": 598, "impressions": 1113, "reach": 1066}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "unknown", "spend": 0.01, "results": 12, "impressions": 28, "reach": 27}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "25-34", "gender": "female", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "unknown", "spend": 0.0, "results": 3, "impressions": 4, "reach": 4}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "male", "spend": 0.1, "results": 59, "impressions": 149, "reach": 137}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "unknown", "spend": 0.0, "results": 12, "impressions": 17, "reach": 16}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "female", "spend": 0.04, "results": 52, "impressions": 113, "reach": 106}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "unknown", "spend": 0.0, "results": 14, "impressions": 23, "reach": 23}, {"day": "2026-05-14", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "unknown", "spend": 0.01, "results": 13, "impressions": 30, "reach": 28}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "45-54", "gender": "male", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "25-34", "gender": "female", "spend": 0.0, "results": 0, "impressions": 2, "reach": 2}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "45-54", "gender": "male", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "65+", "gender": "male", "spend": 0.01, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "35-44", "gender": "male", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "female", "spend": 0.69, "results": 433, "impressions": 1020, "reach": 920}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "male", "spend": 0.67, "results": 538, "impressions": 1447, "reach": 1294}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "male", "spend": 1.01, "results": 809, "impressions": 2101, "reach": 1939}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "female", "spend": 0.05, "results": 41, "impressions": 70, "reach": 67}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "male", "spend": 0.08, "results": 158, "impressions": 274, "reach": 262}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "unknown", "spend": 0.0, "results": 2, "impressions": 2, "reach": 2}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "unknown", "spend": 0.02, "results": 4, "impressions": 15, "reach": 15}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "unknown", "spend": 0.0, "results": 8, "impressions": 15, "reach": 15}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "female", "spend": 0.39, "results": 320, "impressions": 449, "reach": 436}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "unknown", "spend": 0.03, "results": 11, "impressions": 20, "reach": 18}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "male", "spend": 0.35, "results": 405, "impressions": 545, "reach": 495}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "male", "spend": 0.97, "results": 654, "impressions": 1653, "reach": 1472}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "female", "spend": 0.92, "results": 715, "impressions": 1487, "reach": 1353}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "female", "spend": 0.15, "results": 182, "impressions": 287, "reach": 272}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "18-24", "gender": "male", "spend": 0.0, "results": 2, "impressions": 1, "reach": 1}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "unknown", "spend": 0.0, "results": 2, "impressions": 2, "reach": 2}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "male", "spend": 0.05, "results": 34, "impressions": 85, "reach": 77}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "35-44", "gender": "female", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-13", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "female", "spend": 0.73, "results": 600, "impressions": 1240, "reach": 1114}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "65+", "gender": "male", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "female", "spend": 0.79, "results": 688, "impressions": 1081, "reach": 1001}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "35-44", "gender": "male", "spend": 0.01, "results": 0, "impressions": 2, "reach": 2}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "male", "spend": 0.71, "results": 592, "impressions": 1191, "reach": 1145}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "male", "spend": 1.42, "results": 908, "impressions": 2468, "reach": 2256}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "male", "spend": 2.2, "results": 1520, "impressions": 4027, "reach": 3791}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "male", "spend": 1.28, "results": 1115, "impressions": 1926, "reach": 1711}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "female", "spend": 1.01, "results": 795, "impressions": 1986, "reach": 1794}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "female", "spend": 1.48, "results": 1037, "impressions": 2380, "reach": 2183}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "female", "spend": 0.1, "results": 81, "impressions": 149, "reach": 143}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "female", "spend": 0.6, "results": 560, "impressions": 996, "reach": 945}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "male", "spend": 0.09, "results": 82, "impressions": 183, "reach": 170}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "female", "spend": 1.8, "results": 1431, "impressions": 3375, "reach": 3082}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "unknown", "spend": 0.0, "results": 6, "impressions": 6, "reach": 6}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "45-54", "gender": "female", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "25-34", "gender": "female", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "male", "spend": 1.25, "results": 928, "impressions": 2505, "reach": 2276}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "35-44", "gender": "female", "spend": 0.0, "results": 0, "impressions": 2, "reach": 2}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "25-34", "gender": "male", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "18-24", "gender": "female", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "unknown", "spend": 0.0, "results": 2, "impressions": 2, "reach": 2}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "unknown", "spend": 0.02, "results": 12, "impressions": 32, "reach": 29}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "unknown", "spend": 0.0, "results": 5, "impressions": 9, "reach": 9}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "unknown", "spend": 0.03, "results": 8, "impressions": 29, "reach": 26}, {"day": "2026-05-13", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "unknown", "spend": 0.03, "results": 20, "impressions": 37, "reach": 34}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "45-54", "gender": "male", "spend": 0.0, "results": 3, "impressions": 14, "reach": 13}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "25-34", "gender": "female", "spend": 0.0, "results": 0, "impressions": 6, "reach": 6}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "65+", "gender": "male", "spend": 0.0, "results": 1, "impressions": 5, "reach": 5}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "35-44", "gender": "female", "spend": 0.0, "results": 4, "impressions": 10, "reach": 10}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "45-54", "gender": "female", "spend": 0.01, "results": 5, "impressions": 10, "reach": 9}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "25-34", "gender": "male", "spend": 0.0, "results": 4, "impressions": 17, "reach": 16}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "65+", "gender": "female", "spend": 0.0, "results": 1, "impressions": 2, "reach": 2}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "55-64", "gender": "male", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "45-54", "gender": "male", "spend": 0.0, "results": 4, "impressions": 14, "reach": 14}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "35-44", "gender": "unknown", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "18-24", "gender": "female", "spend": 0.0, "results": 1, "impressions": 2, "reach": 2}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "18-24", "gender": "male", "spend": 0.0, "results": 3, "impressions": 3, "reach": 3}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "35-44", "gender": "female", "spend": 0.0, "results": 1, "impressions": 4, "reach": 4}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "25-34", "gender": "male", "spend": 0.0, "results": 6, "impressions": 15, "reach": 15}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "25-34", "gender": "female", "spend": 0.0, "results": 2, "impressions": 9, "reach": 9}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "35-44", "gender": "male", "spend": 0.0, "results": 3, "impressions": 15, "reach": 14}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "18-24", "gender": "male", "spend": 0.0, "results": 1, "impressions": 3, "reach": 3}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "35-44", "gender": "male", "spend": 0.02, "results": 3, "impressions": 23, "reach": 22}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "male", "spend": 0.71, "results": 585, "impressions": 1211, "reach": 1124}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 3, "reach": 2}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "female", "spend": 0.38, "results": 385, "impressions": 660, "reach": 650}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "65+", "gender": "male", "spend": 0.0, "results": 1, "impressions": 3, "reach": 3}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "female", "spend": 0.4, "results": 330, "impressions": 519, "reach": 502}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "female", "spend": 1.49, "results": 917, "impressions": 2272, "reach": 2155}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "female", "spend": 2.3, "results": 1616, "impressions": 3621, "reach": 3335}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "male", "spend": 3.14, "results": 2217, "impressions": 5982, "reach": 5678}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "male", "spend": 1.74, "results": 1281, "impressions": 3598, "reach": 3352}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "female", "spend": 0.06, "results": 65, "impressions": 165, "reach": 151}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "male", "spend": 0.7, "results": 701, "impressions": 1183, "reach": 1078}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "unknown", "spend": 0.01, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "unknown", "spend": 0.01, "results": 14, "impressions": 32, "reach": 31}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "unknown", "spend": 0.01, "results": 18, "impressions": 40, "reach": 36}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "female", "spend": 1.18, "results": 991, "impressions": 2418, "reach": 2159}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "male", "spend": 0.12, "results": 77, "impressions": 187, "reach": 175}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "male", "spend": 1.87, "results": 1258, "impressions": 4090, "reach": 3888}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "unknown", "spend": 0.0, "results": 14, "impressions": 38, "reach": 36}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "unknown", "spend": 0.0, "results": 6, "impressions": 10, "reach": 10}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "55-64", "gender": "male", "spend": 0.01, "results": 1, "impressions": 4, "reach": 4}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "65+", "gender": "female", "spend": 0.0, "results": 1, "impressions": 2, "reach": 2}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "45-54", "gender": "female", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "unknown", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "female", "spend": 0.33, "results": 301, "impressions": 421, "reach": 392}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "female", "spend": 0.04, "results": 48, "impressions": 102, "reach": 94}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "male", "spend": 0.95, "results": 608, "impressions": 1545, "reach": 1392}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "male", "spend": 0.05, "results": 49, "impressions": 104, "reach": 103}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "female", "spend": 0.64, "results": 458, "impressions": 961, "reach": 887}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "male", "spend": 0.1, "results": 157, "impressions": 307, "reach": 307}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "unknown", "spend": 0.01, "results": 3, "impressions": 9, "reach": 8}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "45-54", "gender": "male", "spend": 0.0, "results": 1, "impressions": 3, "reach": 3}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "unknown", "spend": 0.01, "results": 8, "impressions": 17, "reach": 16}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "65+", "gender": "female", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "18-24", "gender": "female", "spend": 0.0, "results": 3, "impressions": 2, "reach": 2}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "25-34", "gender": "male", "spend": 0.0, "results": 3, "impressions": 8, "reach": 8}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "35-44", "gender": "male", "spend": 0.0, "results": 0, "impressions": 6, "reach": 6}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "25-34", "gender": "female", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "65+", "gender": "male", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "35-44", "gender": "female", "spend": 0.0, "results": 0, "impressions": 2, "reach": 2}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "18-24", "gender": "male", "spend": 0.0, "results": 0, "impressions": 3, "reach": 3}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "unknown", "spend": 0.01, "results": 6, "impressions": 13, "reach": 12}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 2, "reach": 2}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "35-44", "gender": "female", "spend": 0.01, "results": 3, "impressions": 16, "reach": 16}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "male", "spend": 0.25, "results": 254, "impressions": 363, "reach": 356}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "18-24", "gender": "male", "spend": 0.0, "results": 1, "impressions": 2, "reach": 2}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "45-54", "gender": "female", "spend": 0.0, "results": 5, "impressions": 14, "reach": 14}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "65+", "gender": "male", "spend": 0.0, "results": 3, "impressions": 4, "reach": 4}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "25-34", "gender": "female", "spend": 0.01, "results": 2, "impressions": 11, "reach": 10}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "35-44", "gender": "male", "spend": 0.0, "results": 8, "impressions": 44, "reach": 44}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "25-34", "gender": "male", "spend": 0.0, "results": 9, "impressions": 39, "reach": 39}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "45-54", "gender": "male", "spend": 0.0, "results": 7, "impressions": 27, "reach": 27}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "55-64", "gender": "female", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "55-64", "gender": "female", "spend": 0.02, "results": 2, "impressions": 6, "reach": 6}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "female", "spend": 1.0, "results": 800, "impressions": 1576, "reach": 1520}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "female", "spend": 0.74, "results": 580, "impressions": 1265, "reach": 1166}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "male", "spend": 0.74, "results": 476, "impressions": 1337, "reach": 1301}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "female", "spend": 0.21, "results": 215, "impressions": 366, "reach": 362}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "45-54", "gender": "female", "spend": 0.0, "results": 1, "impressions": 9, "reach": 9}, {"day": "2026-05-12", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "male", "spend": 1.09, "results": 716, "impressions": 1825, "reach": 1698}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "65+", "gender": "female", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "55-64", "gender": "male", "spend": 0.0, "results": 3, "impressions": 6, "reach": 6}, {"day": "2026-05-12", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "18-24", "gender": "female", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "35-44", "gender": "unknown", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-11", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 2, "reach": 2}, {"day": "2026-05-11", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "unknown", "spend": 0.01, "results": 10, "impressions": 16, "reach": 15}, {"day": "2026-05-11", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "male", "spend": 1.11, "results": 863, "impressions": 2199, "reach": 2046}, {"day": "2026-05-11", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "male", "spend": 1.01, "results": 637, "impressions": 1514, "reach": 1372}, {"day": "2026-05-11", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "female", "spend": 1.45, "results": 901, "impressions": 1919, "reach": 1744}, {"day": "2026-05-11", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "female", "spend": 0.79, "results": 560, "impressions": 1188, "reach": 1112}, {"day": "2026-05-11", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "male", "spend": 0.72, "results": 504, "impressions": 1342, "reach": 1254}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "45-54", "gender": "unknown", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "65+", "gender": "female", "spend": 0.0, "results": 2, "impressions": 6, "reach": 6}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "18-24", "gender": "male", "spend": 0.0, "results": 1, "impressions": 8, "reach": 8}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "55-64", "gender": "female", "spend": 0.0, "results": 2, "impressions": 8, "reach": 7}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "55-64", "gender": "male", "spend": 0.01, "results": 9, "impressions": 19, "reach": 19}, {"day": "2026-05-11", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "female", "spend": 0.79, "results": 483, "impressions": 1050, "reach": 993}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "35-44", "gender": "male", "spend": 0.1, "results": 53, "impressions": 152, "reach": 144}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "45-54", "gender": "male", "spend": 0.12, "results": 81, "impressions": 194, "reach": 190}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "25-34", "gender": "female", "spend": 0.03, "results": 24, "impressions": 81, "reach": 76}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "35-44", "gender": "female", "spend": 0.04, "results": 24, "impressions": 60, "reach": 57}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "65+", "gender": "male", "spend": 0.0, "results": 10, "impressions": 15, "reach": 15}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "45-54", "gender": "female", "spend": 0.05, "results": 34, "impressions": 96, "reach": 94}, {"day": "2026-05-11", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "female", "spend": 0.19, "results": 217, "impressions": 297, "reach": 283}, {"day": "2026-05-11", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "male", "spend": 0.05, "results": 111, "impressions": 190, "reach": 184}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "18-24", "gender": "male", "spend": 0.0, "results": 4, "impressions": 10, "reach": 9}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "55-64", "gender": "female", "spend": 0.0, "results": 0, "impressions": 5, "reach": 4}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "45-54", "gender": "female", "spend": 0.0, "results": 5, "impressions": 15, "reach": 15}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "65+", "gender": "male", "spend": 0.0, "results": 2, "impressions": 3, "reach": 3}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "25-34", "gender": "female", "spend": 0.01, "results": 8, "impressions": 36, "reach": 33}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "65+", "gender": "female", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "18-24", "gender": "female", "spend": 0.0, "results": 1, "impressions": 4, "reach": 4}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "35-44", "gender": "female", "spend": 0.02, "results": 3, "impressions": 15, "reach": 13}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "35-44", "gender": "male", "spend": 0.01, "results": 10, "impressions": 40, "reach": 40}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "45-54", "gender": "male", "spend": 0.01, "results": 17, "impressions": 37, "reach": 36}, {"day": "2026-05-11", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "female", "spend": 0.0, "results": 26, "impressions": 45, "reach": 42}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "25-34", "gender": "male", "spend": 0.03, "results": 8, "impressions": 48, "reach": 47}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "55-64", "gender": "male", "spend": 0.01, "results": 2, "impressions": 7, "reach": 7}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "55-64", "gender": "female", "spend": 0.0, "results": 5, "impressions": 6, "reach": 6}, {"day": "2026-05-11", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-11", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "unknown", "spend": 0.0, "results": 5, "impressions": 7, "reach": 7}, {"day": "2026-05-11", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "unknown", "spend": 0.0, "results": 8, "impressions": 16, "reach": 16}, {"day": "2026-05-11", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "male", "spend": 0.01, "results": 34, "impressions": 55, "reach": 55}, {"day": "2026-05-11", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "female", "spend": 0.22, "results": 162, "impressions": 247, "reach": 240}, {"day": "2026-05-11", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "male", "spend": 0.15, "results": 148, "impressions": 227, "reach": 220}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "18-24", "gender": "female", "spend": 0.0, "results": 3, "impressions": 10, "reach": 8}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "25-34", "gender": "male", "spend": 0.11, "results": 36, "impressions": 102, "reach": 100}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "25-34", "gender": "unknown", "spend": 0.0, "results": 0, "impressions": 2, "reach": 2}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "male", "spend": 0.01, "results": 52, "impressions": 176, "reach": 161}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "45-54", "gender": "female", "spend": 0.0, "results": 6, "impressions": 37, "reach": 36}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "18-24", "gender": "male", "spend": 0.0, "results": 3, "impressions": 8, "reach": 8}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 2, "reach": 2}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "unknown", "spend": 0.0, "results": 7, "impressions": 18, "reach": 17}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "unknown", "spend": 0.01, "results": 12, "impressions": 32, "reach": 27}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "female", "spend": 0.04, "results": 83, "impressions": 155, "reach": 152}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "female", "spend": 0.93, "results": 659, "impressions": 1720, "reach": 1604}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "female", "spend": 0.03, "results": 44, "impressions": 173, "reach": 161}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "35-44", "gender": "female", "spend": 0.0, "results": 11, "impressions": 40, "reach": 36}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "male", "spend": 0.17, "results": 239, "impressions": 391, "reach": 369}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "female", "spend": 0.92, "results": 795, "impressions": 2191, "reach": 2054}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "male", "spend": 0.25, "results": 229, "impressions": 482, "reach": 446}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "male", "spend": 2.36, "results": 1478, "impressions": 4746, "reach": 4230}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "male", "spend": 2.19, "results": 1425, "impressions": 4602, "reach": 3946}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "female", "spend": 0.11, "results": 68, "impressions": 101, "reach": 100}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "female", "spend": 1.15, "results": 933, "impressions": 2070, "reach": 1955}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "male", "spend": 3.05, "results": 1976, "impressions": 5793, "reach": 5110}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "45-54", "gender": "male", "spend": 0.05, "results": 25, "impressions": 80, "reach": 75}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "unknown", "spend": 0.07, "results": 10, "impressions": 36, "reach": 31}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "25-34", "gender": "male", "spend": 0.06, "results": 25, "impressions": 101, "reach": 97}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "35-44", "gender": "female", "spend": 0.06, "results": 25, "impressions": 97, "reach": 94}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "25-34", "gender": "female", "spend": 0.01, "results": 13, "impressions": 46, "reach": 41}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "65+", "gender": "male", "spend": 0.01, "results": 7, "impressions": 14, "reach": 14}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "45-54", "gender": "male", "spend": 0.06, "results": 21, "impressions": 124, "reach": 115}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "18-24", "gender": "female", "spend": 0.0, "results": 12, "impressions": 36, "reach": 33}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "35-44", "gender": "male", "spend": 0.03, "results": 18, "impressions": 129, "reach": 121}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "45-54", "gender": "female", "spend": 0.07, "results": 25, "impressions": 88, "reach": 86}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "35-44", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "18-24", "gender": "male", "spend": 0.01, "results": 4, "impressions": 15, "reach": 13}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "55-64", "gender": "male", "spend": 0.0, "results": 2, "impressions": 12, "reach": 12}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "45-54", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "25-34", "gender": "female", "spend": 0.12, "results": 63, "impressions": 221, "reach": 210}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "55-64", "gender": "male", "spend": 0.03, "results": 1, "impressions": 8, "reach": 8}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "35-44", "gender": "male", "spend": 0.01, "results": 19, "impressions": 79, "reach": 78}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "55-64", "gender": "female", "spend": 0.0, "results": 1, "impressions": 8, "reach": 8}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "18-24", "gender": "female", "spend": 0.0, "results": 3, "impressions": 11, "reach": 11}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "45-54", "gender": "unknown", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "25-34", "gender": "unknown", "spend": 0.0, "results": 0, "impressions": 2, "reach": 2}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "65+", "gender": "male", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-11", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "25-34", "gender": "male", "spend": 0.12, "results": 49, "impressions": 269, "reach": 253}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "45-54", "gender": "unknown", "spend": 0.0, "results": 0, "impressions": 2, "reach": 2}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "unknown", "spend": 0.0, "results": 6, "impressions": 21, "reach": 18}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "unknown", "spend": 0.0, "results": 6, "impressions": 14, "reach": 14}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "unknown", "spend": 0.02, "results": 4, "impressions": 12, "reach": 11}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "female", "spend": 0.68, "results": 438, "impressions": 1167, "reach": 1039}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "female", "spend": 1.1, "results": 815, "impressions": 1899, "reach": 1718}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "female", "spend": 0.68, "results": 475, "impressions": 1211, "reach": 1124}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "male", "spend": 0.11, "results": 161, "impressions": 208, "reach": 198}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "male", "spend": 0.08, "results": 66, "impressions": 144, "reach": 137}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "25-34", "gender": "unknown", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "55-64", "gender": "female", "spend": 0.0, "results": 7, "impressions": 10, "reach": 10}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "65+", "gender": "male", "spend": 0.01, "results": 10, "impressions": 17, "reach": 17}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "18-24", "gender": "male", "spend": 0.0, "results": 4, "impressions": 10, "reach": 9}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "45-54", "gender": "female", "spend": 0.05, "results": 45, "impressions": 147, "reach": 142}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "35-44", "gender": "female", "spend": 0.03, "results": 40, "impressions": 146, "reach": 139}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "45-54", "gender": "male", "spend": 1.27, "results": 971, "impressions": 2597, "reach": 2383}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "35-44", "gender": "male", "spend": 0.12, "results": 76, "impressions": 306, "reach": 287}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "55-64", "gender": "male", "spend": 0.0, "results": 4, "impressions": 17, "reach": 17}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "65+", "gender": "female", "spend": 0.0, "results": 4, "impressions": 5, "reach": 5}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "25-34", "gender": "male", "spend": 0.15, "results": 70, "impressions": 287, "reach": 256}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "25-34", "gender": "female", "spend": 0.07, "results": 27, "impressions": 127, "reach": 124}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "female", "spend": 0.12, "results": 133, "impressions": 215, "reach": 201}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "25-34", "gender": "unknown", "spend": 0.01, "results": 1, "impressions": 2, "reach": 2}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "25-34", "gender": "male", "spend": 0.84, "results": 630, "impressions": 1930, "reach": 1796}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "18-24", "gender": "female", "spend": 0.0, "results": 6, "impressions": 32, "reach": 29}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "35-44", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 3, "reach": 3}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "55-64", "gender": "female", "spend": 0.0, "results": 2, "impressions": 9, "reach": 9}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "18-24", "gender": "male", "spend": 0.04, "results": 15, "impressions": 47, "reach": 45}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "45-54", "gender": "female", "spend": 0.05, "results": 34, "impressions": 148, "reach": 142}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "55-64", "gender": "male", "spend": 0.01, "results": 10, "impressions": 21, "reach": 21}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "65+", "gender": "male", "spend": 0.0, "results": 7, "impressions": 12, "reach": 12}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "25-34", "gender": "female", "spend": 0.09, "results": 69, "impressions": 308, "reach": 287}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "35-44", "gender": "male", "spend": 0.15, "results": 91, "impressions": 369, "reach": 336}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "45-54", "gender": "male", "spend": 0.09, "results": 113, "impressions": 363, "reach": 355}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "55-64", "gender": "unknown", "spend": 0.01, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "35-44", "gender": "male", "spend": 0.77, "results": 540, "impressions": 1631, "reach": 1487}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "65+", "gender": "female", "spend": 0.01, "results": 1, "impressions": 6, "reach": 6}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "25-34", "gender": "male", "spend": 0.23, "results": 118, "impressions": 524, "reach": 502}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "35-44", "gender": "female", "spend": 0.09, "results": 42, "impressions": 176, "reach": 166}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "unknown", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "65+", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "male", "spend": 0.03, "results": 12, "impressions": 55, "reach": 52}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "18-24", "gender": "female", "spend": 0.04, "results": 16, "impressions": 63, "reach": 61}, {"day": "2026-05-10", "adset": "Parents_Braod_AMM", "ad": "رسالة لكل أب وأم_Reel", "age": "55-64", "gender": "female", "spend": 0.15, "results": 125, "impressions": 213, "reach": 203}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "18-24", "gender": "female", "spend": 0.0, "results": 2, "impressions": 4, "reach": 4}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "45-54", "gender": "unknown", "spend": 0.01, "results": 0, "impressions": 6, "reach": 6}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "نشاط الروبوتكس اليوم_Reel", "age": "45-54", "gender": "male", "spend": 0.25, "results": 109, "impressions": 383, "reach": 371}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "female", "spend": 0.11, "results": 91, "impressions": 250, "reach": 219}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "35-44", "gender": "male", "spend": 0.08, "results": 36, "impressions": 138, "reach": 131}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "45-54", "gender": "female", "spend": 0.07, "results": 45, "impressions": 146, "reach": 143}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "65+", "gender": "female", "spend": 0.0, "results": 3, "impressions": 6, "reach": 5}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "45-54", "gender": "male", "spend": 0.11, "results": 50, "impressions": 184, "reach": 176}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "35-44", "gender": "female", "spend": 0.01, "results": 17, "impressions": 84, "reach": 82}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "female", "spend": 0.0, "results": 6, "impressions": 7, "reach": 7}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "unknown", "spend": 0.01, "results": 4, "impressions": 10, "reach": 7}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "male", "spend": 0.01, "results": 13, "impressions": 82, "reach": 69}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "65+", "gender": "male", "spend": 0.0, "results": 8, "impressions": 14, "reach": 13}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "female", "spend": 0.2, "results": 122, "impressions": 467, "reach": 406}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "25-34", "gender": "female", "spend": 0.03, "results": 27, "impressions": 72, "reach": 69}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "male", "spend": 0.35, "results": 223, "impressions": 750, "reach": 645}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "18-24", "gender": "female", "spend": 0.02, "results": 23, "impressions": 77, "reach": 66}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "male", "spend": 0.0, "results": 10, "impressions": 19, "reach": 18}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "55-64", "gender": "female", "spend": 0.0, "results": 1, "impressions": 6, "reach": 6}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "45-54", "gender": "unknown", "spend": 0.0, "results": 2, "impressions": 9, "reach": 7}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 3, "reach": 3}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "male", "spend": 0.22, "results": 190, "impressions": 719, "reach": 640}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "25-34", "gender": "male", "spend": 0.5, "results": 278, "impressions": 1097, "reach": 934}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "لغة الأرقام_Reel", "age": "35-44", "gender": "female", "spend": 0.15, "results": 83, "impressions": 296, "reach": 258}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "18-24", "gender": "female", "spend": 0.0, "results": 3, "impressions": 8, "reach": 6}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "25-34", "gender": "male", "spend": 0.06, "results": 40, "impressions": 156, "reach": 149}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "35-44", "gender": "unknown", "spend": 0.01, "results": 1, "impressions": 3, "reach": 3}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "65+", "gender": "female", "spend": 0.01, "results": 14, "impressions": 30, "reach": 29}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "25-34", "gender": "unknown", "spend": 0.0, "results": 2, "impressions": 5, "reach": 5}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "45-54", "gender": "male", "spend": 0.1, "results": 61, "impressions": 289, "reach": 263}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "55-64", "gender": "female", "spend": 0.03, "results": 13, "impressions": 37, "reach": 36}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "35-44", "gender": "male", "spend": 0.13, "results": 51, "impressions": 210, "reach": 197}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "55-64", "gender": "male", "spend": 0.01, "results": 15, "impressions": 34, "reach": 32}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "25-34", "gender": "female", "spend": 0.15, "results": 56, "impressions": 241, "reach": 223}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "35-44", "gender": "female", "spend": 0.17, "results": 63, "impressions": 251, "reach": 241}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "25-34", "gender": "male", "spend": 0.18, "results": 74, "impressions": 249, "reach": 228}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "65+", "gender": "male", "spend": 0.03, "results": 26, "impressions": 51, "reach": 50}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "18-24", "gender": "male", "spend": 0.0, "results": 2, "impressions": 13, "reach": 10}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "55-64", "gender": "female", "spend": 0.01, "results": 5, "impressions": 7, "reach": 7}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "18-24", "gender": "female", "spend": 0.0, "results": 7, "impressions": 16, "reach": 16}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "45-54", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 2, "reach": 2}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شغف الطالب عندما يعود_Reel", "age": "45-54", "gender": "female", "spend": 0.13, "results": 99, "impressions": 316, "reach": 296}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "45-54", "gender": "unknown", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "25-34", "gender": "unknown", "spend": 0.0, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "35-44", "gender": "unknown", "spend": 0.01, "results": 1, "impressions": 1, "reach": 1}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "55-64", "gender": "male", "spend": 0.01, "results": 11, "impressions": 18, "reach": 18}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "65+", "gender": "male", "spend": 0.01, "results": 3, "impressions": 6, "reach": 6}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "شراء أجهزة حديثة_Reel", "age": "18-24", "gender": "male", "spend": 0.0, "results": 3, "impressions": 9, "reach": 9}, {"day": "2026-05-10", "adset": "DM_Broad_AMM_ZAR_IRB", "ad": "الفرق بين حصة حاسوب مملة_Reel", "age": "35-44", "gender": "unknown", "spend": 0.0, "results": 0, "impressions": 1, "reach": 1}];
 
-const WEEKLY = [
-  { week:'May 7–13',  spend:68.57,   results:50428, impressions:126407, reach:103297, cpr:0.001360 },
-  { week:'May 14–16', spend:39.3575, results:31337, impressions:70620,  reach:60910,  cpr:0.001256 },
-];
-
-const ADSETS = [
-  { name:'DM_Broad_AMM_ZAR_IRB', spend:70.6383, results:52670, impressions:129977, reach:108862, cpr:0.001341 },
-  { name:'Parents_Braod_AMM',    spend:37.2892, results:29095, impressions:67050,  reach:55345,  cpr:0.001282 },
-];
-
-const ADS = [
-  { name:'لغة الأرقام_Reel',            adset:'DM_Broad_AMM_ZAR_IRB', spend:66.5183, results:50233, impressions:121065, reach:100493, cpr:0.001324 },
-  { name:'رسالة لكل أب وأم_Reel',      adset:'Parents_Braod_AMM',    spend:37.2892, results:29095, impressions:67050,  reach:55345,  cpr:0.001282 },
-  { name:'شغف الطالب عندما يعود_Reel', adset:'DM_Broad_AMM_ZAR_IRB', spend:1.45,    results:747,   impressions:2862,   reach:2656,   cpr:0.001941 },
-  { name:'نشاط الروبوتكس اليوم_Reel',  adset:'DM_Broad_AMM_ZAR_IRB', spend:1.19,    results:724,   impressions:2398,   reach:2264,   cpr:0.001644 },
-  { name:'الفرق بين حصة حاسوب مملة_Reel', adset:'DM_Broad_AMM_ZAR_IRB', spend:0.88, results:587,   impressions:2279,   reach:2145,   cpr:0.001499 },
-  { name:'شراء أجهزة حديثة_Reel',      adset:'DM_Broad_AMM_ZAR_IRB', spend:0.60,    results:379,   impressions:1373,   reach:1304,   cpr:0.001583 },
-];
-
-const AGE = [
-  { seg:'18–24', spend:1.1804,  results:1206,  impressions:2970,  reach:2614,  cpr:0.000979 },
-  { seg:'25–34', spend:27.2389, results:19205, impressions:50865, reach:41273, cpr:0.001418 },
-  { seg:'35–44', spend:24.3175, results:16705, impressions:46058, reach:38290, cpr:0.001456 },
-  { seg:'45–54', spend:36.2512, results:26573, impressions:66672, reach:55243, cpr:0.001364 },
-  { seg:'55–64', spend:7.2033,  results:6968,  impressions:12843, reach:11605, cpr:0.001034 },
-  { seg:'65+',   spend:11.7362, results:11108, impressions:17619, reach:15182, cpr:0.001057 },
-];
-
-const GENDER = [
-  { seg:'Male',    spend:60.9104, results:46340, impressions:118844, reach:97662, cpr:0.001314 },
-  { seg:'Female',  spend:46.4870, results:35007, impressions:77218,  reach:65734, cpr:0.001328 },
-  { seg:'Unknown', spend:0.5302,  results:418,   impressions:965,    reach:811,   cpr:0.001268 },
-];
-
-const AGE_BY_ADSET = {
-  'DM_Broad_AMM_ZAR_IRB': [
-    { seg:'18–24', spend:0.8604,  results:802,   impressions:2063,  reach:1795,  cpr:0.001073 },
-    { seg:'25–34', spend:17.0164, results:11885, impressions:32875, reach:26820, cpr:0.001432 },
-    { seg:'35–44', spend:15.5753, results:10606, impressions:30133, reach:25139, cpr:0.001469 },
-    { seg:'45–54', spend:23.3183, results:16680, impressions:42734, reach:35609, cpr:0.001398 },
-    { seg:'55–64', spend:5.4628,  results:5046,  impressions:9468,  reach:8567,  cpr:0.001083 },
-    { seg:'65+',   spend:8.4052,  results:7651,  impressions:12704, reach:10932, cpr:0.001099 },
-  ],
-  'Parents_Braod_AMM': [
-    { seg:'18–24', spend:0.3200,  results:404,  impressions:907,   reach:819,   cpr:0.000792 },
-    { seg:'25–34', spend:10.2225, results:7320, impressions:17990, reach:14453, cpr:0.001397 },
-    { seg:'35–44', spend:8.7422,  results:6099, impressions:15925, reach:13151, cpr:0.001433 },
-    { seg:'45–54', spend:12.9329, results:9893, impressions:23938, reach:19634, cpr:0.001307 },
-    { seg:'55–64', spend:1.7405,  results:1922, impressions:3375,  reach:3038,  cpr:0.000906 },
-    { seg:'65+',   spend:3.3311,  results:3457, impressions:4915,  reach:4250,  cpr:0.000964 },
-  ],
-};
-
+// ══ STATIC LOOKUPS ════════════════════════════════════════════════════════════
 const GCOLS = { male:'#0D2445', female:'#7C3AED', unknown:'#C8CDD8' };
+const ALL_WEEKS = ['2026-05-07 to 2026-05-13','2026-05-14 to 2026-05-16'];
 
 // ══ FORMATTERS ════════════════════════════════════════════════════════════════
 const f$ = v => v==null?'—':'$'+v.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
-const f$4 = v => v==null?'—':'$'+v.toFixed(4);
+const f$4= v => v==null?'—':'$'+v.toFixed(4);
 const fn = v => v==null?'—':v.toLocaleString();
-const fnK = v => v==null?'—':v>=1000?(v/1000).toFixed(1)+'K':String(v);
-const fpct = v => v==null?'—':v.toFixed(2)+'%';
+const fnK= v => v==null?'—':v>=1000?(v/1000).toFixed(1)+'K':String(v);
+const fpct=v => v==null?'—':v.toFixed(2)+'%';
 
 function prettyDate(iso) {
   if(!iso) return '';
@@ -758,9 +707,94 @@ function prettyDate(iso) {
   return `${months[m-1]} ${d}, ${y}`;
 }
 
+// ══ FILTER ROWS BY DATE RANGE ═════════════════════════════════════════════════
+// A row belongs to the selected range if the week overlaps the selected range.
+// Since data is weekly: include row if ws <= until AND we >= since
+function filterRows(since, until) {
+  return RAW_DATA.filter(r => r.day >= since && r.day <= until);
+}
+
+// ══ AGGREGATE ════════════════════════════════════════════════════════════════
+function agg(rows) {
+  let spend=0, results=0, impressions=0, reach=0;
+  rows.forEach(r=>{ spend+=r.spend; results+=r.results; impressions+=r.impressions; reach+=r.reach; });
+  return { spend:parseFloat(spend.toFixed(4)), results, impressions, reach,
+           cpr: results>0 ? spend/results : null };
+}
+
+function groupBy(rows, key) {
+  const m = {};
+  rows.forEach(r => {
+    const k = r[key];
+    if(!m[k]) m[k] = [];
+    m[k].push(r);
+  });
+  return m;
+}
+
+// ══ BUILD COMPUTED DATASET FROM FILTERED ROWS ════════════════════════════════
+function computeData(since, until) {
+  const rows = filterRows(since, until);
+  const core = agg(rows);
+  core.engRate = core.impressions>0 ? parseFloat((core.results/core.impressions*100).toFixed(4)) : 0;
+
+  // Daily breakdown
+  const byDay = groupBy(rows, 'day');
+  const weeklyFixed = Object.keys(byDay).sort().map(day => {
+    const d = new Date(day + 'T00:00:00');
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const label = `${months[d.getMonth()]} ${d.getDate()}`;
+    return { week: label, ws: day, we: day, ...agg(byDay[day]) };
+  });
+  // stub so rest of function works
+
+  // Adsets
+  const byAdset = groupBy(rows, 'adset');
+  const adsets = Object.keys(byAdset).map(name => ({ name, ...agg(byAdset[name]) }))
+    .sort((a,b)=>b.spend-a.spend);
+
+  // Ads
+  const byAd = groupBy(rows, 'ad');
+  const ads = Object.keys(byAd).map(name => {
+    const aRows = byAd[name];
+    return { name, adset: aRows[0].adset, ...agg(aRows) };
+  }).sort((a,b)=>b.spend-a.spend);
+
+  // Age
+  const byAge = groupBy(rows, 'age');
+  const ageOrder = ['18-24','25-34','35-44','45-54','55-64','65+'];
+  const age = ageOrder.filter(s=>byAge[s]).map(s=>({ seg:s, ...agg(byAge[s]) }));
+
+  // Gender
+  const byGender = groupBy(rows, 'gender');
+  const genderOrder = ['male','female','unknown'];
+  const gender = genderOrder.filter(s=>byGender[s]).map(s=>({
+    seg: s.charAt(0).toUpperCase()+s.slice(1), ...agg(byGender[s])
+  }));
+
+  // Age by adset
+  const ageByAdset = {};
+  Object.keys(byAdset).forEach(adsetName => {
+    const asetRows = byAdset[adsetName];
+    const byA = groupBy(asetRows, 'age');
+    ageByAdset[adsetName] = ageOrder.filter(s=>byA[s]).map(s=>({ seg:s, ...agg(byA[s]) }));
+  });
+
+  // Ads audience (age breakdown per ad)
+  const adsAudience = {};
+  Object.keys(byAd).forEach(adName => {
+    const adRows = byAd[adName];
+    const byA = groupBy(adRows, 'age');
+    adsAudience[adName] = ageOrder.filter(s=>byA[s]).map(s=>({ seg:s, ...agg(byA[s]) }));
+  });
+
+  return { core, weekly: weeklyFixed, adsets, ads, age, gender, ageByAdset, adsAudience };
+}
+
 // ══ STATE ══════════════════════════════════════════════════════════════════════
-let currentRange = { since:'2026-05-07', until:'2026-05-16' };
+let currentRange = { since:'2026-05-10', until:'2026-05-16' };
 let currentAgeFilter = 'all';
+let D = computeData(currentRange.since, currentRange.until); // current dataset
 const charts = {};
 
 // ══ CHART DEFAULTS ════════════════════════════════════════════════════════════
@@ -768,15 +802,10 @@ Chart.defaults.font.family = "'DM Mono', monospace";
 Chart.defaults.font.size = 11;
 Chart.defaults.color = '#7A8595';
 
-const gridPlugin = { id:'noGrid', beforeDatasetsDraw(chart) {
-  const {ctx,chartArea:{top,bottom,left,right},scales} = chart;
-  if(!scales.x || !scales.y) return;
-}};
-
 function chartOpts(extra={}) {
   return {
-    responsive:true,
-    maintainAspectRatio:false,
+    responsive: true,
+    maintainAspectRatio: false,
     plugins:{ legend:{display:false}, tooltip:{
       backgroundColor:'#0D2445', titleColor:'rgba(255,255,255,.5)',
       bodyColor:'#fff', padding:10, cornerRadius:8,
@@ -791,26 +820,16 @@ function chartOpts(extra={}) {
   };
 }
 
-// ══ DAILY DATA (actual daily spend/results from campaign period) ══════════════
-// Derived: Week1 (May 7–13, 7 days) avg + Week2 (May 14–16, 3 days) avg
-const DAILY = [
-  {day:'May 7', spend:9.80, results:7204},{day:'May 8',  spend:9.80, results:7204},
-  {day:'May 9', spend:9.80, results:7204},{day:'May 10', spend:9.80, results:7204},
-  {day:'May 11',spend:9.80, results:7204},{day:'May 12', spend:9.80, results:7204},
-  {day:'May 13',spend:9.77, results:7208},
-  {day:'May 14',spend:13.12,results:10446},{day:'May 15',spend:13.12,results:10446},{day:'May 16',spend:13.12,results:10445},
-];
 
-// ══ SPEND VIEW TOGGLE ═════════════════════════════════════════════════════════
 function setSpendView(mode, btn) {
   document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   const c = charts.weeklyOverview;
-  const titles = {weekly:'Spend vs Results — By Week', daily:'Spend vs Results — Daily', adset:'Spend vs Results — By Ad Set'};
+  const titles = {weekly:'Spend vs Results — By Week', daily:'Spend vs Results — By Week', adset:'Spend vs Results — By Ad Set'};
   document.getElementById('spend-chart-title').textContent = titles[mode];
-  const src = mode==='weekly' ? WEEKLY.map(w=>({lbl:w.week, spend:w.spend, results:w.results}))
-            : mode==='daily'  ? DAILY.map(d=>({lbl:d.day, spend:d.spend, results:d.results}))
-            : ADSETS.map(a=>({lbl:a.name.length>18?a.name.slice(0,18)+'…':a.name, spend:a.spend, results:a.results}));
+  const src = mode==='adset'
+    ? D.adsets.map(a=>({lbl:a.name.length>18?a.name.slice(0,18)+'…':a.name, spend:a.spend, results:a.results}))
+    : D.weekly.map(w=>({lbl:w.week, spend:w.spend, results:w.results}));
   c.data.labels = src.map(s=>s.lbl);
   c.data.datasets[0].data = src.map(s=>s.spend);
   c.data.datasets[1].data = src.map(s=>s.results);
@@ -820,15 +839,47 @@ function setSpendView(mode, btn) {
 // ══ INIT CHARTS ═══════════════════════════════════════════════════════════════
 function initCharts() {
   destroyCharts();
+  const m = D.core;
 
-  // Overview — weekly combo
+  // ── Update KPI cards ──────────────────────────────────────────────────────
+  document.querySelector('.kpi-accent .kpi-val').textContent = f$(m.spend);
+  document.querySelector('.kpi-accent .kpi-sub').textContent = `${f$(m.spend/Math.max(D.weekly.length,1))} avg / period`;
+  const kpis = document.querySelectorAll('.kpi-navy,.kpi-default');
+  if(kpis[0]){ kpis[0].querySelector('.kpi-val').textContent=fnK(m.reach); kpis[0].querySelector('.kpi-sub').textContent=`${fnK(m.impressions)} total impressions`; }
+  if(kpis[1]){ kpis[1].querySelector('.kpi-val').textContent=fnK(m.results); kpis[1].querySelector('.kpi-sub').textContent=`${f$4(m.cpr)} cost per result`; }
+  if(kpis[2]){ kpis[2].querySelector('.kpi-val').textContent=fpct(m.engRate); }
+
+  // ── Update adset mini-cards ───────────────────────────────────────────────
+  D.adsets.forEach((as,i)=>{
+    const card = document.querySelectorAll('.grid-2.mb-18 .card')[i];
+    if(!card) return;
+    const vals = card.querySelectorAll('.adset-mini-val');
+    if(vals[0]) vals[0].textContent = f$(as.spend);
+    if(vals[1]) vals[1].textContent = fn(as.results);
+    if(vals[2]) vals[2].textContent = f$4(as.cpr);
+    if(vals[3]) vals[3].textContent = fnK(as.reach);
+    if(vals[4]) vals[4].textContent = fnK(as.impressions);
+    if(vals[5]) vals[5].textContent = fpct(as.results/as.impressions*100);
+    const chip = card.querySelector('.chip');
+    if(chip) chip.textContent = fpct(as.spend/m.spend*100)+' of spend';
+  });
+
+  // ── Update creative score tiles ───────────────────────────────────────────
+  const bestAd = D.ads.filter(a=>a.cpr).reduce((b,a)=>(!b||a.cpr<b.cpr)?a:b, null);
+  const topAd  = D.ads.reduce((b,a)=>a.spend>b.spend?a:b, D.ads[0]);
+  const tiles  = document.querySelectorAll('.score-val');
+  if(tiles[0]) tiles[0].textContent = f$4(m.cpr);
+  if(tiles[1]) { tiles[1].textContent = f$4(bestAd?.cpr); tiles[1].nextElementSibling&&(tiles[1].nextElementSibling.textContent=bestAd?.name||''); }
+  if(tiles[2]) { tiles[2].textContent = fpct(topAd?.spend/m.spend*100); tiles[2].nextElementSibling&&(tiles[2].nextElementSibling.textContent=`${topAd?.name} — ${f$(topAd?.spend)} of ${f$(m.spend)}`); }
+
+  // ── Weekly overview bar ───────────────────────────────────────────────────
   charts.weeklyOverview = new Chart(document.getElementById('chart-weekly-overview'), {
     type:'bar',
     data:{
-      labels: WEEKLY.map(w=>w.week),
+      labels: D.weekly.map(w=>w.week),
       datasets:[
-        { label:'Spend ($)', data:WEEKLY.map(w=>w.spend), backgroundColor:'#E8410A', borderRadius:4, yAxisID:'y', order:1 },
-        { label:'Results',   data:WEEKLY.map(w=>w.results), backgroundColor:'#0D2445', borderRadius:4, yAxisID:'y2', order:2 },
+        { label:'Spend ($)', data:D.weekly.map(w=>w.spend), backgroundColor:'#E8410A', borderRadius:4, yAxisID:'y', order:1 },
+        { label:'Results',   data:D.weekly.map(w=>w.results), backgroundColor:'#0D2445', borderRadius:4, yAxisID:'y2', order:2 },
       ]
     },
     options:{...chartOpts(), scales:{
@@ -838,102 +889,84 @@ function initCharts() {
     }}
   });
 
-  // Overview — gender donut
+  // ── Gender donut ──────────────────────────────────────────────────────────
   charts.genderDonut = new Chart(document.getElementById('chart-gender-donut'), {
     type:'doughnut',
     data:{
-      labels:GENDER.map(g=>g.seg),
-      datasets:[{ data:GENDER.map(g=>g.results), backgroundColor:GENDER.map(g=>GCOLS[g.seg.toLowerCase()]||'#ccc'), borderWidth:2, borderColor:'#fff', hoverOffset:4 }]
+      labels:D.gender.map(g=>g.seg),
+      datasets:[{ data:D.gender.map(g=>g.results), backgroundColor:D.gender.map(g=>GCOLS[g.seg.toLowerCase()]||'#ccc'), borderWidth:2, borderColor:'#fff', hoverOffset:4 }]
     },
-    options:{
-      responsive:true, maintainAspectRatio:false, cutout:'65%',
-      plugins:{ legend:{display:false}, tooltip:{
-        backgroundColor:'#0D2445', bodyColor:'#fff', padding:10, cornerRadius:8,
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'65%',
+      plugins:{ legend:{display:false}, tooltip:{ backgroundColor:'#0D2445', bodyColor:'#fff', padding:10, cornerRadius:8,
         bodyFont:{family:"'DM Mono',monospace",size:12,weight:'bold'},
-        callbacks:{label:ctx=>`${ctx.label}: ${fn(ctx.raw)}`}
-      }}
-    }
+        callbacks:{label:ctx=>`${ctx.label}: ${fn(ctx.raw)}`} }} }
   });
-
-  // Render gender legend
-  const gl = document.getElementById('gender-legend');
-  gl.innerHTML = GENDER.map(g=>`
+  document.getElementById('gender-legend').innerHTML = D.gender.map(g=>`
     <div class="gender-row">
       <div class="gender-dot" style="background:${GCOLS[g.seg.toLowerCase()]||'#ccc'}"></div>
       <span class="gender-name">${g.seg}</span>
       <span class="gender-num">${fn(g.results)}</span>
-      <span class="gender-pct">${fpct(g.spend/CORE.spend*100)}</span>
+      <span class="gender-pct">${fpct(g.spend/m.spend*100)}</span>
     </div>`).join('');
 
-  // Overview — age bar
+  // ── Age overview bar ──────────────────────────────────────────────────────
   charts.ageOverview = new Chart(document.getElementById('chart-age-overview'), {
     type:'bar',
-    data:{
-      labels:AGE.map(a=>a.seg),
-      datasets:[
-        { label:'Results', data:AGE.map(a=>a.results), backgroundColor:'#E8410A', borderRadius:4, barPercentage:.4 },
-        { label:'Spend',   data:AGE.map(a=>a.spend),   backgroundColor:'#0D2445', borderRadius:4, barPercentage:.4 },
-      ]
-    },
+    data:{ labels:D.age.map(a=>a.seg), datasets:[
+      { label:'Results', data:D.age.map(a=>a.results), backgroundColor:'#E8410A', borderRadius:4, barPercentage:.4 },
+      { label:'Spend',   data:D.age.map(a=>a.spend),   backgroundColor:'#0D2445', borderRadius:4, barPercentage:.4 },
+    ]},
     options:{...chartOpts(), scales:{
       x:{ grid:{display:false}, border:{display:false}, ticks:{color:'#7A8595'} },
       y:{ grid:{color:'#EDF0F5'}, border:{display:false}, ticks:{color:'#7A8595',callback:v=>fnK(v)} },
     }}
   });
 
-  // Weekly — spend bar
+  // ── Weekly tab charts ─────────────────────────────────────────────────────
   charts.weeklySpend = new Chart(document.getElementById('chart-weekly-spend'), {
     type:'bar',
-    data:{ labels:WEEKLY.map(w=>w.week), datasets:[{ label:'Spend ($)', data:WEEKLY.map(w=>w.spend), backgroundColor:'#E8410A', borderRadius:4, barPercentage:.5 }] },
+    data:{ labels:D.weekly.map(w=>w.week), datasets:[{ label:'Spend ($)', data:D.weekly.map(w=>w.spend), backgroundColor:'#E8410A', borderRadius:4, barPercentage:.5 }] },
     options: chartOpts()
   });
-
-  // Weekly — results bar
   charts.weeklyResults = new Chart(document.getElementById('chart-weekly-results'), {
     type:'bar',
-    data:{ labels:WEEKLY.map(w=>w.week), datasets:[{ label:'Results', data:WEEKLY.map(w=>w.results), backgroundColor:'#0D2445', borderRadius:4, barPercentage:.5 }] },
+    data:{ labels:D.weekly.map(w=>w.week), datasets:[{ label:'Results', data:D.weekly.map(w=>w.results), backgroundColor:'#0D2445', borderRadius:4, barPercentage:.5 }] },
     options:{...chartOpts(), scales:{
       x:{ grid:{display:false}, border:{display:false}, ticks:{color:'#7A8595'} },
       y:{ grid:{color:'#EDF0F5'}, border:{display:false}, ticks:{color:'#7A8595',callback:v=>fnK(v)} },
     }}
   });
-
-  // Weekly — CPR line
+  const cprMin = Math.min(...D.weekly.map(w=>w.cpr).filter(Boolean)) * 0.98;
+  const cprMax = Math.max(...D.weekly.map(w=>w.cpr).filter(Boolean)) * 1.02;
   charts.weeklyCPR = new Chart(document.getElementById('chart-weekly-cpr'), {
     type:'line',
-    data:{ labels:WEEKLY.map(w=>w.week), datasets:[{ label:'CPR', data:WEEKLY.map(w=>w.cpr), borderColor:'#0A7C52', backgroundColor:'rgba(10,124,82,.1)', borderWidth:2.5, pointRadius:6, pointBackgroundColor:'#0A7C52', fill:true, tension:.3 }] },
+    data:{ labels:D.weekly.map(w=>w.week), datasets:[{ label:'CPR', data:D.weekly.map(w=>w.cpr), borderColor:'#0A7C52', backgroundColor:'rgba(10,124,82,.1)', borderWidth:2.5, pointRadius:6, pointBackgroundColor:'#0A7C52', fill:true, tension:.3 }] },
     options:{...chartOpts(), scales:{
       x:{ grid:{display:false}, border:{display:false}, ticks:{color:'#7A8595'} },
-      y:{ grid:{color:'#EDF0F5'}, border:{display:false}, ticks:{color:'#7A8595',callback:v=>'$'+v.toFixed(4)}, min:0.00120, max:0.00142 },
+      y:{ grid:{color:'#EDF0F5'}, border:{display:false}, ticks:{color:'#7A8595',callback:v=>'$'+v.toFixed(4)}, min:cprMin, max:cprMax },
     }}
   });
-
-  // CPR legend
-  document.getElementById('weekly-cpr-legend').innerHTML = WEEKLY.map((w,i)=>`
+  document.getElementById('weekly-cpr-legend').innerHTML = D.weekly.map((w,i)=>`
     <div style="display:flex;align-items:center;gap:10px">
       <div style="width:10px;height:10px;border-radius:50%;background:#0A7C52"></div>
       <span style="font-size:12px;color:#3D4A5C">${w.week}</span>
       <span style="font-size:13px;font-weight:700;color:#0D1526;font-family:'DM Mono',monospace">${f$4(w.cpr)}</span>
-      ${i===1?'<span class="chip" style="color:#0A7C52;background:#ECFDF5">↓ Improving</span>':''}
+      ${i===D.weekly.length-1&&D.weekly.length>1?'<span class="chip" style="color:#0A7C52;background:#ECFDF5">↓ Improving</span>':''}
     </div>`).join('');
 
-  // Ads — horizontal bar
-  const adsSorted = [...ADS].sort((a,b)=>b.spend-a.spend);
+  // ── Ads horizontal bar ────────────────────────────────────────────────────
   charts.adsSpend = new Chart(document.getElementById('chart-ads-spend'), {
     type:'bar',
     data:{
-      labels:adsSorted.map(a=>a.name.length>22?a.name.slice(0,22)+'…':a.name),
-      datasets:[{ label:'Spend ($)', data:adsSorted.map(a=>a.spend), backgroundColor:'#E8410A', borderRadius:4, barPercentage:.6 }]
+      labels:D.ads.map(a=>a.name.length>22?a.name.slice(0,22)+'…':a.name),
+      datasets:[{ label:'Spend ($)', data:D.ads.map(a=>a.spend), backgroundColor:'#E8410A', borderRadius:4, barPercentage:.6 }]
     },
     options:{...chartOpts(), indexAxis:'y', scales:{
       x:{ grid:{color:'#EDF0F5'}, border:{display:false}, ticks:{color:'#7A8595',callback:v=>'$'+v} },
       y:{ grid:{display:false}, border:{display:false}, ticks:{color:'#7A8595'} },
     }}
   });
-
-  // CPR rank list
-  const cprList = document.getElementById('cpr-rank-list');
-  cprList.innerHTML = [...ADS].sort((a,b)=>a.cpr-b.cpr).map((ad,i)=>`
+  document.getElementById('cpr-rank-list').innerHTML = [...D.ads].filter(a=>a.cpr).sort((a,b)=>a.cpr-b.cpr).map((ad,i)=>`
     <div class="cpr-rank-item">
       <div class="cpr-rank-top">
         <span class="cpr-rank-name">${ad.name}</span>
@@ -945,13 +978,14 @@ function initCharts() {
       </div>
     </div>`).join('');
 
-  // Init age chart
-  renderAgeCharts('all');
+  // ── Age chart ─────────────────────────────────────────────────────────────
+  renderAgeCharts(currentAgeFilter);
 
-  // Gender tiles
-  const gColors = ['#EBF0F8','#FEF0EB','#F5F6F8'];
-  GENDER.forEach((g,i)=>{
-    document.getElementById(`gtile-${i}`).innerHTML = `
+  // ── Gender tiles ──────────────────────────────────────────────────────────
+  D.gender.forEach((g,i)=>{
+    const el = document.getElementById(`gtile-${i}`);
+    if(!el) return;
+    el.innerHTML = `
       <div class="gender-tile-header">
         <div class="gender-dot-lg" style="background:${GCOLS[g.seg.toLowerCase()]||'#ccc'}"></div>
         <span class="gender-tile-name">${g.seg}</span>
@@ -964,43 +998,32 @@ function initCharts() {
       </div>`;
   });
 
-  // Build all tables
-  buildTable('table-weekly', [
-    {k:'week',label:'Period'},
-    {k:'spend',label:'Spend',fmt:f$,r:true},
-    {k:'results',label:'Results',fmt:fn,r:true},
-    {k:'impressions',label:'Impressions',fmt:fn,r:true},
-    {k:'reach',label:'Reach',fmt:fn,r:true},
-    {k:'cpr',label:'Cost/Result',fmt:f$4,r:true},
-  ], WEEKLY, 'cpr');
-
+  // ── Tables ────────────────────────────────────────────────────────────────
+  const tCols = [
+    {k:'week',label:'Period'},{k:'spend',label:'Spend',fmt:f$,r:true},
+    {k:'results',label:'Results',fmt:fn,r:true},{k:'impressions',label:'Impressions',fmt:fn,r:true},
+    {k:'reach',label:'Reach',fmt:fn,r:true},{k:'cpr',label:'Cost/Result',fmt:f$4,r:true},
+  ];
+  buildTable('table-weekly', tCols, D.weekly, 'cpr');
   buildTable('table-ads', [
-    {k:'name',label:'Ad Creative'},
-    {k:'adset',label:'Ad Set'},
-    {k:'spend',label:'Spend',fmt:f$,r:true},
-    {k:'results',label:'Results',fmt:fn,r:true},
-    {k:'impressions',label:'Impressions',fmt:fn,r:true},
-    {k:'reach',label:'Reach',fmt:fn,r:true},
+    {k:'name',label:'Ad Creative'},{k:'adset',label:'Ad Set'},
+    {k:'spend',label:'Spend',fmt:f$,r:true},{k:'results',label:'Results',fmt:fn,r:true},
+    {k:'impressions',label:'Impressions',fmt:fn,r:true},{k:'reach',label:'Reach',fmt:fn,r:true},
     {k:'cpr',label:'Cost/Result',fmt:f$4,r:true},
-  ], ADS, 'cpr');
-
+  ], D.ads, 'cpr');
   buildTable('table-adsets', [
-    {k:'name',label:'Ad Set'},
-    {k:'spend',label:'Spend',fmt:f$,r:true},
-    {k:'results',label:'Results',fmt:fn,r:true},
-    {k:'impressions',label:'Impressions',fmt:fn,r:true},
-    {k:'reach',label:'Reach',fmt:fn,r:true},
-    {k:'cpr',label:'Cost/Result',fmt:f$4,r:true},
-  ], ADSETS, 'cpr');
-
+    {k:'name',label:'Ad Set'},{k:'spend',label:'Spend',fmt:f$,r:true},
+    {k:'results',label:'Results',fmt:fn,r:true},{k:'impressions',label:'Impressions',fmt:fn,r:true},
+    {k:'reach',label:'Reach',fmt:fn,r:true},{k:'cpr',label:'Cost/Result',fmt:f$4,r:true},
+  ], D.adsets, 'cpr');
   buildTable('table-gender', [
-    {k:'seg',label:'Gender'},
-    {k:'spend',label:'Spend',fmt:f$,r:true},
-    {k:'results',label:'Results',fmt:fn,r:true},
-    {k:'impressions',label:'Impressions',fmt:fn,r:true},
-    {k:'reach',label:'Reach',fmt:fn,r:true},
-    {k:'cpr',label:'Cost/Result',fmt:f$4,r:true},
-  ], GENDER, 'cpr');
+    {k:'seg',label:'Gender'},{k:'spend',label:'Spend',fmt:f$,r:true},
+    {k:'results',label:'Results',fmt:fn,r:true},{k:'impressions',label:'Impressions',fmt:fn,r:true},
+    {k:'reach',label:'Reach',fmt:fn,r:true},{k:'cpr',label:'Cost/Result',fmt:f$4,r:true},
+  ], D.gender, 'cpr');
+
+  // ── Refresh ad audience dropdown ─────────────────────────────────────────
+  initAdAudienceSelect();
 }
 
 function destroyCharts() {
@@ -1010,44 +1033,34 @@ function destroyCharts() {
 
 // ══ AGE CHART (filterable) ════════════════════════════════════════════════════
 function renderAgeCharts(filter) {
-  const data = filter==='all' ? AGE : (AGE_BY_ADSET[filter]||AGE);
-  const maxR = Math.max(...data.map(a=>a.results));
-
+  const data = filter==='all' ? D.age : (D.ageByAdset[filter]||D.age);
+  const maxR = Math.max(...data.map(a=>a.results), 1);
   if(charts.ageMain) charts.ageMain.destroy();
   charts.ageMain = new Chart(document.getElementById('chart-age-main'), {
     type:'bar',
-    data:{
-      labels:data.map(a=>a.seg),
-      datasets:[
-        { label:'Results', data:data.map(a=>a.results), backgroundColor:'#E8410A', borderRadius:4, barPercentage:.4 },
-        { label:'Spend',   data:data.map(a=>a.spend),   backgroundColor:'#0D2445', borderRadius:4, barPercentage:.4 },
-      ]
-    },
+    data:{ labels:data.map(a=>a.seg), datasets:[
+      { label:'Results', data:data.map(a=>a.results), backgroundColor:'#E8410A', borderRadius:4, barPercentage:.4 },
+      { label:'Spend',   data:data.map(a=>a.spend),   backgroundColor:'#0D2445', borderRadius:4, barPercentage:.4 },
+    ]},
     options:{...chartOpts(), scales:{
       x:{ grid:{display:false}, border:{display:false}, ticks:{color:'#7A8595'} },
       y:{ grid:{color:'#EDF0F5'}, border:{display:false}, ticks:{color:'#7A8595',callback:v=>fnK(v)} },
     }}
   });
-
-  // Rank list
-  const sorted = [...data].sort((a,b)=>a.cpr-b.cpr);
+  const sorted = [...data].sort((a,b)=>(a.cpr||99)-(b.cpr||99));
   document.getElementById('age-rank-list').innerHTML = sorted.map((a,i)=>`
     <div class="age-rank-row">
       <span class="age-seg">${a.seg}</span>
       <div class="age-bar-wrap">
-        <div class="age-bar" style="width:${a.results/maxR*100}%;background:${i===0?'#0A7C52':'#E8410A'}"></div>
+        <div class="age-bar" style="width:${maxR>0?a.results/maxR*100:0}%;background:${i===0?'#0A7C52':'#E8410A'}"></div>
       </div>
       <span class="age-cpr" style="color:${i===0?'#0A7C52':'#0D1526'}">${f$4(a.cpr)}</span>
       ${i===0?'<span class="chip age-best-chip" style="color:#0A7C52;background:#ECFDF5">Best</span>':''}
     </div>`).join('');
-
-  // Table
   buildTable('table-age', [
     {k:'seg',label:filter==='all'?'Age Group':`Age (${filter})`},
-    {k:'spend',label:'Spend',fmt:f$,r:true},
-    {k:'results',label:'Results',fmt:fn,r:true},
-    {k:'impressions',label:'Impressions',fmt:fn,r:true},
-    {k:'reach',label:'Reach',fmt:fn,r:true},
+    {k:'spend',label:'Spend',fmt:f$,r:true},{k:'results',label:'Results',fmt:fn,r:true},
+    {k:'impressions',label:'Impressions',fmt:fn,r:true},{k:'reach',label:'Reach',fmt:fn,r:true},
     {k:'cpr',label:'Cost/Result',fmt:f$4,r:true},
   ], data, 'cpr');
 }
@@ -1151,15 +1164,23 @@ function applyDateRange() {
   if(since>until){ errEl.textContent='⚠ Start date must be before end date.'; errEl.style.display='flex'; return; }
   errEl.style.display='none';
   currentRange = { since, until };
+  // Recompute dataset from raw data
+  D = computeData(since, until);
   const label = `${prettyDate(since)} – ${prettyDate(until)}`;
   document.getElementById('range-label').textContent = label;
-  // sync mobile FAB label (short format)
   const mobEl = document.getElementById('mob-range-label');
   if(mobEl){ const s=prettyDate(since).replace(', 2026',''), u=prettyDate(until).replace(', 2026',''); mobEl.textContent=`${s} – ${u}`; }
   document.getElementById('header-range').textContent = `robotna.org · ${label} · Outcome Engagement`;
   document.getElementById('notice-range').textContent = `Reporting period: ${label}`;
-  document.getElementById('weekly-sub').textContent = `${label} · May 7–13 (full week) vs May 14–16 (3 days)`;
-  document.getElementById('footer-range').textContent = `${label} · 81,765 engagements · No estimated values`;
+  document.getElementById('weekly-sub').textContent = `${label}`;
+  document.getElementById('footer-range').textContent = `${label} · ${fn(D.core.results)} engagements · No estimated values`;
+  // Reset view toggles
+  currentAgeFilter = 'all';
+  document.querySelectorAll('.filter-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  document.getElementById('ad-audience-panel').style.display='none';
+  document.getElementById('ad-audience-select').value='';
+  // Redraw everything
+  initCharts();
   closeDatePicker();
 }
 
@@ -1207,7 +1228,7 @@ function downloadPDF() {
 
   // KPI row
   const kpis = [
-    ['Total Spend','$107.93'],['Reach','164,207'],['Engagements','81,765'],['Eng. Rate','41.50%']
+    ['Total Spend',f$(D.core.spend)],['Reach',fn(D.core.reach)],['Engagements',fn(D.core.results)],['Eng. Rate',fpct(D.core.engRate)]
   ];
   const kw = usable/4;
   kpis.forEach((k,i)=>{
@@ -1251,7 +1272,7 @@ function downloadPDF() {
   section('Weekly Performance');
   autoTable(
     ['Week','Spend','Results','Impressions','Reach','Cost/Result'],
-    WEEKLY.map(w=>[w.week,f$(w.spend),fn(w.results),fn(w.impressions),fn(w.reach),f$4(w.cpr)])
+    D.weekly.map(w=>[w.week,f$(w.spend),fn(w.results),fn(w.impressions),fn(w.reach),f$4(w.cpr)])
   );
 
   // Ad Sets
@@ -1259,7 +1280,7 @@ function downloadPDF() {
   section('Ad Set Performance');
   autoTable(
     ['Ad Set','Spend','Results','Impressions','Reach','CPR'],
-    ADSETS.map(a=>[a.name,f$(a.spend),fn(a.results),fn(a.impressions),fn(a.reach),f$4(a.cpr)])
+    D.adsets.map(a=>[a.name,f$(a.spend),fn(a.results),fn(a.impressions),fn(a.reach),f$4(a.cpr)])
   );
 
   // Ads
@@ -1267,7 +1288,7 @@ function downloadPDF() {
   section('Ad-Level Performance');
   autoTable(
     ['Ad Creative','Ad Set','Spend','Results','Impressions','Reach','CPR'],
-    [...ADS].sort((a,b)=>a.cpr-b.cpr).map(a=>[a.name,a.adset,f$(a.spend),fn(a.results),fn(a.impressions),fn(a.reach),f$4(a.cpr)])
+    [...D.ads].sort((a,b)=>(a.cpr||99)-(b.cpr||99)).map(a=>[a.name,a.adset,f$(a.spend),fn(a.results),fn(a.impressions),fn(a.reach),f$4(a.cpr)])
   );
 
   // Age
@@ -1275,7 +1296,7 @@ function downloadPDF() {
   section('Age Breakdown');
   autoTable(
     ['Age','Spend','Results','Impressions','Reach','CPR'],
-    [...AGE].sort((a,b)=>a.cpr-b.cpr).map(a=>[a.seg,f$(a.spend),fn(a.results),fn(a.impressions),fn(a.reach),f$4(a.cpr)])
+    [...D.age].sort((a,b)=>(a.cpr||99)-(b.cpr||99)).map(a=>[a.seg,f$(a.spend),fn(a.results),fn(a.impressions),fn(a.reach),f$4(a.cpr)])
   );
 
   // Gender
@@ -1283,7 +1304,7 @@ function downloadPDF() {
   section('Gender Breakdown');
   autoTable(
     ['Gender','Spend','Results','Impressions','Reach','CPR'],
-    GENDER.map(g=>[g.seg,f$(g.spend),fn(g.results),fn(g.impressions),fn(g.reach),f$4(g.cpr)])
+    D.gender.map(g=>[g.seg,f$(g.spend),fn(g.results),fn(g.impressions),fn(g.reach),f$4(g.cpr)])
   );
 
   // Footer on each page
@@ -1299,28 +1320,14 @@ function downloadPDF() {
 }
 
 // ══ PER-AD AUDIENCE ══════════════════════════════════════════════════════════
-// Audience data per ad (derived from adset-level age breakdowns weighted by ad spend)
-const ADS_AUDIENCE = {};
-ADS.forEach(ad => {
-  const adsetData = AGE_BY_ADSET[ad.adset];
-  if(!adsetData) return;
-  // weight = ad spend / adset spend
-  const adsetSpend = ADSETS.find(a=>a.name===ad.adset)?.spend || 1;
-  const w = ad.spend / adsetSpend;
-  ADS_AUDIENCE[ad.name] = adsetData.map(row => ({
-    seg: row.seg,
-    spend:   parseFloat((row.spend   * w).toFixed(4)),
-    results: Math.round(row.results  * w),
-    impressions: Math.round(row.impressions * w),
-    reach:   Math.round(row.reach    * w),
-    cpr:     row.cpr, // CPR stays same at adset level
-  }));
-});
+// Uses D.adsAudience — computed from real CSV data, updates with date filter
 
 function initAdAudienceSelect() {
   const sel = document.getElementById('ad-audience-select');
   if(!sel) return;
-  ADS.forEach(ad => {
+  // Rebuild options from current D.ads
+  while(sel.options.length > 1) sel.remove(1);
+  D.ads.forEach(ad => {
     const opt = document.createElement('option');
     opt.value = ad.name;
     opt.textContent = ad.name;
@@ -1331,11 +1338,11 @@ function initAdAudienceSelect() {
 function setAdAudience(adName) {
   const panel = document.getElementById('ad-audience-panel');
   if(!adName) { panel.style.display='none'; return; }
-  const data = ADS_AUDIENCE[adName];
-  if(!data) return;
+  const data = D.adsAudience[adName];
+  if(!data || data.length===0) return;
   panel.style.display='block';
-  const ad = ADS.find(a=>a.name===adName);
-  const maxR = Math.max(...data.map(d=>d.results));
+  const ad = D.ads.find(a=>a.name===adName);
+  const maxR = Math.max(...data.map(d=>d.results), 1);
   panel.innerHTML = `
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
@@ -1407,7 +1414,6 @@ function setAdAudience(adName) {
   ], data, 'cpr');
 }
 
-// ══ BOOT ══════════════════════════════════════════════════════════════════════
 // ══ BOOT ══════════════════════════════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', ()=>{ initCharts(); initAdAudienceSelect(); });
 </script>
