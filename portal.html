@@ -264,52 +264,44 @@ function handleFileSelect(file) {
 
 function parseCSV(text) {
   try {
-    // Strip BOM, normalize line endings
-    const clean = text.replace(/^﻿/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-    const lines = clean.split('\n').filter(l => l.trim() !== '');
-    if (!lines.length) { setStatus('parse-status', 'File is empty.', 'err'); return; }
+    // Strip BOM (UTF-8 BOM = U+FEFF)
+    if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
 
-    // Auto-detect delimiter (Meta uses comma, some locales use semicolon)
-    const delim = lines[0].includes(';') && !lines[0].includes(',') ? ';' : ',';
+    // Parse entire CSV respecting quoted multi-line fields
+    const allRows = parseCSVRows(text);
+    if (!allRows.length) { setStatus('parse-status', 'File is empty.', 'err'); return; }
 
-    const headers = splitCSVLine(lines[0], delim).map(h => h.replace(/^"|"$/g, '').trim());
-
-    // Find the real header row (some Meta exports have metadata rows on top)
-    let headerIdx = 0;
+    // Find header row containing all required columns
     const need = ['Day','Ad set name','Ad name','Age','Gender','Results','Amount spent (USD)','Impressions','Reach'];
-    for (let r = 0; r < Math.min(10, lines.length); r++) {
-      const h = splitCSVLine(lines[r], delim).map(v => v.replace(/^"|"$/g, '').trim());
-      if (need.every(n => h.includes(n))) { headerIdx = r; break; }
+    let headerIdx = -1, hdrs = [];
+    for (let r = 0; r < Math.min(10, allRows.length); r++) {
+      if (need.every(n => allRows[r].includes(n))) { headerIdx = r; hdrs = allRows[r]; break; }
     }
-    const hdrs = splitCSVLine(lines[headerIdx], delim).map(h => h.replace(/^"|"$/g, '').trim());
-    const idx = name => hdrs.indexOf(name);
-
-    const missing = need.filter(n => idx(n) === -1);
-    if (missing.length) {
-      console.warn('Detected headers:', hdrs);
-      setStatus('parse-status', `Missing columns: ${missing.join(', ')} — check F12 console for detected column names`, 'err');
+    if (headerIdx === -1) {
+      console.warn('First row detected:', allRows[0]);
+      setStatus('parse-status', 'Missing required columns — see F12 console for detected headers.', 'err');
       return;
     }
-    console.info('Headers OK at row', headerIdx, ':', hdrs);
+    console.info('Headers at row', headerIdx, ':', hdrs);
 
+    const idx = name => hdrs.indexOf(name);
     const rows = [];
-    for (let i = headerIdx + 1; i < lines.length; i++) {
-      const cols = splitCSVLine(lines[i], delim);
+    for (let i = headerIdx + 1; i < allRows.length; i++) {
+      const cols = allRows[i];
       if (!cols || !cols.length) continue;
       const adset = String(cols[idx('Ad set name')] ?? '').trim();
       const day   = String(cols[idx('Day')]         ?? '').trim();
-      // Skip aggregate/total rows — they have no ad set or no date
       if (!adset || !day) continue;
       rows.push({
         day,
         adset,
-        ad:          String(cols[idx('Ad name')]  ?? '').trim(),
-        age:         String(cols[idx('Age')]       ?? '').trim(),
-        gender:      String(cols[idx('Gender')]    ?? '').trim().toLowerCase(),
+        ad:          String(cols[idx('Ad name')]           ?? '').trim(),
+        age:         String(cols[idx('Age')]                ?? '').trim(),
+        gender:      String(cols[idx('Gender')]             ?? '').trim().toLowerCase(),
         spend:       parseFloat(String(cols[idx('Amount spent (USD)')] ?? '').replace(/,/g,'')) || 0,
-        results:     parseInt(String(cols[idx('Results')]    ?? '').replace(/,/g,''))           || 0,
-        impressions: parseInt(String(cols[idx('Impressions')]?? '').replace(/,/g,''))           || 0,
-        reach:       parseInt(String(cols[idx('Reach')]      ?? '').replace(/,/g,''))           || 0
+        results:     parseInt(  String(cols[idx('Results')]    ?? '').replace(/,/g,''))         || 0,
+        impressions: parseInt(  String(cols[idx('Impressions')]?? '').replace(/,/g,''))         || 0,
+        reach:       parseInt(  String(cols[idx('Reach')]      ?? '').replace(/,/g,''))         || 0
       });
     }
 
@@ -317,36 +309,46 @@ function parseCSV(text) {
 
     parsedRows = rows;
     const days = rows.map(r => r.day).filter(Boolean).sort();
-    document.getElementById('meta-since').value = days[0]  || '';
-    document.getElementById('meta-until').value = days[days.length-1] || '';
+    document.getElementById('meta-since').value = days[0] || '';
+    document.getElementById('meta-until').value = days[days.length - 1] || '';
     setStatus('parse-status', `Parsed ${rows.length} rows · ${days[0]} → ${days[days.length-1]}`, 'ok');
     showPreview(rows);
     saveToStorage();
   } catch(err) {
     console.error('parseCSV error:', err);
-    setStatus('parse-status', 'Parse error: ' + err.message + ' — check browser console (F12) for details.', 'err');
+    setStatus('parse-status', 'Parse error: ' + err.message, 'err');
   }
 }
 
-function splitCSVLine(line, delim = ',') {
-  if (line == null) return [];
-  const result = [];
-  let cur = '', inQ = false;
-  for (let i = 0; i < line.length; i++) {
-    const c = line[i];
-    if (c === '"') {
-      // Handle escaped quotes ("")
-      if (inQ && line[i+1] === '"') { cur += '"'; i++; }
-      else inQ = !inQ;
-    } else if (c === delim && !inQ) {
-      result.push(cur.trim());
-      cur = '';
+// Full CSV parser — handles quoted fields that contain embedded newlines
+function parseCSVRows(text) {
+  const rows = [];
+  let row = [], field = '', inQuote = false, i = 0;
+
+  while (i < text.length) {
+    const c = text[i];
+
+    if (inQuote) {
+      if (c === '"' && text[i + 1] === '"') { field += '"'; i += 2; }  // escaped ""
+      else if (c === '"') { inQuote = false; i++; }                    // closing quote
+      else { field += c; i++; }                                         // inside quote (incl. \n)
     } else {
-      cur += c;
+      if (c === '"') { inQuote = true; i++; }
+      else if (c === ',') { row.push(field.trim()); field = ''; i++; }
+      else if (c === '\r' || c === '\n') {
+        row.push(field.trim()); field = '';
+        if (row.some(f => f.length)) rows.push(row);
+        row = [];
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        i++;
+      } else { field += c; i++; }
     }
   }
-  result.push(cur.trim());
-  return result;
+  // flush last row
+  row.push(field.trim());
+  if (row.some(f => f.length)) rows.push(row);
+
+  return rows;
 }
 
 function showPreview(rows) {
