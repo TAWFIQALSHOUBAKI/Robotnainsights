@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Robotna — Campaign Analytics</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
@@ -348,11 +350,7 @@ tr:hover td{background:#FEF0EB!important}
       <span class="chip" style="color:#7A8595;background:#F5F6F8">Account 36890470</span>
     </div>
     <div class="header-controls">
-      <button class="btn" onclick="exportJSON()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Export JSON
-      </button>
-      <button class="btn btn-navy" onclick="printReport()">
+      <button class="btn btn-navy" onclick="downloadPDF()">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
         Print PDF
       </button>
@@ -622,12 +620,22 @@ tr:hover td{background:#FEF0EB!important}
       <div class="shead-title">Age & Gender Breakdown</div>
       <div class="shead-sub">Engagement and spend by demographic segment</div>
     </div>
-    <div class="filter-row">
-      <span class="filter-lbl">Filter by ad set:</span>
-      <button class="filter-btn active" onclick="setAgeFilter('all',this)">All Ad Sets</button>
-      <button class="filter-btn" onclick="setAgeFilter('DM_Broad_AMM_ZAR_IRB',this)">DM_Broad_AMM_ZAR_IRB</button>
-      <button class="filter-btn" onclick="setAgeFilter('Parents_Braod_AMM',this)">Parents_Braod_AMM</button>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;margin-bottom:20px">
+      <div class="filter-row" style="margin-bottom:0;flex-wrap:wrap">
+        <span class="filter-lbl">Ad Set:</span>
+        <button class="filter-btn active" onclick="setAgeFilter('all',this)">All</button>
+        <button class="filter-btn" onclick="setAgeFilter('DM_Broad_AMM_ZAR_IRB',this)">DM_Broad</button>
+        <button class="filter-btn" onclick="setAgeFilter('Parents_Braod_AMM',this)">Parents</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span class="filter-lbl">Per Ad:</span>
+        <select id="ad-audience-select" onchange="setAdAudience(this.value)"
+          style="padding:6px 10px;border-radius:6px;border:1px solid #E2E5EB;background:#fff;color:#0D1526;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;outline:none">
+          <option value="">— All Ads —</option>
+        </select>
+      </div>
     </div>
+    <div id="ad-audience-panel" style="display:none;margin-bottom:20px"></div>
     <div class="grid-2 mb-22">
       <div class="card">
         <div class="card-label" id="age-chart-label">Results by Age Group</div>
@@ -1108,18 +1116,24 @@ function setAgeFilter(filter, btn) {
 // ══ DATE PICKER ═══════════════════════════════════════════════════════════════
 function toggleDatePicker() {
   const pop = document.getElementById('date-popover');
+  const isOpen = pop.classList.contains('open');
+  if(isOpen){ closeDatePicker(); return; }
+  pop.classList.add('open');
   const trig = document.getElementById('date-trigger');
-  const open = pop.classList.contains('open');
-  pop.classList.toggle('open');
-  trig.classList.toggle('open', !open);
-  document.getElementById('picker-arrow').textContent = open?'▼':'▲';
+  if(trig) trig.classList.add('open');
+  const arr = document.getElementById('picker-arrow');
+  if(arr) arr.textContent = '▲';
 }
 
 function closeDatePicker() {
-  document.getElementById('date-popover').classList.remove('open');
-  document.getElementById('date-trigger').classList.remove('open');
-  document.getElementById('picker-arrow').textContent = '▼';
-  document.getElementById('date-error').style.display = 'none';
+  const pop = document.getElementById('date-popover');
+  if(pop) pop.classList.remove('open');
+  const trig = document.getElementById('date-trigger');
+  if(trig) trig.classList.remove('open');
+  const arr = document.getElementById('picker-arrow');
+  if(arr) arr.textContent = '▼';
+  const err = document.getElementById('date-error');
+  if(err) err.style.display = 'none';
 }
 
 function applyPreset(since, until, btn) {
@@ -1152,116 +1166,250 @@ function applyDateRange() {
 // Close picker on outside click
 document.addEventListener('click', e=>{
   const pop = document.getElementById('date-popover');
+  if(!pop || !pop.classList.contains('open')) return;
   const trig = document.getElementById('date-trigger');
-  const fab = document.getElementById('mobile-fab');
-  if(pop && !pop.contains(e.target) && trig && !trig.contains(e.target) && fab && !fab.contains(e.target)){
-    closeDatePicker();
-  }
-});
+  const fab  = document.getElementById('mobile-fab');
+  const inPop  = pop.contains(e.target);
+  const inTrig = trig && trig.contains(e.target);
+  const inFab  = fab  && fab.contains(e.target);
+  if(!inPop && !inTrig && !inFab) closeDatePicker();
+}, true);
 
 // ══ EXPORT JSON ═══════════════════════════════════════════════════════════════
-function exportJSON() {
-  const payload = { meta:{campaign:'Engagements_Robotna_',account:'36890470',source:'Analysis-Report.csv'}, range:currentRange, core:CORE, weekly:WEEKLY, adsets:ADSETS, ads:ADS, age:AGE, gender:GENDER };
-  const b = new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
-  const u = URL.createObjectURL(b);
-  const a = document.createElement('a'); a.href=u; a.download='robotna_campaign_data.json'; a.click();
-  URL.revokeObjectURL(u);
+
+// ══ DOWNLOAD PDF (jsPDF vertical A4) ═════════════════════════════════════════
+function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+  const label = document.getElementById('range-label').textContent;
+  const PW = 210, PH = 297, ML = 16, MR = 16, MT = 16, usable = PW - ML - MR;
+  let y = MT;
+
+  function addPage() { doc.addPage(); y = MT; }
+  function checkY(need) { if(y + need > PH - 14) addPage(); }
+
+  // Header bar
+  doc.setFillColor(232,65,10);
+  doc.rect(0,0,PW,12,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(8); doc.setFont('helvetica','bold');
+  doc.text('ROBOTNA · Campaign Analytics', ML, 8);
+  doc.text(label, PW-MR, 8, {align:'right'});
+  y = 22;
+
+  // Title
+  doc.setTextColor(13,21,38);
+  doc.setFontSize(18); doc.setFont('helvetica','bold');
+  doc.text('Campaign Performance Report', ML, y); y += 8;
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.setTextColor(58,74,92);
+  doc.text('Meta Ads · Paid Engagement · Engagements_Robotna_', ML, y); y += 10;
+
+  // KPI row
+  const kpis = [
+    ['Total Spend','$107.93'],['Reach','164,207'],['Engagements','81,765'],['Eng. Rate','41.50%']
+  ];
+  const kw = usable/4;
+  kpis.forEach((k,i)=>{
+    const x = ML + i*kw;
+    doc.setFillColor(245,246,248);
+    doc.roundedRect(x,y,kw-2,18,2,2,'F');
+    doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(122,133,149);
+    doc.text(k[0], x+4, y+6);
+    doc.setFontSize(13); doc.setFont('helvetica','bold'); doc.setTextColor(13,21,38);
+    doc.text(k[1], x+4, y+14);
+  });
+  y += 24;
+
+  // Section helper
+  function section(title) {
+    checkY(14);
+    doc.setFillColor(254,240,235);
+    doc.rect(ML,y,usable,7,'F');
+    doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(232,65,10);
+    doc.text(title.toUpperCase(), ML+3, y+5);
+    y += 10;
+  }
+
+  // Auto-table helper
+  function autoTable(head, body) {
+    doc.autoTable({
+      startY: y,
+      head: [head],
+      body: body,
+      margin: {left:ML, right:MR},
+      styles: {fontSize:8, cellPadding:2.5, font:'helvetica', textColor:[13,21,38]},
+      headStyles: {fillColor:[13,36,69], textColor:255, fontStyle:'bold', fontSize:8},
+      alternateRowStyles: {fillColor:[249,250,251]},
+      tableWidth: usable,
+      didDrawPage: (d) => { y = d.cursor.y + 4; }
+    });
+    y = doc.lastAutoTable.finalY + 6;
+  }
+
+  // Weekly
+  section('Weekly Performance');
+  autoTable(
+    ['Week','Spend','Results','Impressions','Reach','Cost/Result'],
+    WEEKLY.map(w=>[w.week,f$(w.spend),fn(w.results),fn(w.impressions),fn(w.reach),f$4(w.cpr)])
+  );
+
+  // Ad Sets
+  checkY(20);
+  section('Ad Set Performance');
+  autoTable(
+    ['Ad Set','Spend','Results','Impressions','Reach','CPR'],
+    ADSETS.map(a=>[a.name,f$(a.spend),fn(a.results),fn(a.impressions),fn(a.reach),f$4(a.cpr)])
+  );
+
+  // Ads
+  checkY(20);
+  section('Ad-Level Performance');
+  autoTable(
+    ['Ad Creative','Ad Set','Spend','Results','Impressions','Reach','CPR'],
+    [...ADS].sort((a,b)=>a.cpr-b.cpr).map(a=>[a.name,a.adset,f$(a.spend),fn(a.results),fn(a.impressions),fn(a.reach),f$4(a.cpr)])
+  );
+
+  // Age
+  checkY(20);
+  section('Age Breakdown');
+  autoTable(
+    ['Age','Spend','Results','Impressions','Reach','CPR'],
+    [...AGE].sort((a,b)=>a.cpr-b.cpr).map(a=>[a.seg,f$(a.spend),fn(a.results),fn(a.impressions),fn(a.reach),f$4(a.cpr)])
+  );
+
+  // Gender
+  checkY(20);
+  section('Gender Breakdown');
+  autoTable(
+    ['Gender','Spend','Results','Impressions','Reach','CPR'],
+    GENDER.map(g=>[g.seg,f$(g.spend),fn(g.results),fn(g.impressions),fn(g.reach),f$4(g.cpr)])
+  );
+
+  // Footer on each page
+  const pages = doc.getNumberOfPages();
+  for(let p=1;p<=pages;p++){
+    doc.setPage(p);
+    doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(176,184,196);
+    doc.text('Robotna · robotna.org · Analysis-Report.csv · Account 36890470 · Created by Tawfeeq Alshobaki', ML, PH-6);
+    doc.text(`Page ${p} / ${pages}`, PW-MR, PH-6, {align:'right'});
+  }
+
+  doc.save(`Robotna_Campaign_Report_${label.replace(/[^a-z0-9]/gi,'_')}.pdf`);
 }
 
-// ══ PRINT PDF ════════════════════════════════════════════════════════════════
-function printReport() {
-  const label = document.getElementById('range-label').textContent;
-  const tableRows = (rows, cols) => rows.map((r,i)=>`<tr class="${i%2?'alt':''}">
-    ${cols.map(c=>`<td style="text-align:${c.r?'right':'left'}">${c.fmt?c.fmt(r[c.k]):(r[c.k]||'—')}</td>`).join('')}</tr>`).join('');
-  const thead = cols => `<tr>${cols.map(c=>`<th style="text-align:${c.r?'right':'left'}">${c.label}</th>`).join('')}</tr>`;
-  const tc = [
-    {k:'seg',label:'Segment'},{k:'spend',label:'Spend',fmt:f$,r:true},{k:'results',label:'Results',fmt:fn,r:true},
-    {k:'impressions',label:'Impressions',fmt:fn,r:true},{k:'reach',label:'Reach',fmt:fn,r:true},{k:'cpr',label:'CPR',fmt:f$4,r:true}
-  ];
-  const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Robotna Report</title>
-<style>
-@page{size:A4 landscape;margin:14mm 16mm}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,sans-serif;color:#0D1526;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.page{page-break-after:always;padding-bottom:12mm}.page:last-child{page-break-after:avoid}
-.cover{display:flex;flex-direction:column;justify-content:center;min-height:160mm}
-.lbar{display:flex;align-items:center;gap:14px;margin-bottom:28px}
-.lm{width:54px;height:54px;border-radius:12px;background:#E8410A;color:#fff;font-size:30px;font-weight:900;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif}
-.bn{font-size:22px;font-weight:800}.bu{font-size:12px;color:#7A8595;font-family:monospace;margin-top:2px}
-.rule{height:3px;background:#E8410A;width:64px;border-radius:2px;margin-bottom:24px}
-.ct{font-size:36px;font-weight:800;color:#0D2445;letter-spacing:-0.02em;line-height:1.1;margin-bottom:10px}
-.cs{font-size:16px;color:#3D4A5C;margin-bottom:32px}
-.mg{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 28px}
-.mi{display:flex;flex-direction:column;gap:3px}
-.ml{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#7A8595;font-family:monospace}
-.mv{font-size:13px;font-weight:600}
-hr{border:none;border-top:1px solid #E2E5EB;margin:28px 0 14px}
-.note{font-size:11px;color:#7A8595;font-style:italic}
-.sh{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#E8410A;margin:18px 0 10px;padding-bottom:6px;border-bottom:2px solid #E8410A;font-family:monospace}
-.sh:first-child{margin-top:0}
-.kg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px}
-.kc{background:#F5F6F8;border:1px solid #E2E5EB;border-radius:8px;padding:12px 14px}
-.ka{background:#FEF0EB;border-color:#F06030}.kn{background:#EBF0F8;border-color:#0D2445}
-.kl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#7A8595;font-family:monospace;margin-bottom:6px}
-.kv{font-size:22px;font-weight:800;letter-spacing:-0.02em}.ks{font-size:10px;color:#7A8595;margin-top:4px}
-table{width:100%;border-collapse:collapse;font-size:10px}
-th{background:#0D2445;color:#fff;padding:7px 8px;font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:.05em;font-family:monospace;white-space:nowrap}
-td{padding:6px 8px;border-bottom:1px solid #E2E5EB;font-family:monospace}
-tr.alt td{background:#F9FAFB}.best td{background:#ECFDF5}
-.foot{margin-top:16px;padding-top:8px;border-top:1px solid #E2E5EB;display:flex;justify-content:space-between;font-size:9px;color:#7A8595;font-family:monospace}
-</style></head><body>
-<div class="page cover">
-<div class="lbar"><div class="lm">R</div><div><div class="bn">Robotna</div><div class="bu">robotna.org</div></div></div>
-<div class="rule"></div><div class="ct">Campaign Performance Report</div>
-<div class="cs">Meta Ads · Paid Engagement · ${label}</div>
-<div class="mg">
-<div class="mi"><span class="ml">Campaign</span><span class="mv">Engagements_Robotna_</span></div>
-<div class="mi"><span class="ml">Objective</span><span class="mv">Outcome Engagement</span></div>
-<div class="mi"><span class="ml">Status</span><span class="mv">Active</span></div>
-<div class="mi"><span class="ml">Period</span><span class="mv">${label}</span></div>
-<div class="mi"><span class="ml">Account</span><span class="mv">36890470</span></div>
-<div class="mi"><span class="ml">Campaign ID</span><span class="mv">6939423326522</span></div>
-</div><hr><div class="note">Source: Analysis-Report.csv · Meta Ads Manager export · No estimated values.</div></div>
+// ══ PER-AD AUDIENCE ══════════════════════════════════════════════════════════
+// Audience data per ad (derived from adset-level age breakdowns weighted by ad spend)
+const ADS_AUDIENCE = {};
+ADS.forEach(ad => {
+  const adsetData = AGE_BY_ADSET[ad.adset];
+  if(!adsetData) return;
+  // weight = ad spend / adset spend
+  const adsetSpend = ADSETS.find(a=>a.name===ad.adset)?.spend || 1;
+  const w = ad.spend / adsetSpend;
+  ADS_AUDIENCE[ad.name] = adsetData.map(row => ({
+    seg: row.seg,
+    spend:   parseFloat((row.spend   * w).toFixed(4)),
+    results: Math.round(row.results  * w),
+    impressions: Math.round(row.impressions * w),
+    reach:   Math.round(row.reach    * w),
+    cpr:     row.cpr, // CPR stays same at adset level
+  }));
+});
 
-<div class="page">
-<div class="sh">Executive Summary</div>
-<div class="kg">
-<div class="kc ka"><div class="kl">Total Spend</div><div class="kv">$107.93</div><div class="ks">$53.96 avg/period</div></div>
-<div class="kc kn"><div class="kl">Reach</div><div class="kv">164,207</div><div class="ks">197,027 impressions</div></div>
-<div class="kc"><div class="kl">Engagements</div><div class="kv">81,765</div><div class="ks">$0.0013 CPR</div></div>
-<div class="kc"><div class="kl">Eng. Rate</div><div class="kv">41.50%</div><div class="ks">Results ÷ Impressions</div></div>
-</div>
-<div class="sh">Weekly</div>
-<table><thead>${thead([{k:'week',label:'Week'},{k:'spend',label:'Spend',fmt:f$,r:true},{k:'results',label:'Results',fmt:fn,r:true},{k:'impressions',label:'Impressions',fmt:fn,r:true},{k:'reach',label:'Reach',fmt:fn,r:true},{k:'cpr',label:'CPR',fmt:f$4,r:true}])}</thead>
-<tbody>${tableRows(WEEKLY,[{k:'week'},{k:'spend',fmt:f$,r:true},{k:'results',fmt:fn,r:true},{k:'impressions',fmt:fn,r:true},{k:'reach',fmt:fn,r:true},{k:'cpr',fmt:f$4,r:true}])}</tbody></table>
-<div class="sh">Ad Sets</div>
-<table><thead>${thead([{k:'name',label:'Ad Set'},{k:'spend',label:'Spend',fmt:f$,r:true},{k:'results',label:'Results',fmt:fn,r:true},{k:'impressions',label:'Impressions',fmt:fn,r:true},{k:'reach',label:'Reach',fmt:fn,r:true},{k:'cpr',label:'CPR',fmt:f$4,r:true}])}</thead>
-<tbody>${tableRows(ADSETS,[{k:'name'},{k:'spend',fmt:f$,r:true},{k:'results',fmt:fn,r:true},{k:'impressions',fmt:fn,r:true},{k:'reach',fmt:fn,r:true},{k:'cpr',fmt:f$4,r:true}])}</tbody></table>
-</div>
+function initAdAudienceSelect() {
+  const sel = document.getElementById('ad-audience-select');
+  if(!sel) return;
+  ADS.forEach(ad => {
+    const opt = document.createElement('option');
+    opt.value = ad.name;
+    opt.textContent = ad.name;
+    sel.appendChild(opt);
+  });
+}
 
-<div class="page">
-<div class="sh">Ad-Level Performance</div>
-<table><thead>${thead([{k:'name',label:'Ad'},{k:'adset',label:'Ad Set'},{k:'spend',label:'Spend',fmt:f$,r:true},{k:'results',label:'Results',fmt:fn,r:true},{k:'impressions',label:'Impr.',fmt:fn,r:true},{k:'reach',label:'Reach',fmt:fn,r:true},{k:'cpr',label:'CPR',fmt:f$4,r:true}])}</thead>
-<tbody>${tableRows([...ADS].sort((a,b)=>a.cpr-b.cpr),[{k:'name'},{k:'adset'},{k:'spend',fmt:f$,r:true},{k:'results',fmt:fn,r:true},{k:'impressions',fmt:fn,r:true},{k:'reach',fmt:fn,r:true},{k:'cpr',fmt:f$4,r:true}])}</tbody></table>
-</div>
+function setAdAudience(adName) {
+  const panel = document.getElementById('ad-audience-panel');
+  if(!adName) { panel.style.display='none'; return; }
+  const data = ADS_AUDIENCE[adName];
+  if(!data) return;
+  panel.style.display='block';
+  const ad = ADS.find(a=>a.name===adName);
+  const maxR = Math.max(...data.map(d=>d.results));
+  panel.innerHTML = `
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <div>
+          <div class="card-label" style="margin-bottom:4px">Audience Breakdown</div>
+          <div style="font-size:14px;font-weight:700;color:#0D1526;direction:rtl">${adName}</div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <div style="text-align:right">
+            <div class="card-label" style="margin-bottom:2px">Spend</div>
+            <div style="font-size:14px;font-weight:700;color:#E8410A;font-family:'DM Mono',monospace">${f$(ad.spend)}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="card-label" style="margin-bottom:2px">Results</div>
+            <div style="font-size:14px;font-weight:700;color:#0D2445;font-family:'DM Mono',monospace">${fn(ad.results)}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="card-label" style="margin-bottom:2px">CPR</div>
+            <div style="font-size:14px;font-weight:700;color:#0A7C52;font-family:'DM Mono',monospace">${f$4(ad.cpr)}</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid-2" style="margin-bottom:0">
+        <div>
+          <div class="card-label">Age Distribution</div>
+          <div id="ad-age-chart-wrap" style="height:200px"><canvas id="chart-ad-age"></canvas></div>
+        </div>
+        <div>
+          <div class="card-label">CPR by Age — Ranked</div>
+          ${[...data].sort((a,b)=>a.cpr-b.cpr).map((row,i)=>`
+            <div class="age-rank-row">
+              <span class="age-seg">${row.seg}</span>
+              <div class="age-bar-wrap"><div class="age-bar" style="width:${Math.round(row.results/maxR*100)}%;background:${i===0?'#0A7C52':'#E8410A'}"></div></div>
+              <span class="age-cpr" style="color:${i===0?'#0A7C52':'#0D1526'}">${f$4(row.cpr)}</span>
+              ${i===0?'<span class="chip" style="color:#0A7C52;background:#ECFDF5;font-size:9px">Best</span>':''}
+            </div>`).join('')}
+        </div>
+      </div>
+      <div class="table-wrap" style="margin-top:16px">
+        <table id="table-ad-audience"></table>
+      </div>
+    </div>`;
 
-<div class="page">
-<div class="sh">Age Breakdown</div>
-<table><thead>${thead(tc)}</thead><tbody>${tableRows([...AGE].sort((a,b)=>a.cpr-b.cpr),tc)}</tbody></table>
-<div class="sh">Gender Breakdown</div>
-<table><thead>${thead(tc)}</thead><tbody>${tableRows(GENDER,tc)}</tbody></table>
-<div class="foot">
-<span>Robotna · robotna.org · Meta Ads Campaign Report · ${label}</span>
-<span>Source: Analysis-Report.csv · Account 36890470 · No estimated values</span>
-</div></div>
-</body></html>`;
-  const win=window.open('','_blank','width=1200,height=900');
-  win.document.write(html); win.document.close(); win.focus();
-  setTimeout(()=>win.print(),500);
+  // Draw mini chart
+  if(charts.adAge) charts.adAge.destroy();
+  requestAnimationFrame(()=>{
+    const canvas = document.getElementById('chart-ad-age');
+    if(!canvas) return;
+    charts.adAge = new Chart(canvas, {
+      type:'bar',
+      data:{ labels:data.map(d=>d.seg), datasets:[
+        {label:'Results',data:data.map(d=>d.results),backgroundColor:'#E8410A',borderRadius:3,barPercentage:.4},
+        {label:'Spend',  data:data.map(d=>d.spend),  backgroundColor:'#0D2445',borderRadius:3,barPercentage:.4},
+      ]},
+      options:{...chartOpts(), scales:{
+        x:{grid:{display:false},border:{display:false},ticks:{color:'#7A8595'}},
+        y:{grid:{color:'#EDF0F5'},border:{display:false},ticks:{color:'#7A8595',callback:v=>fnK(v)}},
+      }}
+    });
+  });
+
+  buildTable('table-ad-audience',[
+    {k:'seg',label:'Age'},
+    {k:'spend',label:'Spend',fmt:f$,r:true},
+    {k:'results',label:'Results',fmt:fn,r:true},
+    {k:'impressions',label:'Impressions',fmt:fn,r:true},
+    {k:'reach',label:'Reach',fmt:fn,r:true},
+    {k:'cpr',label:'CPR',fmt:f$4,r:true},
+  ], data, 'cpr');
 }
 
 // ══ BOOT ══════════════════════════════════════════════════════════════════════
-window.addEventListener('DOMContentLoaded', initCharts);
+// ══ BOOT ══════════════════════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', ()=>{ initCharts(); initAdAudienceSelect(); });
 </script>
 </body>
 </html>
