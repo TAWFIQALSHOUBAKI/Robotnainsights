@@ -7,12 +7,12 @@ const CAMPAIGN_META = {
 };
 
 // ── ANALYST FINDINGS ────────────────────────────────────────────
-/*const FINDINGS = [
+const FINDINGS = [
   {
     "date": "2026-05-16",
     "note": "new ad set started"
   }
-];*/
+];
 
 // ── RAW DATA ─────────────────────────────────────────────────────
 const RAW_DATA = [
