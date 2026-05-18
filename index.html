@@ -894,13 +894,22 @@ function initCharts() {
     {c:'#E8410A',bg:'#FEF0EB'}, {c:'#0D2445',bg:'#EBF0F8'},
     {c:'#0A7C52',bg:'#ECFDF5'}, {c:'#7C3AED',bg:'#F5F3FF'},
   ];
+  // Active = has at least one row on the last day of the selected range
+  const activeAdsets = new Set(RAW_DATA.filter(r => r.day === currentRange.until).map(r => r.adset));
   document.getElementById('adset-cards').innerHTML = D.adsets.map((as, i) => {
     const {c, bg} = CHIP_COLORS[i % CHIP_COLORS.length];
+    const isActive = activeAdsets.has(as.name);
+    const statusBadge = isActive
+      ? `<span class="chip" style="color:#0A7C52;background:#ECFDF5;display:inline-flex;align-items:center;gap:4px"><span style="font-size:8px">●</span> Active</span>`
+      : `<span class="chip" style="color:#7A8595;background:#F5F6F8;display:inline-flex;align-items:center;gap:4px"><span style="font-size:8px">○</span> Paused</span>`;
     return `<div class="card">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-        <div>
-          <div class="card-label" style="margin-bottom:5px">Ad Set</div>
-          <div style="font-size:15px;font-weight:700;color:#0D1526">${as.name}</div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <div>
+            <div class="card-label" style="margin-bottom:5px">Ad Set</div>
+            <div style="font-size:15px;font-weight:700;color:#0D1526">${as.name}</div>
+          </div>
+          ${statusBadge}
         </div>
         <span class="chip" style="color:${c};background:${bg}">${fpct(as.spend/m.spend*100)} of spend</span>
       </div>
