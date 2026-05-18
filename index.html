@@ -353,7 +353,7 @@ tr:hover td{background:#FEF0EB!important}
       </div>
       <div class="brand-text">
         <div class="brand-title">Robotna<span class="sub">/ Campaign Analytics</span></div>
-        <div class="brand-sub" id="header-range">robotna.org · May 10, 2026 – May 16, 2026 · Outcome Engagement</div>
+        <div class="brand-sub" id="header-range">robotna.org · May 10, 2026 – May 17, 2026 · Outcome Engagement</div>
       </div>
       <div class="divider-v"></div>
       <span class="chip" style="color:#0A7C52;background:#ECFDF5">● Active</span>
@@ -394,7 +394,7 @@ tr:hover td{background:#FEF0EB!important}
       <div class="date-picker-wrapper" id="desktop-picker">
         <button class="date-trigger" id="date-trigger" onclick="toggleDatePicker()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          <span id="range-label">May 10, 2026 – May 16, 2026</span>
+          <span id="range-label">May 10, 2026 – May 17, 2026</span>
           <span id="picker-arrow" style="font-size:9px;font-family:'DM Mono',monospace;font-weight:700">▼</span>
         </button>
       </div>
@@ -442,7 +442,7 @@ tr:hover td{background:#FEF0EB!important}
 
     <div class="notice">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0D2445" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      <span id="notice-range">Reporting period: May 10, 2026 – May 16, 2026</span>
+      <span id="notice-range">Reporting period: May 10, 2026 – May 17, 2026</span>
       <small>— data sourced from Analysis-Report.csv</small>
     </div>
 
@@ -505,7 +505,7 @@ tr:hover td{background:#FEF0EB!important}
     </div>
 
     <!-- Ad Set Cards — generated dynamically from D.adsets in initCharts() -->
-    <div id="adset-cards" class="mb-18" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px"></div>
+    <div id="adset-cards" class="mb-18" style="display:flex;flex-direction:column;gap:18px"></div>
 
     <!-- Age + Spend bar -->
     <div class="card">
@@ -519,7 +519,7 @@ tr:hover td{background:#FEF0EB!important}
     <div class="shead">
       <div class="shead-eyebrow">Time Series</div>
       <div class="shead-title">Weekly Performance</div>
-      <div class="shead-sub" id="weekly-sub">May 10, 2026 – May 16, 2026</div>
+      <div class="shead-sub" id="weekly-sub">May 10, 2026 – May 17, 2026</div>
     </div>
     <div class="grid-2">
       <div class="card">
@@ -670,7 +670,7 @@ tr:hover td{background:#FEF0EB!important}
 <div class="mobile-date-fab" id="mobile-fab">
   <button onclick="toggleDatePicker()" style="display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:28px;background:#E8410A;color:#fff;border:none;font-size:13px;font-weight:700;font-family:inherit;box-shadow:0 4px 20px rgba(232,65,10,.4);cursor:pointer;white-space:nowrap">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-    <span id="mob-range-label">May 10 – May 16</span>
+    <span id="mob-range-label">May 10 – May 17</span>
   </button>
 </div>
 <div id="footer">
@@ -680,7 +680,7 @@ tr:hover td{background:#FEF0EB!important}
       <span class="footer-txt">Robotna · robotna.org · Source: Analysis-Report.csv · Account 36890470</span>
     </div>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
-      <span class="footer-txt" id="footer-range">May 10, 2026 – May 16, 2026 · No estimated values</span>
+      <span class="footer-txt" id="footer-range">May 10, 2026 – May 17, 2026 · No estimated values</span>
       <span style="font-size:10px;color:#B0B8C4;font-family:'DM Mono',monospace">Created by Tawfeeq Alshobaki</span>
     </div>
   </div>
@@ -1629,7 +1629,16 @@ window.addEventListener('DOMContentLoaded', ()=>{
   // Seed date inputs from CAMPAIGN_META
   document.getElementById('date-since').value = CAMPAIGN_META.since;
   document.getElementById('date-until').value = CAMPAIGN_META.until;
+  // Sync all date labels from CAMPAIGN_META on first load
+  const label = `${prettyDate(CAMPAIGN_META.since)} – ${prettyDate(CAMPAIGN_META.until)}`;
+  document.getElementById('range-label').textContent = label;
+  document.getElementById('header-range').textContent = `robotna.org · ${label} · ${CAMPAIGN_META.goal}`;
+  document.getElementById('notice-range').textContent = `Reporting period: ${label}`;
+  document.getElementById('weekly-sub').textContent = label;
+  const s = prettyDate(CAMPAIGN_META.since).replace(', 2026',''), u = prettyDate(CAMPAIGN_META.until).replace(', 2026','');
+  document.getElementById('mob-range-label').textContent = `${s} – ${u}`;
   initCharts();
+  document.getElementById('footer-range').textContent = `${label} · ${fn(D.core.results)} engagements · No estimated values`;
   initAdAudienceSelect();
   renderFindings();
 });
