@@ -779,14 +779,11 @@ function computeData(since, until) {
 
   // Adsets
   const byAdset = groupBy(rows, 'adset');
-  const lastDay = Object.keys(byDay).sort().at(-1);
   const adsets = Object.keys(byAdset).map(name => {
     const asRows = byAdset[name];
-    // Active: prefer explicit delivery field from CSV; fall back to spend on last day of range
+    // Active status driven by delivery field in RAW_DATA (set during CSV import in portal)
     const deliveryVals = asRows.map(r => (r.delivery || '').toLowerCase()).filter(Boolean);
-    const active = deliveryVals.length
-      ? deliveryVals.some(v => v.includes('active') && !v.includes('inactive'))
-      : asRows.some(r => r.day === lastDay && r.spend > 0);
+    const active = deliveryVals.some(v => v === 'active');
     return { name, active, ...agg(asRows) };
   }).sort((a,b)=>b.spend-a.spend);
 
