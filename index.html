@@ -832,6 +832,14 @@ function computeData(since, until) {
   return { core, daily, weekly, adsets, ads, age, gender, ageByAdset, adsAudience };
 }
 
+// ══ AUTO-ADVANCE UNTIL DATE ════════════════════════════════════════════════════
+// If today is after the stored until date, advance it to today so the range
+// always reflects the current day without touching data.js manually.
+(function() {
+  const today = new Date().toISOString().slice(0, 10);
+  if (today > CAMPAIGN_META.until) CAMPAIGN_META.until = today;
+})();
+
 // ══ STATE ══════════════════════════════════════════════════════════════════════
 let currentRange = { since: CAMPAIGN_META.since, until: CAMPAIGN_META.until };
 let currentAgeFilter = 'all';
