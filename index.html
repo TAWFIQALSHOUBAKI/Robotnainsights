@@ -423,7 +423,7 @@ tr:hover td{background:#FEF0EB!important}
     <button class="preset-btn" onclick="applyPreset('2026-05-10','2026-05-13',this)">Mon–Wed</button>
     <button class="preset-btn" onclick="applyPreset('2026-05-14','2026-05-16',this)">Thu–Sat</button>
     <button class="preset-btn active" onclick="applyPreset('2026-05-10','2026-05-16',this)">Full report</button>
-    <button class="preset-btn" onclick="applyPreset('2026-05-10','2026-05-16',this)">All days</button>
+    <button class="preset-btn" id="preset-alldays" onclick="applyPreset(CAMPAIGN_META.since, CAMPAIGN_META.until, this)">All days</button>
   </div>
   <div class="pop-actions">
     <button class="pop-cancel" onclick="closeDatePicker()">Cancel</button>
@@ -832,11 +832,16 @@ function computeData(since, until) {
   return { core, daily, weekly, adsets, ads, age, gender, ageByAdset, adsAudience };
 }
 
-// ══ AUTO-ADVANCE UNTIL DATE ════════════════════════════════════════════════════
-// Always derive until from the latest day present in RAW_DATA.
+// ══ SYNC DATE RANGE FROM RAW_DATA ══════════════════════════════════════════════
+// Derive since/until from the actual earliest and latest days in RAW_DATA so
+// presets like "All days" always cover the full dataset automatically.
 (function() {
-  const latest = RAW_DATA.reduce((max, r) => r.day > max ? r.day : max, '');
-  if (latest) CAMPAIGN_META.until = latest;
+  const days = RAW_DATA.map(r => r.day).filter(Boolean);
+  if (!days.length) return;
+  const earliest = days.reduce((min, d) => d < min ? d : min, days[0]);
+  const latest   = days.reduce((max, d) => d > max ? d : max, days[0]);
+  CAMPAIGN_META.since = earliest;
+  CAMPAIGN_META.until = latest;
 })();
 
 // ══ STATE ══════════════════════════════════════════════════════════════════════
