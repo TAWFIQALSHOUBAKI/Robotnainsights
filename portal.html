@@ -285,6 +285,8 @@ function parseCSV(text) {
     console.info('Headers at row', headerIdx, ':', hdrs);
 
     const idx = name => hdrs.indexOf(name);
+    // Delivery status column is optional — not all Meta exports include it
+    const deliveryIdx = hdrs.indexOf('Delivery status');
     const rows = [];
     for (let i = headerIdx + 1; i < allRows.length; i++) {
       const cols = allRows[i];
@@ -298,6 +300,7 @@ function parseCSV(text) {
         ad:          String(cols[idx('Ad name')]           ?? '').trim(),
         age:         String(cols[idx('Age')]                ?? '').trim(),
         gender:      String(cols[idx('Gender')]             ?? '').trim().toLowerCase(),
+        delivery:    deliveryIdx >= 0 ? String(cols[deliveryIdx] ?? '').trim() : '',
         spend:       parseFloat(String(cols[idx('Amount spent (USD)')] ?? '').replace(/,/g,'')) || 0,
         results:     parseInt(  String(cols[idx('Results')]    ?? '').replace(/,/g,''))         || 0,
         impressions: parseInt(  String(cols[idx('Impressions')]?? '').replace(/,/g,''))         || 0,
@@ -357,7 +360,7 @@ function showPreview(rows) {
   document.getElementById('preview-count').textContent = `${rows.length} rows · ${days.length} days`;
   document.getElementById('preview-range').textContent = `${days[0]} → ${days[days.length-1]}`;
 
-  const cols = ['day','adset','ad','age','gender','spend','results','impressions','reach'];
+  const cols = ['day','adset','ad','age','gender','delivery','spend','results','impressions','reach'];
   const tbl = document.getElementById('preview-table');
   tbl.innerHTML = `<thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead>
     <tbody>${rows.slice(0,20).map(r=>`<tr>${cols.map(c=>`<td>${r[c]}</td>`).join('')}</tr>`).join('')}</tbody>`;

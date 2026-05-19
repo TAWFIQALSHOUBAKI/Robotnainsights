@@ -779,8 +779,16 @@ function computeData(since, until) {
 
   // Adsets
   const byAdset = groupBy(rows, 'adset');
-  const adsets = Object.keys(byAdset).map(name => ({ name, ...agg(byAdset[name]) }))
-    .sort((a,b)=>b.spend-a.spend);
+  const lastDay = Object.keys(byDay).sort().at(-1);
+  const adsets = Object.keys(byAdset).map(name => {
+    const asRows = byAdset[name];
+    // Active: prefer explicit delivery field from CSV; fall back to spend on last day of range
+    const deliveryVals = asRows.map(r => (r.delivery || '').toLowerCase()).filter(Boolean);
+    const active = deliveryVals.length
+      ? deliveryVals.some(v => v.includes('active') && !v.includes('inactive'))
+      : asRows.some(r => r.day === lastDay && r.spend > 0);
+    return { name, active, ...agg(asRows) };
+  }).sort((a,b)=>b.spend-a.spend);
 
   // Ads — keyed by ad+adset composite so the same creative in different ad sets
   // stays separate (Meta tracks them as distinct delivery units with different CPR)
@@ -896,10 +904,20 @@ function initCharts() {
   ];
   document.getElementById('adset-cards').innerHTML = D.adsets.map((as, i) => {
     const {c, bg} = CHIP_COLORS[i % CHIP_COLORS.length];
+    const statusBadge = as.active
+      ? `<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#0A7C52;background:#ECFDF5;border:1px solid #6EE7B7;border-radius:20px;padding:2px 8px;letter-spacing:.04em">
+          <span style="width:6px;height:6px;border-radius:50%;background:#0A7C52;display:inline-block"></span>Active
+         </span>`
+      : `<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#7A8595;background:#F3F4F6;border:1px solid #D1D5DB;border-radius:20px;padding:2px 8px;letter-spacing:.04em">
+          <span style="width:6px;height:6px;border-radius:50%;background:#9CA3AF;display:inline-block"></span>Inactive
+         </span>`;
     return `<div class="card">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-        <div>
-          <div class="card-label" style="margin-bottom:5px">Ad Set</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="card-label">Ad Set</div>
+            ${statusBadge}
+          </div>
           <div style="font-size:15px;font-weight:700;color:#0D1526">${as.name}</div>
         </div>
         <span class="chip" style="color:${c};background:${bg}">${fpct(as.spend/m.spend*100)} of spend</span>
