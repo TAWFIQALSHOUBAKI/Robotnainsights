@@ -833,11 +833,10 @@ function computeData(since, until) {
 }
 
 // ══ AUTO-ADVANCE UNTIL DATE ════════════════════════════════════════════════════
-// If today is after the stored until date, advance it to today so the range
-// always reflects the current day without touching data.js manually.
+// Always derive until from the latest day present in RAW_DATA.
 (function() {
-  const today = new Date().toISOString().slice(0, 10);
-  if (today > CAMPAIGN_META.until) CAMPAIGN_META.until = today;
+  const latest = RAW_DATA.reduce((max, r) => r.day > max ? r.day : max, '');
+  if (latest) CAMPAIGN_META.until = latest;
 })();
 
 // ══ STATE ══════════════════════════════════════════════════════════════════════
