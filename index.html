@@ -544,13 +544,8 @@ tr:hover td{background:#FEF0EB!important}
             <option value="engrate">CTR (Eng. Rate %)</option>
             <option value="frequency">Frequency</option>
           </select>
-          <!-- Campaign selector (always one campaign but keeps pattern) -->
-          <select id="trend-campaign" onchange="updateTrendChart()" style="padding:5px 10px;border-radius:6px;border:1px solid #E2E5EB;background:#fff;color:#0D1526;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;outline:none">
-            <option value="">All Campaigns</option>
-            <option value="Engagements_Robotna_">Engagements_Robotna_</option>
-          </select>
           <!-- Ad Set selector -->
-          <select id="trend-adset" onchange="updateTrendChart()" style="padding:5px 10px;border-radius:6px;border:1px solid #E2E5EB;background:#fff;color:#0D1526;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;outline:none">
+          <select id="trend-adset" onchange="onTrendAdsetChange()" style="padding:5px 10px;border-radius:6px;border:1px solid #E2E5EB;background:#fff;color:#0D1526;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;outline:none">
             <option value="">All Ad Sets</option>
           </select>
           <!-- Ad selector -->
@@ -1450,9 +1445,9 @@ function downloadPDF() {
 function initAdAudienceSelect(adsetFilter) {
   const sel = document.getElementById('ad-audience-select');
   if(!sel) return;
-  // Reset selection and hide panel when repopulating
   sel.value = '';
-  document.getElementById('ad-audience-panel').style.display = 'none';
+  const audiencePanel = document.getElementById('ad-audience-panel');
+  if(audiencePanel) audiencePanel.style.display = 'none';
   while(sel.options.length > 1) sel.remove(1);
   const ads = adsetFilter && adsetFilter !== 'all'
     ? D.ads.filter(a => a.adset === adsetFilter)
@@ -1473,6 +1468,7 @@ function setAdAudience(adKey) {
   if(!data || data.length===0) return;
   panel.style.display='block';
   const ad = D.ads.find(a=>a.key===adKey);
+  if(!ad) return;
   const maxR = Math.max(...data.map(d=>d.results), 1);
   panel.innerHTML = `
     <div class="card">
@@ -1546,6 +1542,31 @@ function setAdAudience(adKey) {
 }
 
 // ══ TREND CHART — METRIC + ENTITY DROPDOWNS ══════════════════════════════════
+function onTrendAdsetChange() {
+  const adsetVal = document.getElementById('trend-adset')?.value || '';
+  const adSel = document.getElementById('trend-ad');
+  if(!adSel) return;
+  adSel.value = '';
+  while(adSel.options.length > 1) adSel.remove(1);
+  const pairs = [];
+  const seen = new Set();
+  RAW_DATA.forEach(r => {
+    if(!r.ad) return;
+    if(adsetVal && r.adset !== adsetVal) return;
+    const k = r.adset + '\t' + r.ad;
+    if(!seen.has(k)) { seen.add(k); pairs.push({adset:r.adset, ad:r.ad, key:k}); }
+  });
+  pairs.sort((a,b) => a.ad.localeCompare(b.ad));
+  const counts = pairs.reduce((m,p) => (m[p.ad]=(m[p.ad]||0)+1,m), {});
+  pairs.forEach(p => {
+    const o = document.createElement('option');
+    o.value = p.key;
+    o.textContent = counts[p.ad] > 1 ? `${p.ad} · ${shortAdsetTag(p.adset)}` : p.ad;
+    adSel.appendChild(o);
+  });
+  updateTrendChart();
+}
+
 function populateTrendDropdowns() {
   // Ad Sets
   const adsetSel = document.getElementById('trend-adset');
@@ -1556,6 +1577,7 @@ function populateTrendDropdowns() {
   });
   // Ads — one option per unique (adset, ad) pair; value is "adset\tad" compound key
   const adSel = document.getElementById('trend-ad');
+  if(!adSel) return;
   while(adSel.options.length > 1) adSel.remove(1);
   const pairs = [];
   const seenPairs = new Set();
@@ -1579,12 +1601,17 @@ function updateTrendChart() {
   const adsetF   = document.getElementById('trend-adset')?.value    || '';
   const adF      = document.getElementById('trend-ad')?.value       || '';
 
-  // Filter RAW_DATA by current date range + entity selectors
   // adF is a "adset\tad" compound key — split to match both fields
   const [adFAdset, adFName] = adF ? adF.split('\t') : ['', ''];
+  // Auto-sync adset selector to match selected ad's adset
+  if(adF && adFAdset) {
+    const adsetSel = document.getElementById('trend-adset');
+    if(adsetSel && adsetSel.value !== adFAdset) adsetSel.value = adFAdset;
+  }
+  // When adF is set, adsetF is redundant (adF compound key already encodes the adset)
   const rows = filterRows(currentRange.since, currentRange.until).filter(r => {
-    if(adF    && (r.ad !== adFName || r.adset !== adFAdset)) return false;
-    if(adsetF && r.adset !== adsetF) return false;
+    if(adF  && (r.ad !== adFName || r.adset !== adFAdset)) return false;
+    if(!adF && adsetF && r.adset !== adsetF) return false;
     return true;
   });
 
