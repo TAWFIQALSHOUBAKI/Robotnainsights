@@ -4,7 +4,10 @@
       "Bash(python -c ' *)",
       "Bash(node -e \"const fs=require\\('fs'\\);eval\\(fs.readFileSync\\('data.js','utf8'\\)\\);const sets=[...new Set\\(RAW_DATA.map\\(r=>r.adset\\)\\)];console.log\\('Unique adsets:',sets.length\\);sets.forEach\\(s=>console.log\\(' -',s\\)\\)\")",
       "Bash(node -e \"const fs=require\\('fs'\\);const src=fs.readFileSync\\('data.js','utf8'\\).replace\\(/^const /gm,'var '\\);eval\\(src\\);const sets=[...new Set\\(RAW_DATA.map\\(r=>r.adset\\)\\)];console.log\\('Unique adsets:',sets.length\\);sets.forEach\\(s=>console.log\\(' -',s\\)\\)\")",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "PowerShell(Remove-Item \"C:\\\\Users\\\\Admin\\\\.claude\\\\projects\\\\f--Dev-Robotna-Robotnainsights\\\\memory\\\\MEMORY.md\")",
+      "PowerShell(Remove-Item \"C:\\\\Users\\\\Admin\\\\.claude\\\\projects\\\\f--Dev-Robotna-Robotnainsights\\\\memory\\\\user_profile.md\")",
+      "PowerShell(Remove-Item \"C:\\\\Users\\\\Admin\\\\.claude\\\\projects\\\\f--Dev-Robotna-Robotnainsights\\\\memory\\\\project_overview.md\")"
     ]
   }
 }
