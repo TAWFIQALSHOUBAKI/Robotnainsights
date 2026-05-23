@@ -945,8 +945,9 @@ function initCharts() {
   const filterSpan = document.getElementById('adset-filter-btns');
   filterSpan.innerHTML = '';
   D.adsets.forEach(as => {
-    const label = as.name.includes(' - Custom')
-      ? as.name.split('_')[0] + '_Custom'
+    // Label: "Base · Suffix" when name has " - ", else just first segment
+    const label = as.name.includes(' - ')
+      ? as.name.split('_')[0] + ' · ' + as.name.slice(as.name.indexOf(' - ') + 3)
       : as.name.split('_')[0];
     const btn = document.createElement('button');
     btn.className = 'filter-btn';
@@ -1222,6 +1223,8 @@ function setAgeFilter(filter, btn) {
   document.getElementById('age-chart-label').textContent =
     'Results by Age Group' + (filter!=='all'?` — ${filter}`:'');
   renderAgeCharts(filter);
+  // Repopulate Per Ad dropdown scoped to the selected ad set
+  initAdAudienceSelect(filter);
 }
 
 // ══ DATE PICKER ═══════════════════════════════════════════════════════════════
@@ -1444,12 +1447,18 @@ function downloadPDF() {
 // ══ PER-AD AUDIENCE ══════════════════════════════════════════════════════════
 // Uses D.adsAudience — computed from real CSV data, updates with date filter
 
-function initAdAudienceSelect() {
+function initAdAudienceSelect(adsetFilter) {
   const sel = document.getElementById('ad-audience-select');
   if(!sel) return;
+  // Reset selection and hide panel when repopulating
+  sel.value = '';
+  document.getElementById('ad-audience-panel').style.display = 'none';
   while(sel.options.length > 1) sel.remove(1);
-  const counts = D.ads.reduce((m,a)=>(m[a.name]=(m[a.name]||0)+1,m), {});
-  D.ads.forEach(ad => {
+  const ads = adsetFilter && adsetFilter !== 'all'
+    ? D.ads.filter(a => a.adset === adsetFilter)
+    : D.ads;
+  const counts = ads.reduce((m,a)=>(m[a.name]=(m[a.name]||0)+1,m), {});
+  ads.forEach(ad => {
     const opt = document.createElement('option');
     opt.value = ad.key;
     opt.textContent = counts[ad.name] > 1 ? `${ad.name} · ${shortAdsetTag(ad.adset)}` : ad.name;
